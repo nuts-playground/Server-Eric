@@ -1,2 +1,2 @@
 # Server-Eric
-에릭 서버
+에릭 nest 서버
