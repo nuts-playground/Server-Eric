@@ -7,7 +7,7 @@ export class AppController {
 
     @Get()
     getHello(): string {
-        // return this.appService.getHello();
-        throw new HttpException('Not found',HttpStatus.NOT_FOUND);
+        return this.appService.getHello();
+        // throw new HttpException('Not found',HttpStatus.NOT_FOUND);
     }
 }
