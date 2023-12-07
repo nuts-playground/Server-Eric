@@ -36,7 +36,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # dotenv environment variable files
-docker-compose.dev.yaml
 .env
 .dev.env
 .prod.env
