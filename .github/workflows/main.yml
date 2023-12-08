@@ -38,7 +38,7 @@ jobs:
           node-version: 18.17.1
 
       - name: Change Directory to 'app'
-        run: cd app
+        run: cd ~/app
 
       - name: Install Dependencies
         run: npm install
