@@ -31,13 +31,20 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v3
-      - name: Setup node.js 18.17.1
+
+      - name: Install Node.js and Check Dependencies
         uses: actions/setup-node@v3
         with:
           node-version: 18.17.1
-      - run: cd app
-      - run: npm install
-      - run: npm run test:e2e
+
+      - name: Change Directory to 'app'
+        run: cd app
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm run test
 
   # 도커 이미지 빌드
 
