@@ -53,6 +53,6 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
-          sudo docker images | awk '{print $1}' | tail -n +2 | grep -v '<none>' | awk '{print tolower($0)}' | xargs -I {} sudo docker rmi -f {}
+          sudo docker rmi -f $(sudo docker images -q)
           sudo docker rmi -f `docker images`
           sudo docker-compose up -d
