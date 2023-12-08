@@ -9,7 +9,6 @@ COPY package*.json ./
 RUN npm install --global pm2
 
 # bcrypt사용을 위한 python 설치
-RUN apk add --no-cache --virtual .gyp python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev
 
 RUN npm install --only=development
 
@@ -29,8 +28,6 @@ COPY package*.json ./
 # pm2설치
 RUN npm install --global pm2
 
-# bcrypt사용을 위한 python 설치
-RUN apk add --no-cache --virtual .gyp python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev
 RUN npm install --only=production
 
 COPY . .
