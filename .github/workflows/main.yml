@@ -54,5 +54,4 @@ jobs:
       - name: Docker run
         run: |
           sudo docker rmi -f $(sudo docker images -q)
-          sudo docker rmi -f `docker images`
           sudo docker-compose up -d
