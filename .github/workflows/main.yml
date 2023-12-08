@@ -53,17 +53,13 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Check out source code
         uses: actions/checkout@v2
-
       - name: Configure Git
         run: |
           git config --global user.email ${{ secrets.MY_GITHUB_EMAIL }}
           git config --global user.name "seokho7"
-
-      - name: Set remote and pull
+      - name: Set pull
         run: |
-          git remote add origin https://github.com/nuts-playground/server-eric.git
           git pull origin main
-
       - name: Stop and restart Docker Compose
         run: |
           sudo docker-compose down
