@@ -15,12 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+        uses: actions/checkout@v2.5.0  # Latest version as of now
 
       - name: Set up Docker Compose
         run: |
