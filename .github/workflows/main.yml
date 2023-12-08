@@ -20,6 +20,12 @@ jobs:
         run: |
           sudo docker-compose down
 
+      - name: Delete nestjs image
+        run: |
+          IMAGE_NAME="server-eric-nestjs:latest"
+          if sudo docker images --quiet ${IMAGE_NAME}; then
+          sudo docker rmi -f ${IMAGE_NAME}
+          fi
       - name: Restart Docker Compose
         run: |
           sudo docker-compose up -d
