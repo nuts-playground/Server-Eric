@@ -36,7 +36,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./main
+          context: ./app
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
 
