@@ -4,22 +4,17 @@ services:
     restart: unless-stopped
     image: staticfloat/nginx-certbot
     ports:
-      - "80:80/tcp"
-      - "443:443/tcp"
+      - 80:80/tcp
+      - 443:443/tcp
     environment:
       CERTBOT_EMAIL: rkwhr3256@naver.com
-      # variable names are space-separated
-      ENVSUBST_VARS: FQDN
-      FQDN: www.seokhoserver.site
     volumes:
-      - ./nginx:/etc/nginx/user.conf.d:ro
+      - ./conf.d:/etc/nginx/user.conf.d:ro
       - letsencrypt:/etc/letsencrypt
-  nestjs:
+  pm2:
     build:
-      context: ./app
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+      context: .
+      dockerfile: ./pm2/Dockerfile
     restart: unless-stopped
 volumes:
   letsencrypt:
