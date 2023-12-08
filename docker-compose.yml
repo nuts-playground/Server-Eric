@@ -14,7 +14,7 @@ services:
   pm2:
     build:
       context: .
-      dockerfile: ./pm2/Dockerfile
+      dockerfile: ./app/Dockerfile
     restart: unless-stopped
 volumes:
   letsencrypt:
