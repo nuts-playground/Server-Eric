@@ -53,6 +53,8 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
+          pwd
+          ls -l
           if sudo docker images | grep -q "${DOCKER_IMAGE}"; then
           sudo docker rmi -f "${DOCKER_IMAGE}:${VERSION}"
           fi
