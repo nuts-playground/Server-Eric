@@ -20,12 +20,14 @@ jobs:
         run: |
           sudo docker-compose down
 
-      - name: Delete nestjs image
+      - name: Remove Docker image if exists
         run: |
           IMAGE_NAME="server-eric-nestjs"
-          if sudo docker images --quiet ${IMAGE_NAME}; then
-          sudo docker rmi -f ${IMAGE_NAME}
+          # 이미지 이름에 "server-eric-nestjs"가 포함된 이미지를 찾아서 삭제
+          if sudo docker images --quiet --filter "reference=${IMAGE_NAME}*" | grep . ; then
+            sudo docker images --quiet --filter "reference=${IMAGE_NAME}*" | xargs sudo docker rmi -f
           fi
+
       - name: Restart Docker Compose
         run: |
           sudo docker-compose up -d
