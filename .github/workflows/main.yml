@@ -53,5 +53,5 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
-          sudo docker rmi -f "${DOCKER_IMAGE}:${VERSION}"
+          sudo docker rmi -f "${DOCKER_IMAGE}:${VERSION}" || true
           sudo docker-compose up -d
