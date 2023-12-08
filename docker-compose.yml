@@ -16,7 +16,7 @@ services:
       - letsencrypt:/etc/letsencrypt
   nestjs:
     build:
-      context: ./main
+      context: ./app
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
