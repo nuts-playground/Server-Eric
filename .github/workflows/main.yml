@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, x64]
 
     steps:
       - name: Checkout Repository
@@ -16,9 +16,20 @@ jobs:
       - name: Install Docker and Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker.io docker-compose
-          sudo usermod -aG docker $USER
-          newgrp docker
+          sudo apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg \
+            lsb-release
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          sudo apt-get install -y docker-compose
+
+      - name: Remove containerd.io
+        run: |
+          sudo apt-get remove containerd.io
+        if: success()
 
       - name: Build and Push Docker Images
         run: |
@@ -35,4 +46,5 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            cd /path/to/your/project
             docker-compose up -d
