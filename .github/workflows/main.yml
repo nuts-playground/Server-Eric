@@ -1,7 +1,13 @@
 name: CI/CD Docker
+
 on:
   push:
     branches: [main]
+
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/nestjs
+  VERSION: ${{ github.sha }}
+  NAME: cicd_test
 
 jobs:
   build:
