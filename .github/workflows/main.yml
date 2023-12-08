@@ -22,7 +22,7 @@ jobs:
 
       - name: Delete nestjs image
         run: |
-          IMAGE_NAME="server-eric-nestjs:latest"
+          IMAGE_NAME="server-eric-nestjs"
           if sudo docker images --quiet ${IMAGE_NAME}; then
           sudo docker rmi -f ${IMAGE_NAME}
           fi
