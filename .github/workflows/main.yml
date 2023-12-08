@@ -49,14 +49,17 @@ jobs:
     name: Deploy
     runs-on: [self-hosted, Linux, x64]
     steps:
-      - name: Login to ghcr
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+#      - name: Login to ghcr
+#        uses: docker/login-action@v1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Set pull
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Set remote and pull
         run: |
           git pull origin main
 
@@ -64,6 +67,6 @@ jobs:
         run: |
           sudo docker-compose down
 
-      - name: restart Docker Compose
-        run: |          
+      - name: Restart Docker Compose
+        run: |
           sudo docker-compose up -d
