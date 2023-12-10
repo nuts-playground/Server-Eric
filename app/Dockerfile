@@ -4,10 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# pm2설치
 RUN npm install --global pm2
-
-# bcrypt사용을 위한 python 설치
 
 RUN npm install --only=development
 
@@ -24,7 +21,6 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# pm2설치
 RUN npm install --global pm2
 
 RUN npm install --only=production
