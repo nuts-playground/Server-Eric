@@ -12,6 +12,24 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v2
 
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "MYSQL_HOST=MYSQL_HOST" >> /env/.production.env
+          echo "MYSQL_PORT=MYSQL_PORT" >> /env/.production.env
+          echo "MYSQL_USERNAME=MYSQL_USERNAME" >> /env/.production.env
+          echo "MYSQL_PASSWORD=MYSQL_PASSWORD" >> /env/.production.env
+          echo "MYSQL_NAME=MYSQL_NAME" >> /env/.production.env
+          echo "MODE=MODE" >> /env/.production.env
+          echo "SESSION_SECRET_KEY=SESSION_SECRET_KEY" >> /env/.production.env
+        env:
+          MODE: ${{ secrets.PROD }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_NAME: ${{ secrets.MYSQL_NAME }}
+          SESSION_SECRET_KEY: ${{ secrets.SESSION_SECRET_KEY }}
+
       - name: Set remote and pull
         run: |
           git pull origin main
