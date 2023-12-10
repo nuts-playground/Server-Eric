@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const path = require('path');
-const envFilePath = path.join(__dirname, 'env', `.${process.env.NODE_ENV}.env`);
+const envFilePath = path.join(__dirname, `.${process.env.NODE_ENV}.env`);
 const result = dotenv.config({ path: envFilePath });
 
 if (result.error) {
