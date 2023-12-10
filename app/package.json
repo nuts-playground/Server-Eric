@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "npm run prebuild && cross-env NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "npm run prebuild && nest build && cross-env NODE_ENV=prod node dist/main.js",
+    "start:prod": "npm run prebuild && nest build && cross-env NODE_ENV=production node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -34,6 +34,7 @@
     "dotenv": "^16.3.1",
     "express-session": "^1.17.3",
     "mysql2": "^3.6.5",
+    "path": "^0.12.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.17"
