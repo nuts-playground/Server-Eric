@@ -14,6 +14,7 @@ jobs:
 
       - name: Generate Environment Variables File for Production
         run: |
+          cd app
           echo "MYSQL_HOST=$MYSQL_HOST" >> .production.env
           echo "MYSQL_PORT=$MYSQL_PORT" >> .production.env
           echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .production.env
