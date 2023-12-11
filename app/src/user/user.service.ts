@@ -16,6 +16,11 @@ export class UserService {
         return userSignUpDto;
     }
 
+    async findByEmail(userEmail: string): Promise<UserEntity> {
+        return await this.userRepository.findOne({
+            where: { EMAIL: userEmail },
+        });
+    }
     async delete(userEmail: UserEmail): Promise<UpdateResult> {
         return await this.userRepository.softDelete({ EMAIL: userEmail.EMAIL });
     }

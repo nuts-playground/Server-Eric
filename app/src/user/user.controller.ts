@@ -13,7 +13,6 @@ export class UserController {
 
     @Post('/signUp')
     async signUp(@Body() userSignUpDto: UserSignUpDto) {
-        console.log(userSignUpDto);
         return await this.userService.signUp(userSignUpDto);
     }
 
