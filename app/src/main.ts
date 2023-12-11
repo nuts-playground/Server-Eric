@@ -18,13 +18,6 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
-
-
-
-
-
-
-
   const config = new DocumentBuilder()
     .setTitle('board')
     .setDescription('The board API description')
