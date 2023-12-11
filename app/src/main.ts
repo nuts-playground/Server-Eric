@@ -27,6 +27,8 @@ async function bootstrap() {
 
 
 
+
+
   const config = new DocumentBuilder()
     .setTitle('board')
     .setDescription('The board API description')
