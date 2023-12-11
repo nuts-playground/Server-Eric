@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {UserEmail, UserSignUpDto} from './dto/user.dto';
-import {Repository, UpdateResult} from 'typeorm';
+import { UserEmail, UserSignUpDto } from './dto/user.dto';
+import { Repository, UpdateResult } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -21,10 +21,10 @@ export class UserService {
   }
 
   async delete(userEmail: UserEmail): Promise<UpdateResult> {
-      return await this.userRepository.softDelete({email: userEmail.email});
+    return await this.userRepository.softDelete({ email: userEmail.email });
   }
 
   async restore(userEmail: UserEmail): Promise<UpdateResult> {
-      return await this.userRepository.restore({email: userEmail.email})
+    return await this.userRepository.restore({ email: userEmail.email });
   }
 }

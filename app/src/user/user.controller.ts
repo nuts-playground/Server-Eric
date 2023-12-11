@@ -8,7 +8,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import {UserEmail, UserSignUpDto} from './dto/user.dto';
+import { UserEmail, UserSignUpDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -23,21 +23,21 @@ export class UserController {
   @Post('/signUp')
   @UsePipes(new ValidationPipe())
   async signUp(@Body() userSignUpDto: UserSignUpDto) {
-    console.log(userSignUpDto)
+    console.log(userSignUpDto);
     return await this.userService.signUp(userSignUpDto);
   }
 
   @Post('/delete')
   @UsePipes(new ValidationPipe())
   async delete(@Body() userEmail: UserEmail): Promise<Boolean> {
-      const state = await this.userService.delete(userEmail);
-      return !!state;
+    const state = await this.userService.delete(userEmail);
+    return !!state;
   }
 
   @Post('/restore')
   @UsePipes(new ValidationPipe())
   async restore(@Body() userEmail: UserEmail): Promise<Boolean> {
-    const state= await this.userService.restore(userEmail);
+    const state = await this.userService.restore(userEmail);
     return !!state;
   }
 }

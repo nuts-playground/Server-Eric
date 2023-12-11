@@ -1,4 +1,11 @@
-import {Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, UpdateDateColumn} from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'USER' })
 export class UserEntity {
@@ -20,4 +27,3 @@ export class UserEntity {
   @DeleteDateColumn()
   delete_dtm: Date | null;
 }
-
