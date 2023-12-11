@@ -17,10 +17,10 @@ export class UserService {
     }
 
     async delete(userEmail: UserEmail): Promise<UpdateResult> {
-        return await this.userRepository.softDelete({ email: userEmail.email });
+        return await this.userRepository.softDelete({ EMAIL: userEmail.EMAIL });
     }
 
     async restore(userEmail: UserEmail): Promise<UpdateResult> {
-        return await this.userRepository.restore({ email: userEmail.email });
+        return await this.userRepository.restore({ EMAIL: userEmail.EMAIL });
     }
 }
