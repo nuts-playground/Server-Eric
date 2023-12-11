@@ -1,29 +1,29 @@
 import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryColumn,
-  UpdateDateColumn,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    PrimaryColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'USER' })
 export class UserEntity {
-  @PrimaryColumn()
-  email: string;
+    @PrimaryColumn()
+    EMAIL: string;
 
-  @Column()
-  nickname: string;
+    @Column()
+    NICKNAME: string;
 
-  @Column()
-  provider_id: string;
+    @Column()
+    PROVIDER_ID: string;
 
-  @CreateDateColumn()
-  create_dtm: Date;
+    @CreateDateColumn()
+    CREATE_DTM: Date;
 
-  @UpdateDateColumn()
-  update_dtm: Date | null;
+    @UpdateDateColumn()
+    UPDATE_DTM: Date | null;
 
-  @DeleteDateColumn()
-  delete_dtm: Date | null;
+    @DeleteDateColumn()
+    DELETE_DTM: Date | null;
 }
