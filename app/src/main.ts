@@ -17,6 +17,7 @@ async function bootstrap() {
       cookie: { maxAge: 3600000 }, // 쿠키 유효시간 = 일단 1시간 주었다.
     }),
   );
+
   app.useGlobalFilters(new HttpExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle('board')
