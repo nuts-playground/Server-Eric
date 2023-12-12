@@ -49,4 +49,12 @@ export class UserEmail {
     @IsEmail()
     @IsString()
     readonly EMAIL: string;
+
+    constructor(email: string) {
+        this.EMAIL = email;
+    }
+
+    get email() {
+        return this.EMAIL;
+    }
 }
