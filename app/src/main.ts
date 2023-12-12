@@ -1,11 +1,13 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { HttpExceptionFilter } from './exception/http.exception';
+import { HttpExceptionFilter } from './common/exception/http.exception';
 import * as passport from 'passport';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+
+// import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -18,17 +20,16 @@ async function bootstrap() {
             cookie: { maxAge: 3600000 }, // 쿠키 유효시간 = 일단 1시간 주었다.
         }),
     );
-
-    app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());
-    const config = new DocumentBuilder()
-        .setTitle('board')
-        .setDescription('The board API description')
-        .setVersion('1.0')
-        .addTag('board')
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    // const config = new DocumentBuilder()
+    //     .setTitle('board')
+    //     .setDescription('The board API description')
+    //     .setVersion('1.0')
+    //     .addTag('board')
+    //     .build();
+    // const document = SwaggerModule.createDocument(app, config);
+    // SwaggerModule.setup('api', app, document);
 
     app.use(passport.initialize());
     app.use(passport.session());

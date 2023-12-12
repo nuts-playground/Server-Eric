@@ -18,6 +18,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
     'no-trailing-spaces': ['error', { 'ignoreComments': true }],
     'prettier/prettier': ['error', { 'endOfLine': 'auto' }],
     '@typescript-eslint/interface-name-prefix': 'off',
