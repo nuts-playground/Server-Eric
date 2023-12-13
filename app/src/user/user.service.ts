@@ -1,31 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { UserEmail, UserSignUpDto } from './dto/user.dto';
+import { UserSignUpDto } from './dto/user-signup.dto';
 import { Repository, UpdateResult } from 'typeorm';
-import { UserEntity } from './entity/user.entity';
+import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(UserEntity)
-        private userRepository: Repository<UserEntity>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
     ) {}
 
     async signUp(userSignUpDto: UserSignUpDto): Promise<UserSignUpDto> {
-        await this.userRepository.save(userSignUpDto);
-        return userSignUpDto;
+        const user = User.from(
+            userSignUpDto.getEmail(),
+            userSignUpDto.getNickname(),
+            userSignUpDto.getProviderId()
+        )
+        try {
+            await this.userRepository.save(user);
+            return userSignUpDto;
+        }catch(err) {
+            console.log(err);
+        }
     }
 
-    async findByEmail(userEmail: string): Promise<UserEntity> {
-        return await this.userRepository.findOne({
-            where: { EMAIL: userEmail },
-        });
-    }
-    async delete(userEmail: UserEmail): Promise<UpdateResult> {
-        return await this.userRepository.softDelete({ EMAIL: userEmail.EMAIL });
-    }
-
-    async restore(userEmail: UserEmail): Promise<UpdateResult> {
-        return await this.userRepository.restore({ EMAIL: userEmail.EMAIL });
-    }
+    // async findByEmail(userEmail: string): Promise<User> {
+    //     return await this.userRepository.findOne({
+    //         where: { EMAIL: userEmail },
+    //     });
+    // }
+    // async delete(userEmail: UserEmail): Promise<UpdateResult> {
+    //     return await this.userRepository.softDelete({ EMAIL: userEmail.EMAIL });
+    // }
+    //
+    // async restore(userEmail: UserEmail): Promise<UpdateResult> {
+    //     return await this.userRepository.restore({ EMAIL: userEmail.EMAIL });
+    // }
 }
