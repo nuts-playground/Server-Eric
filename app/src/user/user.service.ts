@@ -3,6 +3,8 @@ import { UserSignUpDto } from './dto/user-signup.dto';
 import { Repository, UpdateResult } from 'typeorm';
 import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserFindDto } from './dto/user-find.dto';
+import { use } from 'passport';
 
 @Injectable()
 export class UserService {
@@ -12,29 +14,40 @@ export class UserService {
     ) {}
 
     async signUp(userSignUpDto: UserSignUpDto): Promise<UserSignUpDto> {
-        const user = User.from(
-            userSignUpDto.getEmail(),
-            userSignUpDto.getNickname(),
-            userSignUpDto.getProviderId()
-        )
+        const user = userSignUpDto.toEntity();
         try {
             await this.userRepository.save(user);
             return userSignUpDto;
-        }catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }
 
-    // async findByEmail(userEmail: string): Promise<User> {
-    //     return await this.userRepository.findOne({
-    //         where: { EMAIL: userEmail },
-    //     });
-    // }
-    // async delete(userEmail: UserEmail): Promise<UpdateResult> {
-    //     return await this.userRepository.softDelete({ EMAIL: userEmail.EMAIL });
-    // }
-    //
-    // async restore(userEmail: UserEmail): Promise<UpdateResult> {
-    //     return await this.userRepository.restore({ EMAIL: userEmail.EMAIL });
-    // }
+    async findByEmail(userEmail: string): Promise<User> {
+        return await this.userRepository.findOne({
+            where: { EMAIL: userEmail },
+        });
+    }
+
+    async delete(userEmail: string): Promise<boolean> {
+        try {
+            const user = await this.findByEmail(userEmail);
+            if (user) {
+                await this.userRepository.softDelete({
+                    EMAIL: userEmail,
+                });
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            return false;
+        }
+    }
+
+    async restore(userEmail: string): Promise<UpdateResult> {
+        return await this.userRepository.restore({
+            EMAIL: userEmail,
+        });
+    }
 }

@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { UserService } from './user.service';
+import { UserFindDto } from './dto/user-find.dto';
+import { ResponseDto } from '../common/dto/response-dto';
 
 @Controller('user')
 export class UserController {
@@ -12,19 +14,22 @@ export class UserController {
     }
 
     @Post('/signUp')
-    async signUp(@Body() userSignUpDto: UserSignUpDto) {
-        return await this.userService.signUp(userSignUpDto);
+    async signUp(
+        @Body() userSignUpDto: UserSignUpDto,
+    ): Promise<ResponseDto<UserSignUpDto>> {
+        const result = await this.userService.signUp(userSignUpDto);
+        return ResponseDto.successData(result);
     }
 
-    // @Post('/delete')
-    // async delete(@Body() ): Promise<boolean> {
-    //     const state = await this.userService.delete(userEmail);
-    //     return !!state;
-    // }
+    @Post('/delete')
+    async delete(@Body() userEmail: UserFindDto): Promise<boolean> {
+        const state = await this.userService.delete(userEmail.getEmail());
+        return !!state;
+    }
     //
-    // @Post('/restore')
-    // async restore(@Body() userEmail: UserEmail): Promise<boolean> {
-    //     const state = await this.userService.restore(userEmail);
-    //     return !!state;
-    // }
+    @Post('/restore')
+    async restore(@Body() userEmail: UserFindDto): Promise<boolean> {
+        const state = await this.userService.restore(userEmail.getEmail());
+        return !!state;
+    }
 }

@@ -1,7 +1,6 @@
-import { User } from "../entity/user.entity";
+import { User } from '../entity/user.entity';
 
 export class UserSignUpDto {
-
     private readonly EMAIL: string;
     private readonly NICKNAME: string;
     private readonly PROVIDER_ID: string;
