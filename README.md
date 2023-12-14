@@ -1,3 +1,6 @@
-# server-eric
-에릭 서버
-- 깃허브 액션 테스트
+# NestJS로 만드는 블로그
+
+## 1. 목표
+- NestJS 공부
+- RDB 공부
+- OOP 습관화
