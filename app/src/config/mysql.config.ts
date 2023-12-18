@@ -21,10 +21,4 @@ class MysqlConfig extends EnvConfig {
     }
 }
 
-export const mysqlConfig = new MysqlConfig(process.env).verifyKey([
-    'MYSQL_HOST',
-    'MYSQL_PORT',
-    'MYSQL_USERNAME',
-    'MYSQL_PASSWORD',
-    'MYSQL_NAME',
-]);
+export const mysqlConfig = new MysqlConfig(process.env).verifyKey(['MYSQL_HOST', 'MYSQL_PORT', 'MYSQL_USERNAME', 'MYSQL_PASSWORD', 'MYSQL_NAME']);

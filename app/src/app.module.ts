@@ -8,13 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { mysqlConfig } from './config/mysql.config';
 
 @Module({
-    imports: [
-        AuthModule,
-        UserModule,
-        BoardModule,
-        TypeOrmModule.forRoot(mysqlConfig.getConfig()),
-
-    ],
+    imports: [AuthModule, UserModule, BoardModule, TypeOrmModule.forRoot(mysqlConfig.getConfig())],
     controllers: [AppController],
     providers: [AppService],
 })

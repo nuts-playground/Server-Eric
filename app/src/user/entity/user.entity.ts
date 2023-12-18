@@ -1,14 +1,5 @@
-import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { LocalDateTimeTransformer } from '../../common/transformer/localDateTransformer';
-
-
 
 /*
  * 데이터베이스 USER 테이블과 매핑되는 Entity

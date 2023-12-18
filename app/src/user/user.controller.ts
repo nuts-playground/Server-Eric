@@ -6,7 +6,6 @@ import { ResponseDto } from '../common/dto/response-dto';
 
 @Controller('user')
 export class UserController {
-
     constructor(private userService: UserService) {}
 
     @Get('/test')
@@ -32,5 +31,4 @@ export class UserController {
         const state = await this.userService.restore(userEmail.getEmail());
         return !!state;
     }
-
 }

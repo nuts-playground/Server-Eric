@@ -1,14 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Post,
-    Put,
-    ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, ValidationPipe } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -34,10 +24,7 @@ export class BoardController {
     }
 
     @Put(':id')
-    update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body(new ValidationPipe()) data: UpdateBoardDto,
-    ) {
+    update(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) data: UpdateBoardDto) {
         return this.boardService.update(id, data);
     }
 
