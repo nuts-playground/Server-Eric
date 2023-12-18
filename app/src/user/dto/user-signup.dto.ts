@@ -1,29 +1,31 @@
 import { User } from '../entity/user.entity';
 
 export class UserSignUpDto {
-    private readonly EMAIL: string;
-    private readonly NICKNAME: string;
-    private readonly PROVIDER_ID: string;
+    private readonly email: string;
+    private readonly nickname: string;
+    private readonly provider_id: string;
+    private readonly create_dtm: Date;
 
-    constructor(email: string, nickname: string, providerId: string) {
-        this.EMAIL = email;
-        this.NICKNAME = nickname;
-        this.PROVIDER_ID = providerId;
+    constructor(email: string, nickname: string, providerId: string, createDtm: Date) {
+        this.email = email;
+        this.nickname = nickname;
+        this.provider_id = providerId;
+        this.create_dtm = createDtm;
     }
 
     getEmail(): string {
-        return this.EMAIL;
+        return this.email;
     }
 
     getNickname(): string {
-        return this.NICKNAME;
+        return this.nickname;
     }
 
     getProviderId(): string {
-        return this.PROVIDER_ID;
+        return this.provider_id;
     }
 
     toEntity(): User {
-        return User.from(this.EMAIL, this.NICKNAME, this.PROVIDER_ID);
+        return User.from(this.email, this.nickname, this.provider_id, this.create_dtm);
     }
 }

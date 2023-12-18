@@ -9,34 +9,31 @@ export class ResponseDto<T> {
     @Exclude() private readonly _serverDatetime: string;
     @Exclude() private readonly _data: T;
 
-    constructor(
-        status: ResponseStatus,
-        message: string,
-        serverDateTime: string,
-        data: T,
-    ) {
+    constructor(status: ResponseStatus, message: string, serverDateTime: string, data: T) {
         this._status = ResponseStatus[status];
         this._message = message;
         this._serverDatetime = serverDateTime;
         this._data = data;
     }
 
-    static success(message: string): ResponseDto<string> {
-        return new ResponseDto<string>(
-            ResponseStatus.SUCCESS,
-            message,
-            DateTimeUtil.now(),
-            '',
-        );
+    static success(): ResponseDto<string> {
+        return new ResponseDto<string>(ResponseStatus.SUCCESS, '', DateTimeUtil.now(), '');
     }
 
     static successData<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>(
-            ResponseStatus.SUCCESS,
-            '',
-            DateTimeUtil.now(),
-            data,
-        );
+        return new ResponseDto<T>(ResponseStatus.SUCCESS, '', DateTimeUtil.now(), data);
+    }
+
+    static error(message: string): ResponseDto<string> {
+        return new ResponseDto<string>(ResponseStatus.ERROR, message, DateTimeUtil.now(), '');
+    }
+
+    static errorData<T>(data: T): ResponseDto<T> {
+        return new ResponseDto<T>(ResponseStatus.ERROR, '', DateTimeUtil.now(), data);
+    }
+
+    static badParam<T>(data: T): ResponseDto<T> {
+        return new ResponseDto<T>(ResponseStatus.BAD_PARAM, '', DateTimeUtil.now(), data);
     }
 
     @ApiProperty()

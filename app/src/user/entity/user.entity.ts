@@ -6,6 +6,9 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { LocalDateTimeTransformer } from '../../common/transformer/localDateTransformer';
+
+
 
 /*
  * 데이터베이스 USER 테이블과 매핑되는 Entity
@@ -13,37 +16,44 @@ import {
 @Entity({ name: 'USER' })
 export class User {
     @PrimaryGeneratedColumn()
-    ID: number;
+    id: number;
 
     @Column()
-    EMAIL: string;
+    email: string;
 
     @Column()
-    NICKNAME: string;
+    nickname: string;
 
     @Column()
-    PROVIDER_ID: string;
+    provider_id: string;
 
     @CreateDateColumn()
-    CREATE_DTM: Date;
+    create_dtm: Date;
 
-    @UpdateDateColumn()
-    UPDATE_DTM: Date | null;
+    @Column({
+        nullable: true,
+        type: 'timestamp',
+    })
+    update_dtm: Date | null;
 
-    @DeleteDateColumn()
-    DELETE_DTM: Date | null;
+    @Column({
+        nullable: true,
+        type: 'timestamp',
+    })
+    delete_dtm: Date | null;
 
-    static from(email: string, nickname: string, providerId: string): User {
+    static from(email: string, nickname: string, providerId: string, createDtm: Date): User {
         const user = new User();
-        user.EMAIL = email;
-        user.NICKNAME = nickname;
-        user.PROVIDER_ID = providerId;
+        user.email = email;
+        user.nickname = nickname;
+        user.provider_id = providerId;
+        user.create_dtm = createDtm;
         return user;
     }
 
     static email(reqEmail: string) {
         const user = new User();
-        user.EMAIL = reqEmail;
+        user.email = reqEmail;
         return user;
     }
 }

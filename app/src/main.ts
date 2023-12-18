@@ -22,6 +22,7 @@ async function bootstrap() {
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
     // const config = new DocumentBuilder()
     //     .setTitle('board')
     //     .setDescription('The board API description')
@@ -30,7 +31,6 @@ async function bootstrap() {
     //     .build();
     // const document = SwaggerModule.createDocument(app, config);
     // SwaggerModule.setup('api', app, document);
-
     app.use(passport.initialize());
     app.use(passport.session());
     await app.listen(3000);

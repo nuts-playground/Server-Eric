@@ -13,6 +13,7 @@ import { mysqlConfig } from './config/mysql.config';
         UserModule,
         BoardModule,
         TypeOrmModule.forRoot(mysqlConfig.getConfig()),
+
     ],
     controllers: [AppController],
     providers: [AppService],

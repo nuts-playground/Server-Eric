@@ -3,8 +3,8 @@ import { UserSignUpDto } from './dto/user-signup.dto';
 import { Repository, UpdateResult } from 'typeorm';
 import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserFindDto } from './dto/user-find.dto';
-import { use } from 'passport';
+// import { UserFindDto } from './dto/user-find.dto';
+// import { use } from 'passport';
 
 @Injectable()
 export class UserService {
@@ -13,19 +13,12 @@ export class UserService {
         private userRepository: Repository<User>,
     ) {}
 
-    async signUp(userSignUpDto: UserSignUpDto): Promise<UserSignUpDto> {
-        const user = userSignUpDto.toEntity();
-        try {
-            await this.userRepository.save(user);
-            return userSignUpDto;
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    // async signUp(userSignUpDto: UserSignUpDto) {
+    // }
 
     async findByEmail(userEmail: string): Promise<User> {
-        return await this.userRepository.findOne({
-            where: { EMAIL: userEmail },
+        return this.userRepository.findOne({
+            where: { email: userEmail },
         });
     }
 
@@ -34,7 +27,7 @@ export class UserService {
             const user = await this.findByEmail(userEmail);
             if (user) {
                 await this.userRepository.softDelete({
-                    EMAIL: userEmail,
+                    email: userEmail,
                 });
                 return true;
             } else {
@@ -47,7 +40,9 @@ export class UserService {
 
     async restore(userEmail: string): Promise<UpdateResult> {
         return await this.userRepository.restore({
-            EMAIL: userEmail,
+            email: userEmail,
         });
     }
+
+
 }

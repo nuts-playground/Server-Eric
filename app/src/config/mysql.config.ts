@@ -16,6 +16,7 @@ class MysqlConfig extends EnvConfig {
             database: this.getValue('MYSQL_NAME'),
             synchronize: false,
             entities: [__dirname + '/..' + '/**/*.entity{.ts,.js}'],
+            timezone: 'UTC',
         };
     }
 }
