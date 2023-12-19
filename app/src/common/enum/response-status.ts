@@ -1,8 +1,8 @@
-export enum ResponseStatus {
-    // eslint-disable-next-line no-unused-vars
-    SUCCESS = 'SUCCESS',
-    // eslint-disable-next-line no-unused-vars
-    ERROR = 'ERROR',
-    // eslint-disable-next-line no-unused-vars
-    BAD_PARAM = 'BAD_PARAM',
-}
+const ResponseStatusValues = {
+    success: 'success',
+    error: 'error',
+    bad_param: 'bad_param',
+    exception: 'exception',
+} as const;
+
+export type ResponseStatus = (typeof ResponseStatusValues)[keyof typeof ResponseStatusValues];

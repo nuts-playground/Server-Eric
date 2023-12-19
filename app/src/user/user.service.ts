@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { Repository, UpdateResult } from 'typeorm';
 import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { UserFindDto } from './dto/user-find.dto';
-// import { use } from 'passport';
 
 @Injectable()
 export class UserService {
@@ -13,13 +11,28 @@ export class UserService {
         private userRepository: Repository<User>,
     ) {}
 
-    // async signUp(userSignUpDto: UserSignUpDto) {
-    // }
+    async findByEmail(userEmail: string): Promise<User | boolean> {
+        try {
+            const user = this.userRepository.findOne({
+                where: { email: userEmail },
+            });
+            return user ? user : false;
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
 
-    async findByEmail(userEmail: string): Promise<User> {
-        return this.userRepository.findOne({
-            where: { email: userEmail },
-        });
+    async signUp(userSignUpDto: UserSignUpDto): Promise<User | boolean> {
+        try {
+            const state = userSignUpDto.isReadySignUp();
+            if (!state) {
+                return false;
+            }
+            const user = await this.findByEmail(userSignUpDto.getEmail());
+            return !user ? this.userRepository.save(userSignUpDto.toEntity()) : false;
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
     }
 
     async delete(userEmail: string): Promise<boolean> {

@@ -1,5 +1,7 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
+import { ArgumentsHost, Catch, createParamDecorator, ExceptionFilter, HttpException } from '@nestjs/common';
 import { Response, Request } from 'express';
+import { ResponseDto } from '../dto/response-dto';
+import { instanceToPlain } from 'class-transformer';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(exception: HttpException, host: ArgumentsHost) {
@@ -8,12 +10,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const status = exception.getStatus();
         const request = ctx.getRequest<Request>();
         const message = exception.message;
-
-        response.status(status).json({
+        const exceptionBody = {
             statusCode: status,
-            timestamp: new Date().toISOString(),
             path: request.url,
-            message: message,
-        });
+            requestBody: request.body,
+        };
+        const responseBody = ResponseDto.exception(message, exceptionBody);
+        const plainResponse = instanceToPlain(responseBody, { excludeExtraneousValues: true });
+        response.status(status).json(plainResponse);
     }
 }

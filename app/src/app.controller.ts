@@ -10,4 +10,9 @@ export class AppController {
         // return this.appService.getHello();
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
+
+    @Get('/test')
+    test(): string {
+        return '안녕하세요!';
+    }
 }

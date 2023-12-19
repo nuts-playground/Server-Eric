@@ -1,7 +1,7 @@
-import { ResponseStatus } from '../enum/response-status';
 import { Exclude, Expose } from 'class-transformer';
-import { DateTimeUtil } from '../utils/date.util';
+import { DateUtil } from '../utils/date.util';
 import { ApiProperty } from '@nestjs/swagger';
+import { ResponseStatus } from '../enum/response-status';
 
 export class ResponseDto<T> {
     @Exclude() private readonly _status: string;
@@ -10,30 +10,34 @@ export class ResponseDto<T> {
     @Exclude() private readonly _data: T;
 
     constructor(status: ResponseStatus, message: string, serverDateTime: string, data: T) {
-        this._status = ResponseStatus[status];
+        this._status = status;
         this._message = message;
         this._serverDatetime = serverDateTime;
         this._data = data;
     }
 
     static success(): ResponseDto<string> {
-        return new ResponseDto<string>(ResponseStatus.SUCCESS, '', DateTimeUtil.now(), '');
+        return new ResponseDto<string>('success', '', DateUtil.now(), '');
     }
 
     static successData<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>(ResponseStatus.SUCCESS, '', DateTimeUtil.now(), data);
+        return new ResponseDto<T>('success', '', DateUtil.now(), data);
     }
 
     static error(message: string): ResponseDto<string> {
-        return new ResponseDto<string>(ResponseStatus.ERROR, message, DateTimeUtil.now(), '');
+        return new ResponseDto<string>('error', message, DateUtil.now(), '');
     }
 
     static errorData<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>(ResponseStatus.ERROR, '', DateTimeUtil.now(), data);
+        return new ResponseDto<T>('error', '', DateUtil.now(), data);
     }
 
     static badParam<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>(ResponseStatus.BAD_PARAM, '', DateTimeUtil.now(), data);
+        return new ResponseDto<T>('bad_param', '', DateUtil.now(), data);
+    }
+
+    static exception<T>(message: string, data: T): ResponseDto<T> {
+        return new ResponseDto<T>('exception', message, DateUtil.now(), data);
     }
 
     @ApiProperty()
@@ -59,14 +63,4 @@ export class ResponseDto<T> {
     get data(): T {
         return this._data;
     }
-    //
-    // static error(): ResponseDto<string> {}
-    //
-    // static errorData<T>(): ResponseDto<T> {}
-    //
-    // get status(): string {}
-    //
-    // get message(): string {}
-    //
-    // get data(): T {}
 }

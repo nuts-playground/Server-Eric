@@ -20,8 +20,8 @@ async function bootstrap() {
         }),
     );
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-    app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     // const config = new DocumentBuilder()
     //     .setTitle('board')
