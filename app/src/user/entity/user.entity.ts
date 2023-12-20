@@ -11,10 +11,10 @@ export class User {
     id: number;
 
     @Column()
-    email: string;
+    user_email: string;
 
     @Column()
-    nickname: string;
+    user_name: string;
 
     @Column()
     provider_id: ProviderIdEnum;
@@ -28,10 +28,10 @@ export class User {
     @DeleteDateColumn()
     delete_dtm: Date | null;
 
-    static from(email: string, nickname: string, providerId: ProviderIdEnum, createDtm: Date): User {
+    static from(userEmail: string, userName: string, providerId: ProviderIdEnum, createDtm: Date): User {
         const user = new User();
-        user.email = email;
-        user.nickname = nickname;
+        user.user_email = userEmail;
+        user.user_name = userName;
         user.provider_id = providerId;
         user.create_dtm = createDtm;
         return user;

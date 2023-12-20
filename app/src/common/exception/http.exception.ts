@@ -1,6 +1,6 @@
-import { ArgumentsHost, Catch, createParamDecorator, ExceptionFilter, HttpException } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { ResponseDto } from '../dto/response-dto';
+import { ResponseDto } from '../dto/response.dto';
 import { instanceToPlain } from 'class-transformer';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

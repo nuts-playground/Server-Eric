@@ -1,41 +1,39 @@
-import { Body, Controller, Get, InternalServerErrorException, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, InternalServerErrorException, Post } from '@nestjs/common';
+import { UserDeleteDto } from './dto/user-delete.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { UserService } from './user.service';
-import { UserFindDto } from './dto/user-find.dto';
-import { ResponseDto } from '../common/dto/response-dto';
+import { ResponseDto } from '../common/dto/response.dto';
 
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) {}
 
-    @Get('/test')
-    test(@Req() req, @Res() res) {
-        res.send('안녕하세요!');
-    }
-
     @Post('/signUp')
-    async signUp(@Body() userSignUpDto: UserSignUpDto): Promise<any> {
+    async signUp(@Body() userSignUpDto: UserSignUpDto): Promise<ResponseDto<any>> {
         try {
-            const user = await this.userService.signUp(userSignUpDto);
-            if (!user) {
-                const state = userSignUpDto.isReadySignUp();
-                return state === true ? ResponseDto.error('이미 존재하는 유저입니다.') : ResponseDto.badParam(userSignUpDto.valiDateParam());
-            }
-            return ResponseDto.success();
+            const state = userSignUpDto.isReadySignUp();
+            if (!state) return ResponseDto.badParam(userSignUpDto.valiDateParam());
+
+            const user = await this.userService.findByEmail(userSignUpDto.getEmail());
+            if (user) return ResponseDto.error('이미 존재하는 유저입니다.');
+
+            const result = await this.userService.signUp(userSignUpDto);
+            return result ? ResponseDto.success() : ResponseDto.error('회원가입에 실패했습니다.');
         } catch (err) {
             throw new InternalServerErrorException(err);
         }
     }
 
     @Post('/delete')
-    async delete(@Body() userEmail: UserFindDto): Promise<boolean> {
-        const state = await this.userService.delete(userEmail.getEmail());
-        return !!state;
-    }
+    async delete(@Body() userDeleteDto: UserDeleteDto): Promise<ResponseDto<any>> {
+        try {
+            const user = await this.userService.findByEmail(userDeleteDto.getEmail());
+            if (!user) return ResponseDto.error('존재하지 않는 유저입니다.');
 
-    @Post('/restore')
-    async restore(@Body() userEmail: UserFindDto): Promise<boolean> {
-        const state = await this.userService.restore(userEmail.getEmail());
-        return !!state;
+            const result = await this.userService.delete(userDeleteDto.getEmail());
+            return result ? ResponseDto.success() : ResponseDto.error('삭제에 실패했습니다.');
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
     }
 }

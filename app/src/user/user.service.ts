@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { UserDeleteDto } from './dto/user-delete.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -13,8 +14,8 @@ export class UserService {
 
     async findByEmail(userEmail: string): Promise<User | boolean> {
         try {
-            const user = this.userRepository.findOne({
-                where: { email: userEmail },
+            const user = await this.userRepository.findOne({
+                where: { user_email: userEmail },
             });
             return user ? user : false;
         } catch (err) {
@@ -22,14 +23,10 @@ export class UserService {
         }
     }
 
-    async signUp(userSignUpDto: UserSignUpDto): Promise<User | boolean> {
+    async signUp(userSignUpDto: UserSignUpDto): Promise<boolean> {
         try {
-            const state = userSignUpDto.isReadySignUp();
-            if (!state) {
-                return false;
-            }
-            const user = await this.findByEmail(userSignUpDto.getEmail());
-            return !user ? this.userRepository.save(userSignUpDto.toEntity()) : false;
+            const result = await this.userRepository.save(userSignUpDto.toEntity());
+            return !!result;
         } catch (err) {
             throw new InternalServerErrorException(err);
         }
@@ -37,23 +34,12 @@ export class UserService {
 
     async delete(userEmail: string): Promise<boolean> {
         try {
-            const user = await this.findByEmail(userEmail);
-            if (user) {
-                await this.userRepository.softDelete({
-                    email: userEmail,
-                });
-                return true;
-            } else {
-                return false;
-            }
+            const result = await this.userRepository.softDelete({
+                user_email: userEmail,
+            });
+            return !!result;
         } catch (err) {
-            return false;
+            throw new InternalServerErrorException(err);
         }
-    }
-
-    async restore(userEmail: string): Promise<UpdateResult> {
-        return await this.userRepository.restore({
-            email: userEmail,
-        });
     }
 }
