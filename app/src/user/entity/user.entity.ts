@@ -28,12 +28,11 @@ export class User {
     @DeleteDateColumn()
     delete_dtm: Date | null;
 
-    static from(userEmail: string, userName: string, providerId: ProviderIdEnum, createDtm: Date): User {
+    static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
         const user = new User();
         user.user_email = userEmail;
         user.user_name = userName;
         user.provider_id = providerId;
-        user.create_dtm = createDtm;
         return user;
     }
 }

@@ -6,12 +6,12 @@ import { UserSignUpDto } from '../user/dto/user-signup.dto';
 export class AuthService {
     constructor(private userService: UserService) {}
 
-    // async register(userSignupDto: UserSignUpDto): Promise<boolean> {
-    //     const user = await this.userService.findByEmail(userSignupDto.EMAIL);
-    //     if (!user) {
-    //         const state = await this.userService.signUp(userSignupDto);
-    //         return !!state;
-    //     }
-    //     return false;
-    // }
+    async register(userSignupDto: UserSignUpDto): Promise<boolean> {
+        const user = await this.userService.findByEmail(userSignupDto.getEmail());
+        if (!user) {
+            const state = await this.userService.signUp(userSignupDto);
+            return !!state;
+        }
+        return false;
+    }
 }

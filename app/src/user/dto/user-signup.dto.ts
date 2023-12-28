@@ -11,13 +11,11 @@ export class UserSignUpDto {
     private readonly user_email: string;
     private readonly user_name: string;
     private readonly provider_id: ProviderIdEnum;
-    private readonly create_dtm: Date;
 
-    constructor(userEmail: string, userName: string, providerId: ProviderIdEnum, createDtm: Date) {
+    constructor(userEmail: string, userName: string, providerId: ProviderIdEnum) {
         this.user_email = userEmail;
         this.user_name = userName;
         this.provider_id = providerId;
-        this.create_dtm = createDtm;
     }
 
     private isEmail(): boolean {
@@ -71,6 +69,6 @@ export class UserSignUpDto {
     }
 
     toEntity(): User {
-        return User.from(this.user_email, this.user_name, this.provider_id, this.create_dtm);
+        return User.from(this.user_email, this.user_name, this.provider_id);
     }
 }

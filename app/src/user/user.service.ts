@@ -1,5 +1,4 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UserDeleteDto } from './dto/user-delete.dto';
 import { UserSignUpDto } from './dto/user-signup.dto';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';

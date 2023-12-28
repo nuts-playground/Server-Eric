@@ -22,6 +22,7 @@ export class UserController {
         } catch (err) {
             throw new InternalServerErrorException(err);
         }
+
     }
 
     @Post('/delete')
