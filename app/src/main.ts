@@ -5,24 +5,14 @@ import * as session from 'express-session';
 import { HttpExceptionFilter } from './common/exception/http.exception';
 import * as passport from 'passport';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-
-// import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import {setSession} from "./config/session.config";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
-    app.use(cookieParser());
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET_KEY, // 세션 암호화에 사용하는 키로 절대 노출되서는 안된다.
-            resave: false, // 세션을 항상 저장할 지 여부라 일단 false
-            saveUninitialized: false, // 세션이 저장되기 전에는 초기화 하지 않은 상태로 세션을 미리 만들어 저장할지? 일단 false
-            cookie: { maxAge: 1000 * 10 * 6 * 60 }, // 쿠키 유효시간 = 일단 1시간 주었다.
-        }),
-    );
-
+    // await setSession(app)
     // const config = new DocumentBuilder()
     //     .setTitle('board')
     //     .setDescription('The board API description')
@@ -31,8 +21,6 @@ async function bootstrap() {
     //     .build();
     // const document = SwaggerModule.createDocument(app, config);
     // SwaggerModule.setup('api', app, document);
-    app.use(passport.initialize());
-    app.use(passport.session());
     await app.listen(3000);
 }
 bootstrap();
