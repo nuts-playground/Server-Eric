@@ -22,10 +22,9 @@ export class UserService {
         }
     }
 
-    async signUp(userSignUpDto: UserSignUpDto): Promise<boolean> {
+    async signUp(userSignUpDto: UserSignUpDto): Promise<User | boolean> {
         try {
-            const result = await this.userRepository.save(userSignUpDto.toEntity());
-            return !!result;
+            return await this.userRepository.save(userSignUpDto.toEntity());
         } catch (err) {
             throw new InternalServerErrorException(err);
         }

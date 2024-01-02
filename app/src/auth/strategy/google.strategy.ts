@@ -20,6 +20,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         if (!member) {
             const userName = name.familyName + name.givenName;
             const userSignUpDto = new UserSignUpDto(email, userName, provider);
+            // new member
             return await this.userService.signUp(userSignUpDto);
         } else {
             return member;

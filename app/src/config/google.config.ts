@@ -22,4 +22,4 @@ class GoogleConfig extends EnvConfig {
     }
 }
 
-export const googleConfig = new GoogleConfig(process.env).verifyKey(['GOOGLE_OAUTH_CLIENT_ID', 'GOOGLE_OAUTH_CLIENT_SECRET']);
+export const googleConfig = new GoogleConfig(process.env).verifyKey(['GOOGLE_OAUTH_CLIENT_ID', 'GOOGLE_OAUTH_CLIENT_SECRET', 'GOOGLE_OAUTH_CALLBACK_URL']);

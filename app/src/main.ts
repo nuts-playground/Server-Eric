@@ -10,6 +10,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new HttpExceptionFilter());
     app.use(cookieParser());
     app.use(
         session({
@@ -19,9 +22,6 @@ async function bootstrap() {
             cookie: { maxAge: 1000 * 10 * 6 * 60 }, // 쿠키 유효시간 = 일단 1시간 주었다.
         }),
     );
-    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
-    app.useGlobalFilters(new HttpExceptionFilter());
 
     // const config = new DocumentBuilder()
     //     .setTitle('board')

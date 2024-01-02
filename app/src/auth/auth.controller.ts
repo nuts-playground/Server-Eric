@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Post, Redirect, Req, UseGuards } from '@nestjs/common';
-import { UserSignUpDto } from '../user/dto/user-signup.dto';
-import { GoogleAuthGuard } from './auth.guard';
+import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
+import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -14,5 +13,32 @@ export class AuthController {
     @Get('/google')
     @UseGuards(GoogleAuthGuard)
     @Redirect('http://localhost:3000/board')
-    async googleAuthRedirect(): Promise<void> {}
+    async googleAuthRedirect() {}
+
+    @Get('/to-github')
+    @UseGuards(GithubAuthGuard)
+    githubAuth() {}
+
+    @Get('/github')
+    @UseGuards(GithubAuthGuard)
+    @Redirect('http://localhost:3000/board')
+    async githubAuthRedirect() {}
+
+    @Get('/to-naver')
+    @UseGuards(NaverAuthGuard)
+    naverAuth() {}
+
+    @Get('/naver')
+    @UseGuards(NaverAuthGuard)
+    @Redirect('http://localhost:3000/board')
+    async naverAuthRedirect() {}
+
+    @Get('/to-kakao')
+    @UseGuards(KakaoAuthGuard)
+    kakaoAuth() {}
+
+    @Get('/kakao')
+    @UseGuards(KakaoAuthGuard)
+    @Redirect('http://localhost:3000/board')
+    async kakaoAuthRedirect() {}
 }
