@@ -12,7 +12,8 @@ export class AuthController {
 
     @Get('/google')
     @UseGuards(GoogleAuthGuard)
-    @Redirect('http://localhost:3000/board')
+    // @Redirect('http://localhost:3000/board')
+    @Redirect('https://www.seokhoserver.site/board')
     async googleAuthRedirect() {}
 
     @Get('/to-github')
@@ -21,7 +22,8 @@ export class AuthController {
 
     @Get('/github')
     @UseGuards(GithubAuthGuard)
-    @Redirect('http://localhost:3000/board')
+    // @Redirect('http://localhost:3000/board')
+    @Redirect('https://www.seokhoserver.site/board')
     async githubAuthRedirect() {}
 
     @Get('/to-naver')
@@ -30,7 +32,8 @@ export class AuthController {
 
     @Get('/naver')
     @UseGuards(NaverAuthGuard)
-    @Redirect('http://localhost:3000/board')
+    // @Redirect('http://localhost:3000/board')
+    @Redirect('https://www.seokhoserver.site/board')
     async naverAuthRedirect() {}
 
     @Get('/to-kakao')
@@ -39,6 +42,7 @@ export class AuthController {
 
     @Get('/kakao')
     @UseGuards(KakaoAuthGuard)
-    @Redirect('http://localhost:3000/board')
+    // @Redirect('http://localhost:3000/board')
+    @Redirect('https://www.seokhoserver.site/board')
     async kakaoAuthRedirect() {}
 }
