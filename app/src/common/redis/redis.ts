@@ -1,24 +1,19 @@
-import * as redis from "redis";
-import { redisConfig } from "../../config/redis.config";
+import Redis from 'ioredis';
+import { redisConfig } from '../../config/redis.config';
 
-class RedisClient {
-    private redisClient;
+export class RedisClient {
+    private redisClient: Redis;
 
     constructor() {
         this.redisClient = null;
     }
 
-    public async getRedisClient() {
+    public getRedisClient() {
         if (this.redisClient) {
             return this.redisClient;
         }
 
-        this.redisClient = redis.createClient(redisConfig.getConfig());
-
-        await this.redisClient.connect();
-
+        this.redisClient = new Redis(redisConfig.getConfig());
         return this.redisClient;
     }
 }
-
-export default new RedisClient();
