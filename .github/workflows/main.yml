@@ -15,24 +15,28 @@ jobs:
       - name: Generate Environment Variables File for Production
         run: |
           cd app
+          echo "MODE=$MODE" >> .production.env
           echo "MYSQL_HOST=$MYSQL_HOST" >> .production.env
           echo "MYSQL_PORT=$MYSQL_PORT" >> .production.env
           echo "MYSQL_USERNAME=$MYSQL_USERNAME" >> .production.env
           echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .production.env
           echo "MYSQL_NAME=$MYSQL_NAME" >> .production.env
-          echo "MODE=$MODE" >> .production.env
-          echo "GOOGLE_OAUTH_CLIENT_ID=GOOGLE_OAUTH_CLIENT_ID" >> .production.env
-          echo "GOOGLE_OAUTH_CLIENT_SECRET=GOOGLE_OAUTH_CLIENT_SECRET" >> .production.env
-          echo "GOOGLE_OAUTH_CALLBACK_URL=GOOGLE_OAUTH_CALLBACK_URL" >> .production.env
-          echo "GHUB_CLIENT_ID=GHUB_CLIENT_ID" >> .production.env
-          echo "GHUB_CLIENT_SECRET=GHUB_CLIENT_SECRET" >> .production.env
-          echo "GHUB_OAUTH_CALLBACK_URL=GHUB_OAUTH_CALLBACK_URL" >> .production.env
-          echo "NAVER_CLIENT_ID=NAVER_CLIENT_ID" >> .production.env
-          echo "NAVER_CLIENT_SECRET=NAVER_CLIENT_SECRET" >> .production.env
-          echo "NAVER_OAUTH_CALLBACK_URL=NAVER_OAUTH_CALLBACK_URL" >> .production.env
-          echo "KAKAO_CLIENT_ID=KAKAO_CLIENT_ID" >> .production.env
-          echo "KAKAO_CLIENT_SECRET=KAKAO_CLIENT_SECRET" >> .production.env
-          echo "KAKAO_OAUTH_CALLBACK_URL=KAKAO_OAUTH_CALLBACK_URL" >> .production.env
+          echo "SESSION_SECRET_KEY=$SESSION_SECRET_KEY" >> .production.env
+          echo "REDIS_HOST=$REDIS_HOST" >> .production.env
+          echo "REDIS_PORT=$REDIS_PORT" >> .production.env
+          echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> .production.env
+          echo "GOOGLE_OAUTH_CLIENT_ID=$GOOGLE_OAUTH_CLIENT_ID" >> .production.env
+          echo "GOOGLE_OAUTH_CLIENT_SECRET=$GOOGLE_OAUTH_CLIENT_SECRET" >> .production.env
+          echo "GOOGLE_OAUTH_CALLBACK_URL=$GOOGLE_OAUTH_CALLBACK_URL" >> .production.env
+          echo "GHUB_CLIENT_ID=$GHUB_CLIENT_ID" >> .production.env
+          echo "GHUB_CLIENT_SECRET=$GHUB_CLIENT_SECRET" >> .production.env
+          echo "GHUB_OAUTH_CALLBACK_URL=$GHUB_OAUTH_CALLBACK_URL" >> .production.env
+          echo "NAVER_CLIENT_ID=$NAVER_CLIENT_ID" >> .production.env
+          echo "NAVER_CLIENT_SECRET=$NAVER_CLIENT_SECRET" >> .production.env
+          echo "NAVER_OAUTH_CALLBACK_URL=$NAVER_OAUTH_CALLBACK_URL" >> .production.env
+          echo "KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID" >> .production.env
+          echo "KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET" >> .production.env
+          echo "KAKAO_OAUTH_CALLBACK_URL=$KAKAO_OAUTH_CALLBACK_URL" >> .production.env
         env:
           MODE: ${{ secrets.PROD }}
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
@@ -41,7 +45,21 @@ jobs:
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_NAME: ${{ secrets.MYSQL_NAME }}
           SESSION_SECRET_KEY: ${{ secrets.SESSION_SECRET_KEY }}
-
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+          GOOGLE_OAUTH_CALLBACK_URL: ${{ secrets.GOOGLE_OAUTH_CALLBACK_URL }}
+          GHUB_CLIENT_ID: ${{ secrets.GHUB_CLIENT_ID }}
+          GHUB_CLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
+          GHUB_OAUTH_CALLBACK_URL: ${{ secrets.GHUB_OAUTH_CALLBACK_URL }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          NAVER_OAUTH_CALLBACK_URL: ${{ secrets.NAVER_OAUTH_CALLBACK_URL }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_OAUTH_CALLBACK_URL: ${{ secrets.KAKAO_OAUTH_CALLBACK_URL }}
       - name: Set remote and pull
         run: |
           git pull origin main
