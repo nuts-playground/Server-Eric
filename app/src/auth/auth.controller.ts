@@ -1,4 +1,5 @@
-import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
 import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -12,9 +13,9 @@ export class AuthController {
 
     @Get('/google')
     @UseGuards(GoogleAuthGuard)
-    // @Redirect('http://localhost:3000/board')
-    @Redirect('https://www.seokhoserver.site/board')
-    async googleAuthRedirect() {}
+    async googleAuthRedirect(@Res() res: Response) {
+        return res.redirect('/main');
+    }
 
     @Get('/to-github')
     @UseGuards(GithubAuthGuard)
@@ -22,9 +23,9 @@ export class AuthController {
 
     @Get('/github')
     @UseGuards(GithubAuthGuard)
-    // @Redirect('http://localhost:3000/board')
-    @Redirect('https://www.seokhoserver.site/board')
-    async githubAuthRedirect() {}
+    async githubAuthRedirect(@Res() res: Response) {
+        return res.redirect('/main');
+    }
 
     @Get('/to-naver')
     @UseGuards(NaverAuthGuard)
@@ -32,9 +33,9 @@ export class AuthController {
 
     @Get('/naver')
     @UseGuards(NaverAuthGuard)
-    // @Redirect('http://localhost:3000/board')
-    @Redirect('https://www.seokhoserver.site/board')
-    async naverAuthRedirect() {}
+    async naverAuthRedirect(@Res() res: Response) {
+        return res.redirect('/main');
+    }
 
     @Get('/to-kakao')
     @UseGuards(KakaoAuthGuard)
@@ -42,7 +43,7 @@ export class AuthController {
 
     @Get('/kakao')
     @UseGuards(KakaoAuthGuard)
-    // @Redirect('http://localhost:3000/board')
-    @Redirect('https://www.seokhoserver.site/board')
-    async kakaoAuthRedirect() {}
+    async kakaoAuthRedirect(@Res() res: Response) {
+        return res.redirect('/main');
+    }
 }

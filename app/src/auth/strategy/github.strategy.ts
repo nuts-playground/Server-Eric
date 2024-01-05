@@ -13,7 +13,6 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
 
     async validate(accessToken: string, refreshToken: string, profile: any): Promise<any> {
         const { id, username, displayName, photos, provider } = profile;
-        console.log(profile);
         const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
         const member = await this.userService.findByEmail(email);
 

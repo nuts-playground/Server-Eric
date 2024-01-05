@@ -1,7 +1,7 @@
 export const ProviderIdEnumValue = {
-    google: 'google',
-    github: 'github',
-    kakao: 'kakao',
-    naver: 'naver',
+    GOOGLE: 'google',
+    GITHUB: 'github',
+    KAKAO: 'kakao',
+    NAVER: 'naver',
 } as const;
 export type ProviderIdEnum = (typeof ProviderIdEnumValue)[keyof typeof ProviderIdEnumValue];

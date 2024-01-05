@@ -13,11 +13,13 @@ export class SessionSerializer extends PassportSerializer {
         done(null, user.user_email);
     }
 
-    async deserializeUser(payload: any, done: (err: Error, payload: ResponseDto<string>) => void) {
+    async deserializeUser(payload: any, done: (err: any, payload?: ResponseDto<string>) => void) {
         const user = await this.userService.findByEmail(payload);
+
         if (!user) {
-            done(new Error('User not found'), ResponseDto.error('유저가 업습니다.'));
+            return done(null, null);
         }
-        done(null, ResponseDto.success());
+
+        return done(null, ResponseDto.success());
     }
 }
