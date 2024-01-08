@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -7,12 +7,6 @@ export class AppController {
 
     @Get()
     getHello(): string {
-        // return this.appService.getHello();
-        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    }
-
-    @Get('/test')
-    test(): string {
         return '안녕하세요!';
     }
 }

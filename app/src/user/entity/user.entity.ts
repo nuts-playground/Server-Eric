@@ -5,10 +5,10 @@ import { ProviderIdEnum } from '../enum/provider-id-enum';
  * User 테이블에 들어가는 데이터는 모두 여기서 관장한다.
  * */
 
-@Entity({ name: 'USER' })
+@Entity({ name: 'user' })
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    user_id: number;
 
     @Column()
     user_email: string;
