@@ -1,8 +1,8 @@
 const ResponseStatusValues = {
-    success: 'success',
-    error: 'error',
-    bad_param: 'bad_param',
-    exception: 'exception',
+    SUCCESS: 'success',
+    ERROR: 'error',
+    BAD_PARAM: 'bad_param',
+    EXCEPTION: 'exception',
 } as const;
 
 export type ResponseStatus = (typeof ResponseStatusValues)[keyof typeof ResponseStatusValues];
