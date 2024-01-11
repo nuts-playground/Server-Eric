@@ -74,7 +74,7 @@ jobs:
 
       - name: Stop Docker Compose
         run: |
-          sudo docker-compose down
+          sudo docker-compose down -d
 
       - name: Remove Docker image if exists
         run: |
