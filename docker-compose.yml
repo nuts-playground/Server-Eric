@@ -7,6 +7,6 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
-        - .env
+      - .env
     ports:
-        - "${SERVER_PORT}:${SERVER_PORT}/tcp"
+      - "${SERVER_PORT}:${SERVER_PORT}/tcp"
