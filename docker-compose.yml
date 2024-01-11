@@ -9,4 +9,4 @@ services:
     env_file:
       - .env
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}/tcp"
+      - "${parseInt(SERVER_PORT)}:${parseInt(SERVER_PORT)}"
