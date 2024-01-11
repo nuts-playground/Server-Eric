@@ -14,7 +14,7 @@ jobs:
 
       - name: Generate Docker Environment Variables File for Production
         run: |
-          echo "SERVER_PORT=SERVER_PORT" >> .env
+          echo "SERVER_PORT=$SERVER_PORT" >> .env
 
       - name: Generate Environment Variables File for Production
         run: |
