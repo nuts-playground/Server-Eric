@@ -12,6 +12,10 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v2
 
+      - name: Generate Docker Environment Variables File for Production
+        run: |
+          echo "SERVER_PORT=SERVER_PORT" >> .env
+
       - name: Generate Environment Variables File for Production
         run: |
           cd app
@@ -37,6 +41,8 @@ jobs:
           echo "KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID" >> .production.env
           echo "KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET" >> .production.env
           echo "KAKAO_OAUTH_CALLBACK_URL=$KAKAO_OAUTH_CALLBACK_URL" >> .production.env
+          echo "SERVER_PORT=$SERVER_PORT" >> .production.env
+          echo "ACCESS_CORS_ORIGIN=$ACCESS_CORS_ORIGIN" >> .production.env
         env:
           MODE: ${{ secrets.PROD }}
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
@@ -60,6 +66,8 @@ jobs:
           KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
           KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
           KAKAO_OAUTH_CALLBACK_URL: ${{ secrets.KAKAO_OAUTH_CALLBACK_URL }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+          ACCESS_CORS_ORIGIN: ${{ secrets.ACCESS_CORS_ORIGIN }}
       - name: Set remote and pull
         run: |
           git pull origin main

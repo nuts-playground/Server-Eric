@@ -1,4 +1,5 @@
 import { NestFactory, Reflector } from '@nestjs/core';
+import * as process from 'process';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exception/http.exception';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
@@ -20,6 +21,6 @@ async function bootstrap() {
     // const document = SwaggerModule.createDocument(app, config);
     // SwaggerModule.setup('api', app, document);
     app.enableCors(corsConfig.getConfig());
-    await app.listen(4000);
+    await app.listen(process.env['SERVER_PORT']);
 }
 bootstrap();

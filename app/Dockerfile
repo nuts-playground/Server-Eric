@@ -15,8 +15,8 @@ RUN npm run build
 
 FROM node:18-alpine as production
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+ENV NODE_ENV=production
+ENV SERVER_PORT=${SERVER_PORT}
 
 WORKDIR /usr/src/app
 
@@ -31,6 +31,6 @@ COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-EXPOSE 4000
+EXPOSE ${SERVER_PORT}
 
 CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]

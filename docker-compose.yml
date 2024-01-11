@@ -6,8 +6,8 @@ services:
       context: ./app
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - "4000:4000"
     environment:
       - NODE_ENV=production
-
+      - SERVER_PORT=${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
