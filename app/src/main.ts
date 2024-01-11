@@ -2,6 +2,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exception/http.exception';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { corsConfig } from './config/cors.config';
 import { setSession } from './config/session.config';
 
 async function bootstrap() {
@@ -18,7 +19,7 @@ async function bootstrap() {
     //     .build();
     // const document = SwaggerModule.createDocument(app, config);
     // SwaggerModule.setup('api', app, document);
-
+    app.enableCors(corsConfig.getConfig());
     await app.listen(4000);
 }
 bootstrap();
