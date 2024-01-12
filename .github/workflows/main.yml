@@ -45,6 +45,7 @@ jobs:
           echo "KAKAO_OAUTH_CALLBACK_URL=$KAKAO_OAUTH_CALLBACK_URL" >> .production.env
           echo "SERVER_PORT=$SERVER_PORT" >> .production.env
           echo "ACCESS_CORS_ORIGIN=$ACCESS_CORS_ORIGIN" >> .production.env
+          echo "MAIN_PAGE_URL=$MAIN_PAGE_URL" >> .production.env
         env:
           MODE: ${{ secrets.PROD }}
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
@@ -70,6 +71,7 @@ jobs:
           KAKAO_OAUTH_CALLBACK_URL: ${{ secrets.KAKAO_OAUTH_CALLBACK_URL }}
           SERVER_PORT: ${{ secrets.SERVER_PORT }}
           ACCESS_CORS_ORIGIN: ${{ secrets.ACCESS_CORS_ORIGIN }}
+          MAIN_PAGE_URL: ${{ secrets.MAIN_PAGE_URL }}
 
       - name: Set remote and pull
         run: |
