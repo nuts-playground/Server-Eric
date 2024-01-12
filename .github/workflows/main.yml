@@ -79,12 +79,12 @@ jobs:
 
       - name: Stop Docker Compose
         run: |
-          sudo docker-compose down -d
+          sudo docker-compose down
 
       - name: Remove Docker image if exists
         run: |
-          IMAGE_NAME="server-eric_nestjs"
-          # 이미지 이름에 "server-eric_nestjs"가 포함된 이미지를 찾아서 삭제
+          IMAGE_NAME="server-eric-nestjs"
+          # 이미지 이름에 "server-eric-nestjs"가 포함된 이미지를 찾아서 삭제
           if sudo docker images --quiet --filter "reference=${IMAGE_NAME}*" | grep . ; then
             sudo docker images --quiet --filter "reference=${IMAGE_NAME}*" | xargs sudo docker rmi -f
           fi
