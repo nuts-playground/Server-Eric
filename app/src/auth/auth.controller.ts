@@ -14,8 +14,11 @@ export class AuthController {
 
     @Get('/google')
     @UseGuards(GoogleAuthGuard)
-    @Redirect(urlConfig.getMainPageUrl())
-    async googleAuthRedirect() {}
+    async googleAuthRedirect(@Res() res: Response) {
+        res.cookie('test','key')
+        res.redirect(urlConfig.getMainPageUrl());
+        res.end()
+    }
 
     @Get('/to-github')
     @UseGuards(GithubAuthGuard)
