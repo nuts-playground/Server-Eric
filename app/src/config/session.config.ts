@@ -19,6 +19,7 @@ export async function setSession(app: INestApplication) {
             saveUninitialized: false,
             cookie: {
                 maxAge: 3600000,
+                domain: '.seokhoweb.com'
             },
         }),
     );
