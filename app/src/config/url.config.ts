@@ -9,6 +9,10 @@ class UrlConfig extends EnvConfig {
     public getMainPageUrl(): string {
         return this.getValue('MAIN_PAGE_URL');
     }
+
+    public getDomainUrl(): string {
+        return this.getValue('DOMAIN_NAME')
+    }
 }
 
-export const urlConfig = new UrlConfig(process.env).verifyKey(['MAIN_PAGE_URL']);
+export const urlConfig = new UrlConfig(process.env).verifyKey(['MAIN_PAGE_URL', 'DOMAIN_NAME']);

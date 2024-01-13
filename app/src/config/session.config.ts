@@ -4,6 +4,7 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { RedisClient } from '../common/redis/redis';
 import { redisConfig } from './redis.config';
+import {urlConfig} from "./url.config";
 
 export async function setSession(app: INestApplication) {
     const redisClient = new RedisClient().getRedisClient();
@@ -18,8 +19,9 @@ export async function setSession(app: INestApplication) {
             resave: false,
             saveUninitialized: false,
             cookie: {
+                secure: true,
                 maxAge: 3600000,
-                domain: '.seokhoweb.com'
+                domain: urlConfig.getDomainUrl()
             },
         }),
     );
