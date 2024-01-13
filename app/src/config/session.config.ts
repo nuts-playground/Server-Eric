@@ -21,7 +21,8 @@ export async function setSession(app: INestApplication) {
             cookie: {
                 secure: false,
                 maxAge: 3600000,
-                domain: urlConfig.getDomainUrl()
+                domain: urlConfig.getDomainUrl(),
+                sameSite: 'none',
             },
         }),
     );
