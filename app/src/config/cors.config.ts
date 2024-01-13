@@ -12,6 +12,14 @@ class CorsConfig extends EnvConfig {
         return {
             origin: [this.getValue('ACCESS_CORS_ORIGIN')],
             credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+            allowedHeaders: [
+                'Access-Control-Allow-Origin',
+                'X-Requested-With',
+                'Content-type',
+                'Accept',
+                'Authorization',
+            ],
         };
     }
 }

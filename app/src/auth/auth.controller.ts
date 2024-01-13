@@ -1,7 +1,8 @@
-import {Controller, Get, Redirect, Req, Res, UseGuards} from '@nestjs/common';
+import {Controller, Get, Redirect, Req, Res, Session, UseGuards} from '@nestjs/common';
 import { urlConfig } from '../config/url.config';
 import {GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard} from './auth.guard';
 import { AuthService } from './auth.service';
+import {Response} from "express";
 
 @Controller('auth')
 export class AuthController {
@@ -13,8 +14,12 @@ export class AuthController {
 
     @Get('/google')
     @UseGuards(GoogleAuthGuard)
-    @Redirect(urlConfig.getMainPageUrl())
-    async googleAuthRedirect() {}
+    async googleAuthRedirect(@Req() req,@Res() res: Response) {
+        console.log(req.user)
+        res.cookie('test', 'ee')
+        res.redirect('http://localhost:3000/users/eric/main')
+        res.end();
+    }
 
     @Get('/to-github')
     @UseGuards(GithubAuthGuard)
