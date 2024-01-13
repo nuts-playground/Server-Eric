@@ -19,7 +19,7 @@ export async function setSession(app: INestApplication) {
             resave: false,
             saveUninitialized: false,
             cookie: {
-                secure: true,
+                secure: false,
                 maxAge: 3600000,
                 domain: urlConfig.getDomainUrl()
             },
