@@ -1,6 +1,6 @@
-import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
+import {Controller, Get, Redirect, Req, Res, UseGuards} from '@nestjs/common';
 import { urlConfig } from '../config/url.config';
-import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard } from './auth.guard';
+import {GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard} from './auth.guard';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

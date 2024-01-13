@@ -1,27 +1,29 @@
-import { Body, Controller, InternalServerErrorException, Post } from '@nestjs/common';
+import {Body, Controller, Get, InternalServerErrorException, Post, Session} from '@nestjs/common';
 import { UserDeleteDto } from './dto/user-delete.dto';
 import { UserService } from './user.service';
 import { ResponseDto } from '../common/dto/response.dto';
+import { User } from "./entity/user.entity";
+import { UserResponseDto } from "./dto/user-response.dto";
 
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) {}
 
-    // @Post('/signUp')
-    // async signUp(@Body() userSignUpDto: UserSignUpDto): Promise<ResponseDto<any>> {
-    //     try {
-    //         const state = userSignUpDto.isReadySignUp();
-    //         if (!state) return ResponseDto.badParam(userSignUpDto.valiDateParam());
-    //
-    //         const user = await this.userService.findByEmail(userSignUpDto.getEmail());
-    //         if (user) return ResponseDto.error('이미 존재하는 유저입니다.');
-    //
-    //         const result = await this.userService.signUp(userSignUpDto);
-    //         return result ? ResponseDto.success() : ResponseDto.error('회원가입에 실패했습니다.');
-    //     } catch (err) {
-    //         throw new InternalServerErrorException(err);
-    //     }
-    // }
+    @Get('/getUser')
+    async getUser(@Session() session: Record<string, any>): Promise<ResponseDto<any>> {
+        try {
+            const userEmail = session.passport.user;
+            const user = (await this.userService.findByEmail(userEmail)) as User;
+            if (!user) {
+                return ResponseDto.error('로그인 하지 않았습니다.');
+            }
+            const responseUserInfo = new UserResponseDto(user.user_email, user.user_name, user.provider_id);
+            return ResponseDto.successData<UserResponseDto>(responseUserInfo);
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+
+        }
+    }
 
     @Post('/delete')
     async delete(@Body() userDeleteDto: UserDeleteDto): Promise<ResponseDto<any>> {

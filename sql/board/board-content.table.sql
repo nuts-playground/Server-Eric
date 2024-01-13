@@ -11,5 +11,5 @@ CREATE TABLE `board_content`
 		`delete_dtm`		TIMESTAMP				NULL										COMMENT '게시글 비활성화 시간',
 		PRIMARY KEY (`content_id`),
 		CONSTRAINT  `fk-board_content-user`					    FOREIGN KEY (`user_id`) 		REFERENCES `user`(`user_id`),
-  	    CONSTRAINT  `fk-board_content-board_category` 		    FOREIGN KEY (`category_id`) 	REFERENCES `board_category`(`category_id`)
+  	    CONSTRAINT  `fk-board_content-board_category` 		    FOREIGN KEY (`category_id`) 	REFERENCES `boddrd_category`(`category_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='게시판 게시글 테이블';

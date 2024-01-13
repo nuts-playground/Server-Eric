@@ -17,7 +17,9 @@ export async function setSession(app: INestApplication) {
             secret: redisConfig.getSessionKey(),
             resave: false,
             saveUninitialized: false,
-            cookie: { maxAge: 3600000 },
+            cookie: {
+                maxAge: 3600000,
+            },
         }),
     );
 
