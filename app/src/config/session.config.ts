@@ -19,12 +19,13 @@ export async function setSession(app: INestApplication) {
             resave: false,
             saveUninitialized: false,
             cookie: {
+                secure: true,
                 maxAge: 3600000,
                 domain: urlConfig.getDomainUrl(),
+                sameSite: 'none'
             },
         }),
     );
-
     app.use(passport.initialize());
     app.use(passport.session());
 }
