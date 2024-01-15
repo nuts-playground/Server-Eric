@@ -10,6 +10,7 @@ export class MainController {
     test(@Res() res: Response) {
         res.json({
             key: 'https://api.seokhoweb.com/auth/to-google',
+            // key: 'http://localhost:3781/auth/to-google',
         });
         res.end();
     }
