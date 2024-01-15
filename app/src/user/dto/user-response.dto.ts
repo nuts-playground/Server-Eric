@@ -8,4 +8,11 @@ export class UserResponseDto {
         this.user_name = userName;
         this.provider_id = providerId;
     }
+
+    getProfileInfo() {
+        return {
+            name: this.user_name,
+            provider: this.provider_id,
+        };
+    }
 }

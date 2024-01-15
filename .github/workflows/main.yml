@@ -47,6 +47,7 @@ jobs:
           echo "ACCESS_CORS_ORIGIN=$ACCESS_CORS_ORIGIN" >> .production.env
           echo "MAIN_PAGE_URL=$MAIN_PAGE_URL" >> .production.env
           echo "DOMAIN_NAME=$DOMAIN_NAME" >> .production.env
+          echo "SERVER_HOST_URL=$SERVER_HOST_URL" >> .production.env
         env:
           MODE: ${{ secrets.PROD }}
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
@@ -74,6 +75,7 @@ jobs:
           ACCESS_CORS_ORIGIN: ${{ secrets.ACCESS_CORS_ORIGIN }}
           MAIN_PAGE_URL: ${{ secrets.MAIN_PAGE_URL }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+          SERVER_HOST_URL: ${{ secrets.SERVER_HOST_URL }}
 
       - name: Set remote and pull
         run: |
