@@ -1,8 +1,7 @@
-import {Controller, Get, Redirect, Req, Res, Session, UseGuards} from '@nestjs/common';
+import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
 import { urlConfig } from '../config/url.config';
-import {GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard} from './auth.guard';
+import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard} from './auth.guard';
 import { AuthService } from './auth.service';
-import {Response} from "express";
 
 @Controller('auth')
 export class AuthController {

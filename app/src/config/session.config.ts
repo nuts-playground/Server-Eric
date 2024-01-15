@@ -22,7 +22,7 @@ export async function setSession(app: INestApplication) {
                 secure: true,
                 maxAge: 3600000,
                 domain: urlConfig.getDomainUrl(),
-                sameSite: 'none'
+                sameSite: 'none',
             },
         }),
     );
