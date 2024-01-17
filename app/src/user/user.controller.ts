@@ -12,6 +12,8 @@ export class UserController {
     @Get('/getInfo')
     async getInfo(@Session() session: Record<string, any>): Promise<ResponseDto<any>> {
         try {
+            if (!session.passport) return ResponseDto.error('로그인 하지 않았습니다.');
+
             const userEmail = session.passport.user;
             const user = (await this.userService.findByEmail(userEmail)) as User;
 
