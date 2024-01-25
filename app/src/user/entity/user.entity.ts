@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonTimstamp } from '../../common/entity/common-timstamp.entity';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 /*
  * 데이터베이스 USER 테이블과 매핑되는 Entity
@@ -6,7 +7,7 @@ import { ProviderIdEnum } from '../enum/provider-id-enum';
  * */
 
 @Entity({ name: 'user' })
-export class User {
+export class User extends CommonTimstamp {
     @PrimaryGeneratedColumn()
     user_id: number;
 
@@ -18,15 +19,6 @@ export class User {
 
     @Column()
     provider_id: ProviderIdEnum;
-
-    @CreateDateColumn()
-    create_dtm: Date;
-
-    @UpdateDateColumn()
-    update_dtm: Date | null;
-
-    @DeleteDateColumn()
-    delete_dtm: Date | null;
 
     static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
         const user = new User();

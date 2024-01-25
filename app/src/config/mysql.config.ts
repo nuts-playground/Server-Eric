@@ -14,8 +14,9 @@ class MysqlConfig extends EnvConfig {
             username: this.getValue('MYSQL_USERNAME'),
             password: this.getValue('MYSQL_PASSWORD'),
             database: this.getValue('MYSQL_NAME'),
-            synchronize: false,
+            synchronize: this.isDevMode(),
             entities: [__dirname + '/..' + '/**/*.entity{.ts,.js}'],
+            logging: this.isDevMode(),
         };
     }
 }
