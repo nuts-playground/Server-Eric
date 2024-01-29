@@ -25,4 +25,11 @@ class RedisConfig extends EnvConfig {
     }
 }
 
-export const redisConfig = new RedisConfig(process.env).verifyKey(['REDIS_HOST', 'REDIS_PORT', 'REDIS_PASSWORD', 'SESSION_SECRET_KEY']);
+export const redisConfig = new RedisConfig(
+    process.env,
+).verifyKey([
+    'REDIS_HOST',
+    'REDIS_PORT',
+    'REDIS_PASSWORD',
+    'SESSION_SECRET_KEY',
+]);

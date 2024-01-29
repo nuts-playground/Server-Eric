@@ -1,5 +1,13 @@
-import { IsOptional, MaxLength, MinLength } from 'class-validator';
-import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import {
+    IsOptional,
+    MaxLength,
+    MinLength,
+} from 'class-validator';
+import {
+    ApiProperty,
+    PartialType,
+    PickType,
+} from '@nestjs/swagger';
 import { CreateBoardDto } from './create-board.dto';
 
 export class UpdateBoardDto {

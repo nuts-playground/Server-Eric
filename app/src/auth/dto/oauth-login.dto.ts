@@ -1,4 +1,7 @@
-import { ProviderIdEnum, ProviderIdEnumValue } from '../../user/enum/provider-id-enum';
+import {
+    ProviderIdEnum,
+    ProviderIdEnumValue,
+} from '../../user/enum/provider-id-enum';
 
 type ReturnMsg = {
     badParam: string;
@@ -14,7 +17,9 @@ export class OauthLoginDto {
     }
 
     private isPass(): boolean {
-        return Object.values(ProviderIdEnumValue).includes(this.method as ProviderIdEnum);
+        return Object.values(ProviderIdEnumValue).includes(
+            this.method as ProviderIdEnum,
+        );
     }
 
     public getMethod(): string | ReturnMsg {

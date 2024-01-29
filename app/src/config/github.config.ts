@@ -16,11 +16,21 @@ class GithubConfig extends EnvConfig {
     public getConfig(): githubOauthInterface {
         return {
             clientID: this.getValue('GHUB_CLIENT_ID'),
-            clientSecret: this.getValue('GHUB_CLIENT_SECRET'),
-            callbackURL: this.getValue('GHUB_OAUTH_CALLBACK_URL'),
+            clientSecret: this.getValue(
+                'GHUB_CLIENT_SECRET',
+            ),
+            callbackURL: this.getValue(
+                'GHUB_OAUTH_CALLBACK_URL',
+            ),
             scope: ['user:email'],
         };
     }
 }
 
-export const githubConfig = new GithubConfig(process.env).verifyKey(['GHUB_CLIENT_ID', 'GHUB_CLIENT_SECRET', 'GHUB_OAUTH_CALLBACK_URL']);
+export const githubConfig = new GithubConfig(
+    process.env,
+).verifyKey([
+    'GHUB_CLIENT_ID',
+    'GHUB_CLIENT_SECRET',
+    'GHUB_OAUTH_CALLBACK_URL',
+]);

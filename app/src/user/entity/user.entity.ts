@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { BoardComment } from '../../board/entity/board-comment.entity';
+import { BoardContent } from '../../board/entity/board-content.entity';
+import { BoardLike } from '../../board/entity/board-like.entity';
 import { CommonTimstamp } from '../../common/entity/common-timstamp.entity';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 /*
@@ -20,7 +28,41 @@ export class User extends CommonTimstamp {
     @Column()
     provider_id: ProviderIdEnum;
 
-    static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
+    @OneToMany(
+        () => BoardContent,
+        (boardContent) => boardContent.user,
+        {
+            cascade: ['update'],
+            nullable: false,
+        },
+    )
+    boardContent: BoardContent[];
+
+    @OneToMany(
+        () => BoardComment,
+        (boardComment) => boardComment.user,
+        {
+            cascade: ['update'],
+            nullable: false,
+        },
+    )
+    boardComment: BoardComment[];
+
+    @OneToMany(
+        () => BoardLike,
+        (boardLike) => boardLike.user,
+        {
+            cascade: ['update'],
+            nullable: false,
+        },
+    )
+    boardLike: BoardLike[];
+
+    static from(
+        userEmail: string,
+        userName: string,
+        providerId: ProviderIdEnum,
+    ): User {
         const user = new User();
         user.user_email = userEmail;
         user.user_name = userName;

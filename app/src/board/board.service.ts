@@ -37,7 +37,9 @@ export class BoardService {
     }
 
     find(id: number) {
-        const index = this.boards.findIndex((board) => board.id === id);
+        const index = this.boards.findIndex(
+            (board) => board.id === id,
+        );
         console.log(index);
         return this.boards[index];
     }
@@ -64,11 +66,16 @@ export class BoardService {
     }
 
     getBoardId(id: number) {
-        return this.boards.findIndex((board) => board.id === id);
+        return this.boards.findIndex(
+            (board) => board.id === id,
+        );
     }
 
     getNextId() {
-        return this.boards.sort((a, b) => b.id - a.id)[0].id + 1;
+        return (
+            this.boards.sort((a, b) => b.id - a.id)[0].id +
+            1
+        );
     }
 
     delete(id: number) {

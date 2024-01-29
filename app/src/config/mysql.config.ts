@@ -15,10 +15,20 @@ class MysqlConfig extends EnvConfig {
             password: this.getValue('MYSQL_PASSWORD'),
             database: this.getValue('MYSQL_NAME'),
             synchronize: this.isDevMode(),
-            entities: [__dirname + '/..' + '/**/*.entity{.ts,.js}'],
+            entities: [
+                __dirname + '/..' + '/**/*.entity{.ts,.js}',
+            ],
             logging: this.isDevMode(),
         };
     }
 }
 
-export const mysqlConfig = new MysqlConfig(process.env).verifyKey(['MYSQL_HOST', 'MYSQL_PORT', 'MYSQL_USERNAME', 'MYSQL_PASSWORD', 'MYSQL_NAME']);
+export const mysqlConfig = new MysqlConfig(
+    process.env,
+).verifyKey([
+    'MYSQL_HOST',
+    'MYSQL_PORT',
+    'MYSQL_USERNAME',
+    'MYSQL_PASSWORD',
+    'MYSQL_NAME',
+]);

@@ -1,5 +1,8 @@
 import { User } from '../entity/user.entity';
-import { ProviderIdEnum, ProviderIdEnumValue } from '../enum/provider-id-enum';
+import {
+    ProviderIdEnum,
+    ProviderIdEnumValue,
+} from '../enum/provider-id-enum';
 
 type exchangeObj = {
     user_email: boolean | null;
@@ -12,23 +15,33 @@ export class UserSignUpDto {
     private readonly user_name: string;
     private readonly provider_id: ProviderIdEnum;
 
-    constructor(userEmail: string, userName: string, providerId: ProviderIdEnum) {
+    constructor(
+        userEmail: string,
+        userName: string,
+        providerId: ProviderIdEnum,
+    ) {
         this.user_email = userEmail;
         this.user_name = userName;
         this.provider_id = providerId;
     }
 
     private isEmail(): boolean {
-        const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const regExp =
+            /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         return regExp.test(this.user_email);
     }
 
     private isName(): boolean {
-        return 2 <= this.user_name.length && this.user_name.length <= 255;
+        return (
+            2 <= this.user_name.length &&
+            this.user_name.length <= 255
+        );
     }
 
     private isProviderId(): boolean {
-        return Object.values(ProviderIdEnumValue).includes(this.provider_id);
+        return Object.values(ProviderIdEnumValue).includes(
+            this.provider_id,
+        );
     }
 
     getEmail(): string {
@@ -40,7 +53,9 @@ export class UserSignUpDto {
     }
 
     getProviderId(): ProviderIdEnum {
-        return this.isProviderId() ? this.provider_id : null;
+        return this.isProviderId()
+            ? this.provider_id
+            : null;
     }
 
     valiDateParam(): exchangeObj {
@@ -51,14 +66,19 @@ export class UserSignUpDto {
         };
         const errorMsg = {
             user_email: '올바른 이메일을 입력해주세요.',
-            user_name: '이름은 최소 2글자 이상 입력해주세요.',
-            provider_id: '승인되지 않은 플랫폼으로 접근했습니다.',
+            user_name:
+                '이름은 최소 2글자 이상 입력해주세요.',
+            provider_id:
+                '승인되지 않은 플랫폼으로 접근했습니다.',
         };
 
         const errorObj = {};
 
-        for (const [key, val] of Object.entries(signUpState)) {
-            if (val === false) errorObj[key] = errorMsg[key];
+        for (const [key, val] of Object.entries(
+            signUpState,
+        )) {
+            if (val === false)
+                errorObj[key] = errorMsg[key];
         }
         return errorObj as exchangeObj;
     }
@@ -69,6 +89,10 @@ export class UserSignUpDto {
     }
 
     toEntity(): User {
-        return User.from(this.user_email, this.user_name, this.provider_id);
+        return User.from(
+            this.user_email,
+            this.user_name,
+            this.provider_id,
+        );
     }
 }

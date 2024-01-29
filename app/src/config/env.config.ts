@@ -9,14 +9,23 @@ export class EnvConfig {
         },
     ) {
         dotenv.config({
-            path: path.join(__dirname, `../../.${process.env.NODE_ENV}.env`),
+            path: path.join(
+                __dirname,
+                `../../.${process.env.NODE_ENV}.env`,
+            ),
         });
     }
 
     // 벨류 가져오기
-    public getValue(key: string, throwPermission = true): string {
+    public getValue(
+        key: string,
+        throwPermission = true,
+    ): string {
         const value = this.env[key];
-        if (!value && throwPermission) throw new Error(`환경 변수 로드 실패 target: ${key}`);
+        if (!value && throwPermission)
+            throw new Error(
+                `환경 변수 로드 실패 target: ${key}`,
+            );
 
         return value;
     }

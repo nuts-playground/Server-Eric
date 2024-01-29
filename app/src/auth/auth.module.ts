@@ -10,8 +10,18 @@ import { KakaoStrategy } from './strategy/kakao.strategy';
 import { NaverStrategy } from './strategy/naver.strategy';
 
 @Module({
-    imports: [UserModule, PassportModule.register({ session: true })],
+    imports: [
+        UserModule,
+        PassportModule.register({ session: true }),
+    ],
     controllers: [AuthController],
-    providers: [AuthService, GoogleStrategy, GithubStrategy, NaverStrategy, KakaoStrategy, SessionSerializer],
+    providers: [
+        AuthService,
+        GoogleStrategy,
+        GithubStrategy,
+        NaverStrategy,
+        KakaoStrategy,
+        SessionSerializer,
+    ],
 })
 export class AuthModule {}

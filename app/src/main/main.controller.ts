@@ -4,7 +4,9 @@ import { MainService } from './main.service';
 
 @Controller('main')
 export class MainController {
-    constructor(private readonly mainService: MainService) {}
+    constructor(
+        private readonly mainService: MainService,
+    ) {}
 
     @Get('/')
     test(@Res() res: Response) {

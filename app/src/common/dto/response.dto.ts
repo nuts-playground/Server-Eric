@@ -9,7 +9,12 @@ export class ResponseDto<T> {
     @Exclude() private readonly _serverDatetime: string;
     @Exclude() private readonly _data: T;
 
-    constructor(status: ResponseStatus, message: string, serverDateTime: string, data: T) {
+    constructor(
+        status: ResponseStatus,
+        message: string,
+        serverDateTime: string,
+        data: T,
+    ) {
         this._status = status;
         this._message = message;
         this._serverDatetime = serverDateTime;
@@ -17,27 +22,60 @@ export class ResponseDto<T> {
     }
 
     static success(): ResponseDto<string> {
-        return new ResponseDto<string>('success', '', DateUtil.now(), '');
+        return new ResponseDto<string>(
+            'success',
+            '',
+            DateUtil.now(),
+            '',
+        );
     }
 
     static successData<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>('success', '', DateUtil.now(), data);
+        return new ResponseDto<T>(
+            'success',
+            '',
+            DateUtil.now(),
+            data,
+        );
     }
 
     static error(message: string): ResponseDto<string> {
-        return new ResponseDto<string>('error', message, DateUtil.now(), '');
+        return new ResponseDto<string>(
+            'error',
+            message,
+            DateUtil.now(),
+            '',
+        );
     }
 
     static errorData<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>('error', '', DateUtil.now(), data);
+        return new ResponseDto<T>(
+            'error',
+            '',
+            DateUtil.now(),
+            data,
+        );
     }
 
     static badParam<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>('bad_param', '', DateUtil.now(), data);
+        return new ResponseDto<T>(
+            'bad_param',
+            '',
+            DateUtil.now(),
+            data,
+        );
     }
 
-    static exception<T>(message: string, data: T): ResponseDto<T> {
-        return new ResponseDto<T>('exception', message, DateUtil.now(), data);
+    static exception<T>(
+        message: string,
+        data: T,
+    ): ResponseDto<T> {
+        return new ResponseDto<T>(
+            'exception',
+            message,
+            DateUtil.now(),
+            data,
+        );
     }
 
     @ApiProperty()

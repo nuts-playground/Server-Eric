@@ -13,7 +13,9 @@ export class RedisClient {
             return this.redisClient;
         }
 
-        this.redisClient = new Redis(redisConfig.getConfig());
+        this.redisClient = new Redis(
+            redisConfig.getConfig(),
+        );
         return this.redisClient;
     }
 }

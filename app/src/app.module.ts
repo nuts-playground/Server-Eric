@@ -7,7 +7,13 @@ import { mysqlConfig } from './config/mysql.config';
 import { MainModule } from './main/main.module';
 
 @Module({
-    imports: [AuthModule, UserModule, BoardModule, TypeOrmModule.forRoot(mysqlConfig.getConfig()), MainModule],
+    imports: [
+        AuthModule,
+        UserModule,
+        BoardModule,
+        TypeOrmModule.forRoot(mysqlConfig.getConfig()),
+        MainModule,
+    ],
     controllers: [],
     providers: [],
 })

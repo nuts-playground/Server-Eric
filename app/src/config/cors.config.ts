@@ -11,10 +11,24 @@ class CorsConfig extends EnvConfig {
         return {
             origin: [this.getValue('ACCESS_CORS_ORIGIN')],
             credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-            allowedHeaders: ['Access-Control-Allow-Origin', 'X-Requested-With', 'Content-type', 'Accept', 'Authorization'],
+            methods: [
+                'GET',
+                'POST',
+                'PUT',
+                'DELETE',
+                'PATCH',
+            ],
+            allowedHeaders: [
+                'Access-Control-Allow-Origin',
+                'X-Requested-With',
+                'Content-type',
+                'Accept',
+                'Authorization',
+            ],
         };
     }
 }
 
-export const corsConfig = new CorsConfig(process.env).verifyKey(['ACCESS_CORS_ORIGIN']);
+export const corsConfig = new CorsConfig(
+    process.env,
+).verifyKey(['ACCESS_CORS_ORIGIN']);
