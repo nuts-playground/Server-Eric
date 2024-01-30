@@ -13,12 +13,20 @@ export class BoardLike extends CommonTimstamp {
     @PrimaryGeneratedColumn()
     like_id: number;
 
-    @ManyToOne(() => User, (user) => user.boardLike, {
-        createForeignKeyConstraints: true,
-        nullable: false,
-        onDelete: 'CASCADE',
+    @ManyToOne(
+        () => User,
+        (user) => user.boardLike,
+        {
+            createForeignKeyConstraints: true,
+            nullable: false,
+            onDelete: 'CASCADE',
+        }
+    )
+    @JoinColumn({
+        name: 'user_id',
+        foreignKeyConstraintName: 'fk-board_like-user',
+        referencedColumnName: 'user_id'
     })
-    @JoinColumn({ name: 'fk-board_like-user' })
     user: User;
 
     @ManyToOne(
@@ -30,6 +38,10 @@ export class BoardLike extends CommonTimstamp {
             onDelete: 'CASCADE',
         },
     )
-    @JoinColumn({ name: 'fk-board_like-board_content' })
+    @JoinColumn({
+        name: 'content_id',
+        foreignKeyConstraintName: 'fk-board_like-board_content',
+        referencedColumnName: 'content_id'
+    })
     boardContent: BoardContent[];
 }

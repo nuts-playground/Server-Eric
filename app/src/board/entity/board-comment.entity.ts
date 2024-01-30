@@ -19,8 +19,20 @@ export class BoardComment extends CommonTimstamp {
     })
     comment: string;
 
-    @ManyToOne(() => User, (user) => user.boardContent)
-    @JoinColumn({ name: 'fk-board_comment-user' })
+    @ManyToOne(
+        () => User,
+        (user) => user.boardContent,
+        {
+                createForeignKeyConstraints: true,
+                nullable: false,
+                onDelete: 'CASCADE',
+            }
+        )
+    @JoinColumn({
+        name: 'user_id',
+        foreignKeyConstraintName: 'fk-board_comment-user',
+        referencedColumnName: 'user_id'
+    })
     user: User;
 
     @ManyToOne(
@@ -32,6 +44,10 @@ export class BoardComment extends CommonTimstamp {
             onDelete: 'CASCADE',
         },
     )
-    @JoinColumn({ name: 'fk-board_comment-board_content' })
+    @JoinColumn({
+        name: 'content_id',
+        foreignKeyConstraintName: 'fk-board_comment-board_content',
+        referencedColumnName: 'content_id'
+    })
     boardContent: BoardContent;
 }

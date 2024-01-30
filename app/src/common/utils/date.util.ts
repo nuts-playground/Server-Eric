@@ -8,7 +8,7 @@ import {
 
 export class DateUtil {
     private static DATE_TIME_FORMATTER =
-        DateTimeFormatter.ofPattern('yyyy-MM-dd HH:mm:ss');
+        DateTimeFormatter.ofPattern('yyyy-MM-dd HH:mm:ss.SSSSSS');
 
     static now(): string {
         return LocalDateTime.now().format(
