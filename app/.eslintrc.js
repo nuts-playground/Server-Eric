@@ -16,7 +16,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'data-source.ts'],
   rules: {
     'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
     'no-trailing-spaces': ['error', { 'ignoreComments': true }],

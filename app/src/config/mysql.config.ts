@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as process from 'process';
 import { EnvConfig } from './env.config';
 
 class MysqlConfig extends EnvConfig {
