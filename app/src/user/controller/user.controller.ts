@@ -25,7 +25,9 @@ export class UserController {
                 return ResponseDto.error('로그인 하지 않았습니다.');
 
             const userEmail = session.passport.user;
-            const user = (await this.userService.findByEmail(userEmail)) as User;
+            const user = (await this.userService.findByEmail(
+                userEmail,
+            )) as User;
 
             if (!user) return ResponseDto.error('로그인 하지 않았습니다.');
 
@@ -46,10 +48,14 @@ export class UserController {
         @Body() userDeleteDto: UserDeleteDto,
     ): Promise<ResponseDto<any>> {
         try {
-            const user = await this.userService.findByEmail(userDeleteDto.getEmail());
+            const user = await this.userService.findByEmail(
+                userDeleteDto.getEmail(),
+            );
             if (!user) return ResponseDto.error('존재하지 않는 유저입니다.');
 
-            const result = await this.userService.delete(userDeleteDto.getEmail());
+            const result = await this.userService.delete(
+                userDeleteDto.getEmail(),
+            );
             return result
                 ? ResponseDto.success()
                 : ResponseDto.error('삭제에 실패했습니다.');

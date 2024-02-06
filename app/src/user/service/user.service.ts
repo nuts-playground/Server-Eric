@@ -1,15 +1,11 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserSignUpDto } from '../dto/user-signup.dto';
-import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UserService {
-    constructor(
-        private readonly userRepository: UserRepository,
-    ) {}
+    constructor(private readonly userRepository: UserRepository) {}
 
     async findByEmail(userEmail: string): Promise<User | boolean> {
         try {
