@@ -4,12 +4,12 @@ import {
     Get,
     InternalServerErrorException,
     Post,
-    Redirect,
+    Redirect, Req,
     Res,
     Session,
     UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { urlConfig } from '../../config/url.config';
 import {
@@ -78,12 +78,21 @@ export class AuthController {
     async kakaoAuthRedirect() {}
 
     @Get('/logOut')
-    async logOut(@Session() session, @Res() res: Response) {
+    async logOut(
+        @Session() session,
+        @Req() req: Request,
+        @Res() res: Response,
+    ) {
         try {
             const sessionCheck = session.passport;
             if (sessionCheck && sessionCheck.user) {
-                res.clearCookie('connect.sid'); // 세션에 사용된 쿠키의 이름을 여기에 지정합니다.
-                res.send(true);
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.clearCookie('connect.sid');
+                    res.send(true);
+                });
             } else {
                 return ResponseDto.error('로그인 하지 않은 상태입니다.');
             }
