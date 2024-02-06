@@ -1,9 +1,4 @@
-import {
-    Column,
-    Entity,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BoardComment } from '../../board/entity/board-comment.entity';
 import { BoardContent } from '../../board/entity/board-content.entity';
 import { BoardLike } from '../../board/entity/board-like.entity';
@@ -28,34 +23,22 @@ export class User extends CommonTimstamp {
     @Column()
     provider_id: ProviderIdEnum;
 
-    @OneToMany(
-        () => BoardContent,
-        (boardContent) => boardContent.user,
-        {
-            cascade: ['update'],
-            nullable: false,
-        },
-    )
+    @OneToMany(() => BoardContent, (boardContent) => boardContent.user, {
+        cascade: ['update'],
+        nullable: false,
+    })
     boardContent: BoardContent[];
 
-    @OneToMany(
-        () => BoardComment,
-        (boardComment) => boardComment.user,
-        {
-            cascade: ['update'],
-            nullable: false,
-        },
-    )
+    @OneToMany(() => BoardComment, (boardComment) => boardComment.user, {
+        cascade: ['update'],
+        nullable: false,
+    })
     boardComment: BoardComment[];
 
-    @OneToMany(
-        () => BoardLike,
-        (boardLike) => boardLike.user,
-        {
-            cascade: ['update'],
-            nullable: false,
-        },
-    )
+    @OneToMany(() => BoardLike, (boardLike) => boardLike.user, {
+        cascade: ['update'],
+        nullable: false,
+    })
     boardLike: BoardLike[];
 
     static from(

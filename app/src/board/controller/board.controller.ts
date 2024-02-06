@@ -9,17 +9,15 @@ import {
     Put,
     ValidationPipe,
 } from '@nestjs/common';
-import { BoardService } from './board.service';
+import { BoardService } from '../service/board.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { CreateBoardDto } from '../dto/create-board.dto';
+import { UpdateBoardDto } from '../dto/update-board.dto';
 
 @Controller('board')
 @ApiTags('board')
 export class BoardController {
-    constructor(
-        private readonly boardService: BoardService,
-    ) {}
+    constructor(private readonly boardService: BoardService) {}
     @Get()
     findAll() {
         return this.boardService.findAll();
@@ -31,9 +29,7 @@ export class BoardController {
     }
 
     @Post()
-    create(
-        @Body(new ValidationPipe()) data: CreateBoardDto,
-    ) {
+    create(@Body(new ValidationPipe()) data: CreateBoardDto) {
         return this.boardService.create(data);
     }
 

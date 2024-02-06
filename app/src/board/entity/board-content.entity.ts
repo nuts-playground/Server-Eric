@@ -26,20 +26,16 @@ export class BoardContent extends CommonTimstamp {
     @Column()
     category_id: number;
 
-    @ManyToOne(
-        () => User,
-        (user) => user.boardContent,
-        {
-            createForeignKeyConstraints: true,
-            nullable: false,
-            onDelete: 'CASCADE',
-        },
-    )
+    @ManyToOne(() => User, (user) => user.boardContent, {
+        createForeignKeyConstraints: true,
+        nullable: false,
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({
-            name: 'user_id',
-            foreignKeyConstraintName: 'fk-board_content-user',
-            referencedColumnName: 'user_id'
-        })
+        name: 'user_id',
+        foreignKeyConstraintName: 'fk-board_content-user',
+        referencedColumnName: 'user_id',
+    })
     user: User;
 
     @ManyToOne(
@@ -52,9 +48,9 @@ export class BoardContent extends CommonTimstamp {
         },
     )
     @JoinColumn({
-        name:'category_id',
+        name: 'category_id',
         foreignKeyConstraintName: 'fk-board_content-board-category',
-        referencedColumnName: 'category_id'
+        referencedColumnName: 'category_id',
     })
     boardCategory: BoardCategory;
 
@@ -68,13 +64,9 @@ export class BoardContent extends CommonTimstamp {
     )
     boardComment: BoardComment[];
 
-    @OneToMany(
-        () => BoardLike,
-        (boardLike) => boardLike.boardContent,
-        {
-            cascade: ['update'],
-            nullable: false,
-        },
-    )
+    @OneToMany(() => BoardLike, (boardLike) => boardLike.boardContent, {
+        cascade: ['update'],
+        nullable: false,
+    })
     boardLike: BoardLike[];
 }

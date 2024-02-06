@@ -1,22 +1,17 @@
-import {
-    Injectable,
-    InternalServerErrorException,
-} from '@nestjs/common';
-import { UserSignUpDto } from './dto/user-signup.dto';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { UserSignUpDto } from '../dto/user-signup.dto';
 import { Repository } from 'typeorm';
-import { User } from './entity/user.entity';
+import { User } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        private readonly userRepository: UserRepository,
     ) {}
 
-    async findByEmail(
-        userEmail: string,
-    ): Promise<User | boolean> {
+    async findByEmail(userEmail: string): Promise<User | boolean> {
         try {
             const user = await this.userRepository.findOne({
                 where: { user_email: userEmail },
@@ -27,13 +22,9 @@ export class UserService {
         }
     }
 
-    async signUp(
-        userSignUpDto: UserSignUpDto,
-    ): Promise<User | boolean> {
+    async signUp(userSignUpDto: UserSignUpDto): Promise<User | boolean> {
         try {
-            return await this.userRepository.save(
-                userSignUpDto.toEntity(),
-            );
+            return await this.userRepository.save(userSignUpDto.toEntity());
         } catch (err) {
             throw new InternalServerErrorException(err);
         }
@@ -41,10 +32,9 @@ export class UserService {
 
     async delete(userEmail: string): Promise<boolean> {
         try {
-            const result =
-                await this.userRepository.softDelete({
-                    user_email: userEmail,
-                });
+            const result = await this.userRepository.softDelete({
+                user_email: userEmail,
+            });
             return !!result;
         } catch (err) {
             throw new InternalServerErrorException(err);

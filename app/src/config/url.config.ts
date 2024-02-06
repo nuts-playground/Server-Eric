@@ -19,9 +19,7 @@ class UrlConfig extends EnvConfig {
     }
 }
 
-export const urlConfig = new UrlConfig(
-    process.env,
-).verifyKey([
+export const urlConfig = new UrlConfig(process.env).verifyKey([
     'MAIN_PAGE_URL',
     'DOMAIN_NAME',
     'SERVER_HOST_URL',

@@ -2,10 +2,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import * as process from 'process';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/exception/http.exception';
-import {
-    ClassSerializerInterceptor,
-    ValidationPipe,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { corsConfig } from './config/cors.config';
 import { setSession } from './config/session.config';
 
@@ -14,9 +11,7 @@ async function bootstrap() {
     app.useGlobalInterceptors(
         new ClassSerializerInterceptor(app.get(Reflector)),
     );
-    app.useGlobalPipes(
-        new ValidationPipe({ transform: true }),
-    );
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
     await setSession(app);
     // const config = new DocumentBuilder()

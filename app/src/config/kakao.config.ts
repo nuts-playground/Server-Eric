@@ -16,20 +16,14 @@ class KakaoConfig extends EnvConfig {
     public getConfig(): kakaoOauthInterface {
         return {
             clientID: this.getValue('KAKAO_CLIENT_ID'),
-            clientSecret: this.getValue(
-                'KAKAO_CLIENT_SECRET',
-            ),
-            callbackURL: this.getValue(
-                'KAKAO_OAUTH_CALLBACK_URL',
-            ),
+            clientSecret: this.getValue('KAKAO_CLIENT_SECRET'),
+            callbackURL: this.getValue('KAKAO_OAUTH_CALLBACK_URL'),
             scope: ['profile_nickname', 'account_email'],
         };
     }
 }
 
-export const kakaoConfig = new KakaoConfig(
-    process.env,
-).verifyKey([
+export const kakaoConfig = new KakaoConfig(process.env).verifyKey([
     'KAKAO_CLIENT_ID',
     'KAKAO_CLIENT_SECRET',
     'KAKAO_OAUTH_CALLBACK_URL',

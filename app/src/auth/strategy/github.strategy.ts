@@ -3,12 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-github2';
 import { githubConfig } from '../../config/github.config';
 import { UserSignUpDto } from '../../user/dto/user-signup.dto';
-import { UserService } from '../../user/user.service';
+import { UserService } from '../../user/service/user.service';
 
 @Injectable()
-export class GithubStrategy extends PassportStrategy(
-    Strategy,
-) {
+export class GithubStrategy extends PassportStrategy(Strategy) {
     constructor(private userService: UserService) {
         super(githubConfig.getConfig());
     }
@@ -18,29 +16,16 @@ export class GithubStrategy extends PassportStrategy(
         refreshToken: string,
         profile: any,
     ): Promise<any> {
-        const {
-            id,
-            username,
-            displayName,
-            photos,
-            provider,
-        } = profile;
+        const { id, username, displayName, photos, provider } = profile;
         const email =
             profile.emails && profile.emails[0]
                 ? profile.emails[0].value
                 : null;
-        const member =
-            await this.userService.findByEmail(email);
+        const member = await this.userService.findByEmail(email);
 
         if (!member) {
-            const userSignUpDto = new UserSignUpDto(
-                email,
-                username,
-                provider,
-            );
-            return await this.userService.signUp(
-                userSignUpDto,
-            );
+            const userSignUpDto = new UserSignUpDto(email, username, provider);
+            return await this.userService.signUp(userSignUpDto);
         } else {
             return member;
         }

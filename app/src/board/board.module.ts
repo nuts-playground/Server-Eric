@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BoardController } from './board.controller';
-import { BoardService } from './board.service';
+import { BoardController } from './controller/board.controller';
+import { BoardService } from './service/board.service';
 
 @Module({
     controllers: [BoardController],
