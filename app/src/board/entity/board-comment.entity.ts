@@ -15,7 +15,7 @@ export class BoardComment extends CommonTimstamp {
     comment_id: number;
 
     @Column({
-        length: 15,
+        length: 100,
     })
     comment: string;
 

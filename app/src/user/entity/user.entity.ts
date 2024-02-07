@@ -17,10 +17,14 @@ export class User extends CommonTimstamp {
     @Column()
     user_email: string;
 
-    @Column()
+    @Column({
+        length: 20,
+    })
     user_name: string;
 
-    @Column()
+    @Column({
+        length: 20,
+    })
     provider_id: ProviderIdEnum;
 
     @OneToMany(() => BoardContent, (boardContent) => boardContent.user, {

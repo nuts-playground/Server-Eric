@@ -6,7 +6,9 @@ export class BoardCategory {
     @PrimaryGeneratedColumn()
     category_id: number;
 
-    @Column()
+    @Column({
+        length: 20,
+    })
     title: string;
 
     @OneToMany(

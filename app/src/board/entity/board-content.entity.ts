@@ -17,10 +17,12 @@ export class BoardContent extends CommonTimstamp {
     @PrimaryGeneratedColumn()
     content_id: number;
 
-    @Column()
+    @Column({
+        length: 50,
+    })
     title: string;
 
-    @Column()
+    @Column('longtext')
     content: string;
 
     @Column()
