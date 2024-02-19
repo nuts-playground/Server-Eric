@@ -6,14 +6,14 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CommonTimstamp } from '../../common/entity/common-timstamp.entity';
+import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { User } from '../../user/entity/user.entity';
 import { BoardCategory } from './board-category.entity';
 import { BoardComment } from './board-comment.entity';
 import { BoardLike } from './board-like.entity';
 
 @Entity({ name: 'board_content' })
-export class BoardContent extends CommonTimstamp {
+export class BoardContent extends CommonTimestamp {
     @PrimaryGeneratedColumn()
     content_id: number;
 

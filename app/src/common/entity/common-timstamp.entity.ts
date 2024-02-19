@@ -1,6 +1,6 @@
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
 
-export abstract class CommonTimstamp {
+export abstract class CommonTimestamp {
     @CreateDateColumn({
         type: 'timestamp',
     })

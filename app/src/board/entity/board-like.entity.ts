@@ -1,10 +1,10 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { CommonTimstamp } from '../../common/entity/common-timstamp.entity';
+import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { User } from '../../user/entity/user.entity';
 import { BoardContent } from './board-content.entity';
 
 @Entity({ name: 'board_like' })
-export class BoardLike extends CommonTimstamp {
+export class BoardLike extends CommonTimestamp {
     @PrimaryGeneratedColumn()
     like_id: number;
 

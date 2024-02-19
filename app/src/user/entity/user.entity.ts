@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BoardComment } from '../../board/entity/board-comment.entity';
 import { BoardContent } from '../../board/entity/board-content.entity';
 import { BoardLike } from '../../board/entity/board-like.entity';
-import { CommonTimstamp } from '../../common/entity/common-timstamp.entity';
+import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 /*
  * 데이터베이스 USER 테이블과 매핑되는 Entity
@@ -10,7 +10,7 @@ import { ProviderIdEnum } from '../enum/provider-id-enum';
  * */
 
 @Entity({ name: 'user' })
-export class User extends CommonTimstamp {
+export class User extends CommonTimestamp {
     @PrimaryGeneratedColumn()
     user_id: number;
 
