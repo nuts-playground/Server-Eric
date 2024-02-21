@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-naver-v2';
 import { naverConfig } from '../../config/naver.config';
 import { UserSignUpDto } from '../../user/dto/user-signup.dto';
+import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 
 @Injectable()
@@ -21,7 +22,12 @@ export class NaverStrategy extends PassportStrategy(Strategy) {
         if (provider !== 'naver') return false;
         if (!member) {
             const userSignUpDto = new UserSignUpDto(email, name, provider);
-            return await this.userService.signUp(userSignUpDto);
+
+            if (userSignUpDto.toEntity() instanceof User) {
+                return await this.userService.signUp(userSignUpDto);
+            } else {
+                return userSignUpDto.valiDateParam();
+            }
         } else {
             return member;
         }

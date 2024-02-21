@@ -18,7 +18,7 @@ describe('UserRepository CRUD Test', () => {
         testInfo.userEmail,
         testInfo.userName,
         testInfo.providerId as ProviderIdEnum,
-    ).toEntity();
+    ).toEntity() as User;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -33,12 +33,7 @@ describe('UserRepository CRUD Test', () => {
 
         userRepository = module.get<UserRepository>(UserRepository);
         imsiUserTable = [];
-        jest.spyOn(userRepository, 'save').mockImplementation(
-            async (user: User) => {
-                imsiUserTable.push(user);
-                return testUser;
-            },
-        );
+        jest.spyOn(userRepository, 'save').mockResolvedValue(testUser);
 
         jest.spyOn(userRepository, 'findOne').mockImplementation(
             async (userEmailObj) => {
@@ -91,7 +86,7 @@ describe('UserRepository CRUD Test', () => {
                 testInfo.userEmail,
                 testInfo.userName,
                 'naver' as ProviderIdEnum,
-            ).toEntity();
+            ).toEntity() as User;
 
             const targetUser = await userRepository.save(updateUser);
             const resultArr = [];

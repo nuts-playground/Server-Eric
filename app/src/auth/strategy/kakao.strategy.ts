@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
 import { kakaoConfig } from '../../config/kakao.config';
 import { UserSignUpDto } from '../../user/dto/user-signup.dto';
+import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy) {
@@ -24,8 +25,12 @@ export class KakaoStrategy extends PassportStrategy(Strategy) {
 
         if (!member) {
             const userSignUpDto = new UserSignUpDto(email, username, provider);
-            // new member
-            return await this.userService.signUp(userSignUpDto);
+
+            if (userSignUpDto.toEntity() instanceof User) {
+                return await this.userService.signUp(userSignUpDto);
+            } else {
+                return userSignUpDto.valiDateParam();
+            }
         } else {
             return member;
         }

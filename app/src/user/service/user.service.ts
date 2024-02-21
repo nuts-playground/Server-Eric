@@ -20,7 +20,12 @@ export class UserService {
 
     async signUp(userSignUpDto: UserSignUpDto): Promise<User | boolean> {
         try {
-            return await this.userRepository.save(userSignUpDto.toEntity());
+            const user = userSignUpDto.toEntity() ?? false;
+            if (user instanceof User) {
+                return await this.userRepository.save(user);
+            } else {
+                new Error(JSON.stringify(userSignUpDto));
+            }
         } catch (err) {
             throw new InternalServerErrorException(err);
         }

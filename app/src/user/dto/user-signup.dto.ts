@@ -73,7 +73,11 @@ export class UserSignUpDto {
         return Object.values(errorObj).length === 0;
     }
 
-    toEntity(): User {
-        return User.from(this.user_email, this.user_name, this.provider_id);
+    toEntity(): User | exchangeObj {
+        if (this.isReadySignUp()) {
+            return User.from(this.user_email, this.user_name, this.provider_id);
+        } else {
+            return this.valiDateParam();
+        }
     }
 }

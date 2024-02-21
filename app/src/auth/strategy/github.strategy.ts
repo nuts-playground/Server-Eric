@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-github2';
 import { githubConfig } from '../../config/github.config';
 import { UserSignUpDto } from '../../user/dto/user-signup.dto';
+import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 
 @Injectable()
@@ -25,7 +26,12 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
 
         if (!member) {
             const userSignUpDto = new UserSignUpDto(email, username, provider);
-            return await this.userService.signUp(userSignUpDto);
+
+            if (userSignUpDto.toEntity() instanceof User) {
+                return await this.userService.signUp(userSignUpDto);
+            } else {
+                return userSignUpDto.valiDateParam();
+            }
         } else {
             return member;
         }
