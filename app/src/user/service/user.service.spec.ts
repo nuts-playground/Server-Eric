@@ -24,7 +24,7 @@ const notFoundEmail = 'testNotFound@naver.com';
 describe('user service test', () => {
     let userRepository;
     let userService;
-    beforeEach(async () => {
+    beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UserService,

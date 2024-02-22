@@ -6,7 +6,7 @@ import { ResponseStatus } from '../enum/response-status';
 export class ResponseDto<T> {
     @Exclude() private readonly _status: string;
     @Exclude() private readonly _message: string;
-    @Exclude() private readonly _serverDatetime: string;
+    @Exclude() private readonly _serverDateTime: string;
     @Exclude() private readonly _data: T;
 
     constructor(
@@ -17,7 +17,7 @@ export class ResponseDto<T> {
     ) {
         this._status = status;
         this._message = message;
-        this._serverDatetime = serverDateTime;
+        this._serverDateTime = serverDateTime;
         this._data = data;
     }
 
@@ -60,7 +60,7 @@ export class ResponseDto<T> {
     @ApiProperty()
     @Expose()
     get serverDateTime(): string {
-        return this._serverDatetime;
+        return this._serverDateTime;
     }
 
     @ApiProperty()

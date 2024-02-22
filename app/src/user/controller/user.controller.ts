@@ -22,7 +22,7 @@ export class UserController {
     ): Promise<ResponseDto<any>> {
         try {
             if (!session.passport)
-                return ResponseDto.error('로그인 하지 않았습니다.');
+                return ResponseDto.error('정보가 존재하지 않습니다.');
 
             const userEmail = session.passport.user;
             const user = (await this.userService.findByEmail(
@@ -62,5 +62,10 @@ export class UserController {
         } catch (err) {
             throw new InternalServerErrorException(err);
         }
+    }
+
+    @Get('/test')
+    async test() {
+        return '무의미 라우터 테스트';
     }
 }
