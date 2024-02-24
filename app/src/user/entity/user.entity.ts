@@ -27,7 +27,7 @@ export class User extends CommonTimestamp {
     })
     provider_id: ProviderIdEnum;
 
-    @OneToMany(() => BoardContent, (boardContent) => boardContent.user, {
+    @OneToMany(() => BoardContent, (boardContent) => boardContent.user_id, {
         cascade: ['update'],
         nullable: false,
     })

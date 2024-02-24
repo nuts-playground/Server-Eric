@@ -20,4 +20,12 @@ export class BoardCategory {
         },
     )
     boardContent: BoardContent[];
+
+    static from(
+        title: string
+    ): BoardCategory {
+        const boardCategory = new BoardCategory();
+        boardCategory.title = title
+        return boardCategory
+    }
 }

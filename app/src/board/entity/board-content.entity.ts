@@ -38,7 +38,7 @@ export class BoardContent extends CommonTimestamp {
         foreignKeyConstraintName: 'fk-board_content-user',
         referencedColumnName: 'user_id',
     })
-    user: User;
+    user_id: number;
 
     @ManyToOne(
         () => BoardCategory,
@@ -71,4 +71,18 @@ export class BoardContent extends CommonTimestamp {
         nullable: false,
     })
     boardLike: BoardLike[];
+
+    static from(
+        title: string,
+        content: string,
+        category_id: number,
+        user_id: number
+    ): BoardContent {
+        const boardContent = new BoardContent();
+        boardContent.title = title;
+        boardContent.content = content;
+        boardContent.category_id = category_id;
+        boardContent.user_id = user_id;
+        return boardContent;
+    }
 }
