@@ -1,4 +1,4 @@
-import {BoardContent} from "../entity/board-content.entity";
+import { BoardContent } from '../entity/board-content.entity';
 
 export class CreateBoardDto {
     private readonly title: string;
@@ -7,34 +7,30 @@ export class CreateBoardDto {
 
     private readonly category_id: number;
 
-    private readonly user_id: number;
+    private readonly user_email: string;
 
     constructor(
         title: string,
         content: string,
-        category_id: number,
-        user_id: number
+        categoryId: number,
+        userEmail: string,
     ) {
         this.title = title;
         this.content = content;
-        this.category_id = category_id;
-        this.user_id = user_id;
+        this.category_id = categoryId;
+        this.user_email = userEmail;
     }
 
-    valiDateParam() {
-
+    getUserEmail(): string {
+        return this.user_email;
     }
 
-    isReadyCreate() {
-
-    }
-
-    toEntity(): BoardContent {
+    toEntity(userId: number): BoardContent {
         return BoardContent.from(
             this.title,
             this.content,
             this.category_id,
-            this.user_id
-        )
+            userId,
+        );
     }
 }

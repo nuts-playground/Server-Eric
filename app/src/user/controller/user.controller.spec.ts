@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { instanceToPlain } from 'class-transformer';
-import { UserDeleteDto } from '../dto/user-delete.dto';
+import { UserEmailDto } from '../dto/user-email.dto';
 import { UserService } from '../service/user.service';
 import { UserController } from './user.controller';
 
@@ -97,9 +97,9 @@ describe('유저 컨트롤러 테스트', () => {
 
     describe('유저 가입 정보 지우기', () => {
         it('POST /delete', async () => {
-            const noSearchUserParam = new UserDeleteDto('test@test.com');
-            const successParam = new UserDeleteDto('seokho@test.com');
-            const serverErrorParam = new UserDeleteDto('ServerError@test.com');
+            const noSearchUserParam = new UserEmailDto('test@test.com');
+            const successParam = new UserEmailDto('seokho@test.com');
+            const serverErrorParam = new UserEmailDto('ServerError@test.com');
             const noSearchResult = convertPlain(
                 await userController.delete(noSearchUserParam),
             );

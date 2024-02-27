@@ -1,4 +1,8 @@
-import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+    ClassSerializerInterceptor,
+    INestApplication,
+    ValidationPipe,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { HttpExceptionFilter } from '../common/exception/http.exception';
 import { corsConfig } from './cors.config';

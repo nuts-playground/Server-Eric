@@ -6,7 +6,7 @@ import {
     Post,
     Session,
 } from '@nestjs/common';
-import { UserDeleteDto } from '../dto/user-delete.dto';
+import { UserEmailDto } from '../dto/user-email.dto';
 import { UserService } from '../service/user.service';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { User } from '../entity/user.entity';
@@ -32,6 +32,7 @@ export class UserController {
             if (!user) return ResponseDto.error('로그인 하지 않았습니다.');
 
             const responseUserInfo = new UserResponseDto(
+                user.user_id,
                 user.user_email,
                 user.user_name,
                 user.provider_id,
@@ -45,16 +46,16 @@ export class UserController {
 
     @Post('/delete')
     async delete(
-        @Body() userDeleteDto: UserDeleteDto,
+        @Body() userEmailDto: UserEmailDto,
     ): Promise<ResponseDto<any>> {
         try {
             const user = await this.userService.findByEmail(
-                userDeleteDto.getEmail(),
+                userEmailDto.getEmail(),
             );
             if (!user) return ResponseDto.error('존재하지 않는 유저입니다.');
 
             const result = await this.userService.delete(
-                userDeleteDto.getEmail(),
+                userEmailDto.getEmail(),
             );
             return result
                 ? ResponseDto.success()

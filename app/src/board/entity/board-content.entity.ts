@@ -76,7 +76,7 @@ export class BoardContent extends CommonTimestamp {
         title: string,
         content: string,
         category_id: number,
-        user_id: number
+        user_id: number,
     ): BoardContent {
         const boardContent = new BoardContent();
         boardContent.title = title;

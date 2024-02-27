@@ -42,15 +42,6 @@ export class UserService {
         }
     }
 
-    // async findAll() {
-    //     try {
-    //         const result = await this.userRepository.find();
-    //         console.log(result);
-    //     } catch (err) {
-    //         throw new InternalServerErrorException(err);
-    //     }
-    // }
-
     async test() {
         console.log('test');
     }

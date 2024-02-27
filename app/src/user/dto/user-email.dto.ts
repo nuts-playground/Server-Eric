@@ -1,4 +1,4 @@
-export class UserDeleteDto {
+export class UserEmailDto {
     private readonly user_email: string;
 
     constructor(userEmail: string) {
