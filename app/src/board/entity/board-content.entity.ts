@@ -7,6 +7,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
+import { DateUtil } from '../../common/utils/date.util';
 import { User } from '../../user/entity/user.entity';
 import { BoardCategory } from './board-category.entity';
 import { BoardComment } from './board-comment.entity';
@@ -28,6 +29,9 @@ export class BoardContent extends CommonTimestamp {
     @Column()
     category_id: number;
 
+    @Column()
+    user_id: number;
+
     @ManyToOne(() => User, (user) => user.boardContent, {
         createForeignKeyConstraints: true,
         nullable: false,
@@ -38,7 +42,7 @@ export class BoardContent extends CommonTimestamp {
         foreignKeyConstraintName: 'fk-board_content-user',
         referencedColumnName: 'user_id',
     })
-    user_id: number;
+    user: User;
 
     @ManyToOne(
         () => BoardCategory,
@@ -66,11 +70,25 @@ export class BoardContent extends CommonTimestamp {
     )
     boardComment: BoardComment[];
 
-    @OneToMany(() => BoardLike, (boardLike) => boardLike.boardContent, {
+    @OneToMany(() => BoardLike, (boardLike) => boardLike.content_id, {
         cascade: ['update'],
         nullable: false,
     })
     boardLike: BoardLike[];
+
+    private static newBoard(
+        title: string,
+        content: string,
+        category_id: number,
+        user_id: number,
+    ) {
+        const boardContent = new BoardContent();
+        boardContent.title = title;
+        boardContent.content = content;
+        boardContent.category_id = category_id;
+        boardContent.user_id = user_id;
+        return boardContent;
+    }
 
     static from(
         title: string,
@@ -84,5 +102,33 @@ export class BoardContent extends CommonTimestamp {
         boardContent.category_id = category_id;
         boardContent.user_id = user_id;
         return boardContent;
+    }
+
+    static updateInfo(boardContent: BoardContent): BoardContent {
+        const newBoardContent = this.newBoard(
+            boardContent.title,
+            boardContent.content,
+            boardContent.category_id,
+            boardContent.user_id,
+        );
+
+        let dateNow: Date;
+        // eslint-disable-next-line prefer-const
+        dateNow = DateUtil.dateNow();
+        newBoardContent.update_dtm = dateNow;
+        return newBoardContent;
+    }
+
+    static deleteInfo(boardContent: BoardContent): BoardContent {
+        const newBoardContent = this.newBoard(
+            boardContent.title,
+            boardContent.content,
+            boardContent.category_id,
+            boardContent.user_id,
+        );
+        const dateNow = DateUtil.dateNow();
+        newBoardContent.update_dtm = dateNow;
+        newBoardContent.delete_dtm = dateNow;
+        return newBoardContent;
     }
 }

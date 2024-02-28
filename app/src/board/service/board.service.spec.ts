@@ -43,4 +43,8 @@ describe('보드 서비스 테스트', () => {
             expect(categoryList[0].title).toEqual('자유게시판');
         });
     });
+
+    describe('보드 컨텐츠 테스트', () => {
+        it('getBoardContent', () => {});
+    });
 });

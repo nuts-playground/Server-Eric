@@ -39,7 +39,7 @@ export class User extends CommonTimestamp {
     })
     boardComment: BoardComment[];
 
-    @OneToMany(() => BoardLike, (boardLike) => boardLike.user, {
+    @OneToMany(() => BoardLike, (boardLike) => boardLike.user_id, {
         cascade: ['update'],
         nullable: false,
     })

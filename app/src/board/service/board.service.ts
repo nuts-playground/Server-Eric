@@ -2,12 +2,12 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { FindOptionsWhere } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
-import { DeleteBoardContentDto } from '../dto/delete-board-content.dto';
+import { DeleteBoardContentDto } from '../dto/board-content/delete-board-content.dto';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
 import { BoardCategory } from '../entity/board-category.entity';
 import { BoardContentRepository } from '../repository/board-content.repository';
 import { BoardContent } from '../entity/board-content.entity';
-import { CreateBoardContentDto } from '../dto/create-board-content.dto';
+import { CreateBoardContentDto } from '../dto/board-content/create-board-content.dto';
 
 @Injectable()
 export class BoardService {
@@ -16,6 +16,22 @@ export class BoardService {
         private readonly boardContentRepository: BoardContentRepository,
         private readonly userService: UserService,
     ) {}
+
+    async getBoardContent(
+        contentId: number,
+        categoryId?: number,
+        userId?: number,
+    ): Promise<BoardContent | null> {
+        const query: any = { where: { content_id: contentId } }; // 유연성을 위한 형식 어설션
+        if (categoryId) {
+            query.where.category_id = categoryId;
+        }
+        if (userId) {
+            query.where.user_id = userId; // 매개 변수에 따라 추가 조건 추가
+        }
+        return await this.boardContentRepository.findOne(query);
+    }
+
     async getBoardCategoryAll(): Promise<BoardCategory[] | null> {
         try {
             return await this.boardCategoryRepository.find();
@@ -53,25 +69,26 @@ export class BoardService {
         }
     }
 
-    async deleteBoardContent(deleteBoardContentDto: DeleteBoardContentDto) {
+    async deleteBoardContent(
+        deleteBoardContentDto: DeleteBoardContentDto,
+    ): Promise<BoardContent | boolean> {
         try {
             const user = await this.userService.findByEmail(
                 deleteBoardContentDto.getUserEmail(),
             );
 
-            if (!(user instanceof User)) {
-                return false;
-            } else {
-                const userId = user.user_id;
-                const query: FindOptionsWhere<BoardContent> = {
-                    category_id: deleteBoardContentDto.getCategoryId(),
-                    content_id: deleteBoardContentDto.getContentId(),
-                    user_id: userId,
-                };
-                const result =
-                    await this.boardContentRepository.softDelete(query);
-                return !!result;
-            }
+            if (!(user instanceof User)) return false;
+
+            const targetBoardContent = await this.getBoardContent(
+                deleteBoardContentDto.getContentId(),
+                deleteBoardContentDto.getCategoryId(),
+                user.user_id,
+            );
+
+            if (!(targetBoardContent instanceof BoardContent)) return false;
+
+            const deleteBoardInfo = BoardContent.deleteInfo(targetBoardContent);
+            return await this.boardContentRepository.save(deleteBoardInfo);
         } catch (err) {
             throw new InternalServerErrorException(err);
         }

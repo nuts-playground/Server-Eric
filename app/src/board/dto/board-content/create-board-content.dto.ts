@@ -1,4 +1,4 @@
-import { BoardContent } from '../entity/board-content.entity';
+import { BoardContent } from '../../entity/board-content.entity';
 
 export class CreateBoardContentDto {
     private readonly title: string;

@@ -7,13 +7,13 @@ import {
     Patch,
     Post,
 } from '@nestjs/common';
-import { DeleteBoardContentDto } from '../dto/delete-board-content.dto';
+import { DeleteBoardContentDto } from '../dto/board-content/delete-board-content.dto';
 import { BoardService } from '../service/board.service';
 import { ApiTags } from '@nestjs/swagger';
 import { BoardCategory } from '../entity/board-category.entity';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { BoardContent } from '../entity/board-content.entity';
-import { CreateBoardContentDto } from '../dto/create-board-content.dto';
+import { CreateBoardContentDto } from '../dto/board-content/create-board-content.dto';
 
 @Controller('board')
 @ApiTags('board')
@@ -68,7 +68,7 @@ export class BoardController {
                 deleteBoardContentDto,
             );
 
-            return state
+            return state instanceof BoardContent
                 ? ResponseDto.success()
                 : ResponseDto.error('게시글 삭제에 실패하였습니다.');
         } catch (err) {
