@@ -11,8 +11,12 @@ export class DateUtil {
         'yyyy-MM-dd HH:mm:ss.SSSSSS',
     );
 
-    static now(): string {
+    static stringNow(): string {
         return LocalDateTime.now().format(this.DATE_TIME_FORMATTER);
+    }
+
+    static dateNow(): Date {
+        return convert(LocalDateTime.now()).toDate();
     }
 
     static toDate(localDate: LocalDate | LocalDateTime): Date {

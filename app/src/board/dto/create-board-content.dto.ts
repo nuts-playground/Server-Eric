@@ -1,6 +1,6 @@
 import { BoardContent } from '../entity/board-content.entity';
 
-export class CreateBoardDto {
+export class CreateBoardContentDto {
     private readonly title: string;
 
     private readonly content: string;

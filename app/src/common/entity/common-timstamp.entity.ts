@@ -1,4 +1,4 @@
-import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn } from 'typeorm';
 
 export abstract class CommonTimestamp {
     @CreateDateColumn({
@@ -6,15 +6,17 @@ export abstract class CommonTimestamp {
     })
     create_dtm: Date;
 
-    @UpdateDateColumn({
+    @Column({
         type: 'timestamp',
         nullable: true,
+        precision: 6,
     })
     update_dtm: Date | null;
 
-    @DeleteDateColumn({
+    @Column({
         type: 'timestamp',
         nullable: true,
+        precision: 6,
     })
     delete_dtm: Date | null;
 }
