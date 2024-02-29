@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource, UpdateResult } from 'typeorm';
-import { UserSignUpDto } from '../dto/user-signup.dto';
+import { SignupDto } from '../dto/signup.dto';
 import { User } from '../entity/user.entity';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 import { UserRepository } from './user.repository';
@@ -14,7 +14,7 @@ describe('UserRepository CRUD Test', () => {
         userName: 'test',
         providerId: 'google',
     };
-    const testUser = new UserSignUpDto(
+    const testUser = new SignupDto(
         testInfo.userEmail,
         testInfo.userName,
         testInfo.providerId as ProviderIdEnum,
@@ -35,32 +35,28 @@ describe('UserRepository CRUD Test', () => {
         imsiUserTable = [];
         jest.spyOn(userRepository, 'save').mockResolvedValue(testUser);
 
-        jest.spyOn(userRepository, 'findOne').mockImplementation(
-            async (userEmailObj) => {
-                const userEmail = userEmailObj.where['user_email'];
-                for (let i = 0; i < imsiUserTable.length; i++) {
-                    const curUser = imsiUserTable[i];
-                    if (curUser.user_email === userEmail) {
-                        return curUser as User;
-                    }
+        jest.spyOn(userRepository, 'findOne').mockImplementation(async (userEmailObj) => {
+            const userEmail = userEmailObj.where['user_email'];
+            for (let i = 0; i < imsiUserTable.length; i++) {
+                const curUser = imsiUserTable[i];
+                if (curUser.user_email === userEmail) {
+                    return curUser as User;
                 }
-            },
-        );
+            }
+        });
 
-        jest.spyOn(userRepository, 'softDelete').mockImplementation(
-            async (userEmail: string) => {
-                for (let i = 0; i < imsiUserTable.length; i++) {
-                    const curUser = imsiUserTable[i];
-                    if (curUser.user_email === userEmail) {
-                        imsiUserTable[i] = {
-                            ...imsiUserTable[i],
-                            delete_dtm: new Date(),
-                        };
-                        return { raw: true } as UpdateResult;
-                    }
+        jest.spyOn(userRepository, 'softDelete').mockImplementation(async (userEmail: string) => {
+            for (let i = 0; i < imsiUserTable.length; i++) {
+                const curUser = imsiUserTable[i];
+                if (curUser.user_email === userEmail) {
+                    imsiUserTable[i] = {
+                        ...imsiUserTable[i],
+                        delete_dtm: new Date(),
+                    };
+                    return { raw: true } as UpdateResult;
                 }
-            },
-        );
+            }
+        });
     });
 
     it('save test', async () => {
@@ -82,7 +78,7 @@ describe('UserRepository CRUD Test', () => {
             where: { user_email: testInfo.userEmail },
         });
         if (findOneUser) {
-            const updateUser = new UserSignUpDto(
+            const updateUser = new SignupDto(
                 testInfo.userEmail,
                 testInfo.userName,
                 'naver' as ProviderIdEnum,

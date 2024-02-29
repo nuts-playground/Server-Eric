@@ -45,11 +45,7 @@ export class User extends CommonTimestamp {
     })
     boardLike: BoardLike[];
 
-    static from(
-        userEmail: string,
-        userName: string,
-        providerId: ProviderIdEnum,
-    ): User {
+    static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
         const user = new User();
         user.user_email = userEmail;
         user.user_name = userName;

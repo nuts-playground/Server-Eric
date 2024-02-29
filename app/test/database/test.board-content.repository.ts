@@ -4,9 +4,6 @@ import { BoardContent } from '../../src/board/entity/board-content.entity';
 
 export class TestBoardContentRepository extends Repository<BoardContent> {
     constructor(private dataSource: DataSource) {
-        super(
-            BoardContent,
-            mysqlConfig.getTestDataSource.createEntityManager(),
-        );
+        super(BoardContent, mysqlConfig.getTestDataSource.createEntityManager());
     }
 }

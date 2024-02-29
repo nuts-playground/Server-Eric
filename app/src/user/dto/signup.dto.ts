@@ -7,16 +7,12 @@ type exchangeObj = {
     provider_id: boolean | null;
 };
 
-export class UserSignUpDto {
+export class SignupDto {
     private readonly user_email: string;
     private readonly user_name: string;
     private readonly provider_id: ProviderIdEnum;
 
-    constructor(
-        userEmail: string,
-        userName: string,
-        providerId: ProviderIdEnum,
-    ) {
+    constructor(userEmail: string, userName: string, providerId: ProviderIdEnum) {
         this.user_email = userEmail;
         this.user_name = userName;
         this.provider_id = providerId;

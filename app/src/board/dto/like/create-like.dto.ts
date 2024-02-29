@@ -1,6 +1,6 @@
 import { BoardLike } from '../../entity/board-like.entity';
 
-export class CreateBoardLikeDto {
+export class CreateLikeDto {
     private readonly user_id: number;
     private readonly content_id: number;
 

@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { instanceToPlain } from 'class-transformer';
-import { UserEmailDto } from '../dto/user-email.dto';
+import { EmailDto } from '../dto/email.dto';
 import { UserService } from '../service/user.service';
 import { UserController } from './user.controller';
 
 describe('유저 컨트롤러 테스트', () => {
     let userController: UserController;
-
+    let userService: UserService;
     const convertPlain = (param) => {
         return instanceToPlain(param, {
             excludeExtraneousValues: true,
@@ -20,28 +20,23 @@ describe('유저 컨트롤러 테스트', () => {
                 {
                     provide: UserService,
                     useValue: {
-                        findByEmail: jest
-                            .fn()
-                            .mockImplementation((userEmail: string) => {
-                                if (userEmail === 'ServerError@test.com')
-                                    return true;
+                        findByEmail: jest.fn().mockImplementation((userEmail: string) => {
+                            if (userEmail === 'ServerError@test.com') return true;
 
-                                return userEmail === 'seokho@test.com';
-                            }),
-                        delete: jest
-                            .fn()
-                            .mockImplementation((userEmail: string) => {
-                                if (userEmail === 'ServerError@test.com')
-                                    return false;
+                            return userEmail === 'seokho@test.com';
+                        }),
+                        deleteUserInfo: jest.fn().mockImplementation((userEmail: string) => {
+                            if (userEmail === 'ServerError@test.com') return false;
 
-                                return userEmail === 'seokho@test.com';
-                            }),
+                            return userEmail === 'seokho@test.com';
+                        }),
                     },
                 },
             ],
         }).compile();
 
         userController = module.get<UserController>(UserController);
+        userService = module.get<UserService>(UserService);
     });
 
     it('should be defined', () => {
@@ -74,16 +69,12 @@ describe('유저 컨트롤러 테스트', () => {
                 },
             };
 
-            const failResult = convertPlain(
-                await userController.getInfo(sessionFailParam),
-            );
+            const failResult = convertPlain(await userController.getUserInfo(sessionFailParam));
 
-            const nonUserResult = convertPlain(
-                await userController.getInfo(nonUserParam),
-            );
+            const nonUserResult = convertPlain(await userController.getUserInfo(nonUserParam));
 
             const successResult = convertPlain(
-                await userController.getInfo(sessionSuccessParam),
+                await userController.getUserInfo(sessionSuccessParam),
             );
 
             expect(failResult.status).toEqual('error');
@@ -96,20 +87,18 @@ describe('유저 컨트롤러 테스트', () => {
     });
 
     describe('유저 가입 정보 지우기', () => {
-        it('POST /delete', async () => {
-            const noSearchUserParam = new UserEmailDto('test@test.com');
-            const successParam = new UserEmailDto('seokho@test.com');
-            const serverErrorParam = new UserEmailDto('ServerError@test.com');
+        it('POST /deleteUserInfo', async () => {
+            const noSearchUserParam = new EmailDto('test@test.com');
+            const successParam = new EmailDto('seokho@test.com');
+            const serverErrorParam = new EmailDto('ServerError@test.com');
             const noSearchResult = convertPlain(
-                await userController.delete(noSearchUserParam),
+                await userController.deleteUserInfo(noSearchUserParam),
             );
 
-            const successResult = convertPlain(
-                await userController.delete(successParam),
-            );
+            const successResult = convertPlain(await userController.deleteUserInfo(successParam));
 
             const serverErrorResult = convertPlain(
-                await userController.delete(serverErrorParam),
+                await userController.deleteUserInfo(serverErrorParam),
             );
 
             expect(noSearchResult.status).toEqual('error');
@@ -117,6 +106,31 @@ describe('유저 컨트롤러 테스트', () => {
             expect(successResult.status).toEqual('success');
             expect(serverErrorResult.status).toEqual('error');
             expect(serverErrorResult.message).toEqual('삭제에 실패했습니다.');
+        });
+    });
+
+    describe('컨트롤러 exception', () => {
+        it('getUserInfo', async () => {
+            // jest.spyOn(userService, 'findByEmail').mockRejectedValue({
+            //     test: 'test',
+            //     err: 'err',
+            // });
+            const sessionSuccessParam: Record<string, any> = {
+                passport: {
+                    user: 'seokho@test.com',
+                },
+            };
+            try {
+                const failResult = convertPlain(
+                    await userController.getUserInfo(sessionSuccessParam),
+                );
+            } catch (error) {
+                console.log(error);
+            }
+            // console.log(failResult);
+            // expect(failResult.status).toEqual('exception');
+            // expect(failResult.message).toEqual('getUserInfo');
+            // expect(Object.keys(failResult.data).length).toEqual(2);
         });
     });
 });

@@ -1,15 +1,10 @@
-export class UserResponseDto {
+export class SafeResponseDto {
     private readonly user_id: number;
     private readonly user_email: string;
     private readonly user_name: string;
     private readonly provider_id: string;
 
-    constructor(
-        userId: number,
-        userEmail: string,
-        userName: string,
-        providerId: string,
-    ) {
+    constructor(userId: number, userEmail: string, userName: string, providerId: string) {
         this.user_id = userId;
         this.user_email = userEmail;
         this.user_name = userName;

@@ -5,5 +5,4 @@ const ResponseStatusValues = {
     EXCEPTION: 'exception',
 } as const;
 
-export type ResponseStatus =
-    (typeof ResponseStatusValues)[keyof typeof ResponseStatusValues];
+export type ResponseStatus = (typeof ResponseStatusValues)[keyof typeof ResponseStatusValues];

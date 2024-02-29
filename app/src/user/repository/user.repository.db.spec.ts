@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { mysqlConfig } from '../../config/mysql.config';
-import { UserSignUpDto } from '../dto/user-signup.dto';
+import { SignupDto } from '../dto/signup.dto';
 import { User } from '../entity/user.entity';
 
 describe('typeorm version test', () => {
@@ -25,7 +25,7 @@ describe('typeorm version test', () => {
             providerId: 'kakao',
         };
 
-        testUser = new UserSignUpDto(
+        testUser = new SignupDto(
             testInfo.userEmail,
             testInfo.userName,
             testInfo.providerId,

@@ -1,14 +1,14 @@
 import { Repository } from 'typeorm';
 import { mysqlConfig } from '../../../config/mysql.config';
 
-import { CreateBoardContentDto } from '../../dto/board-content/create-board-content.dto';
+import { CreateContentDto } from '../../dto/content/create-content.dto';
 import { BoardContent } from '../../entity/board-content.entity';
 import { BoardLike } from '../../entity/board-like.entity';
 
 describe('typeorm version test', () => {
     let boardContentRepository; // custom repository
     let boardLikeRepository;
-    const testContentData = new CreateBoardContentDto(
+    const testContentData = new CreateContentDto(
         'test',
         '본문입니다 1234',
         1,
@@ -33,7 +33,7 @@ describe('typeorm version test', () => {
     it('게시글 지우기', async () => {
         // await boardContentRepository.save(testContentData);
         // const findBoard = await boardContentRepository.findOne({
-        //     where: { content_id: 1 },
+        //     where: { content_id: 1 },f
         // });
         // const curDate = DateUtil.dateNow();
         // findBoard.update_dtm = curDate;
@@ -58,7 +58,6 @@ describe('typeorm version test', () => {
         //     }
         //     return await boardContentRepository.findOne(query);
         // }
-
         // const targetBoardContent = await getBoardContent(9, 1, 1);
         // // console.log(targetBoardContent);
         // // const testBoardCOntent = BoardContent.deleteInfo(targetBoardContent);
@@ -67,13 +66,13 @@ describe('typeorm version test', () => {
         // });
         // await boardContentRepository.save(testContentData);
         //
-        // const testLike = new CreateBoardLikeDto(1, 10).toEntity();
+        // const testLike = new CreateLikeDto(1, 10).toEntity();
         // const like = await boardLikeRepository.save(testLike);
         // console.log(like);
         // console.log(ClassUtil.checkDelete(targetBoardContent));
     });
     it('좋아요 테스트', async () => {
-        // const testLike = new CreateBoardLikeDto(1, 2).toEntity();
+        // const testLike = new CreateLikeDto(1, 2).toEntity();
         // // const like = await boardLikeRepository.save(testLike);
         // await boardContentRepository.save({
         //     content_id: 2,

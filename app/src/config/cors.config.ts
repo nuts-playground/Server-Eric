@@ -23,6 +23,4 @@ class CorsConfig extends EnvConfig {
     }
 }
 
-export const corsConfig = new CorsConfig(process.env).verifyKey([
-    'ACCESS_CORS_ORIGIN',
-]);
+export const corsConfig = new CorsConfig(process.env).verifyKey(['ACCESS_CORS_ORIGIN']);

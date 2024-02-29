@@ -6,7 +6,7 @@ import { mysqlConfig } from '../../src/config/mysql.config';
 import { setSession } from '../../src/config/session.config';
 import * as supertest from 'supertest';
 import { UserController } from '../../src/user/controller/user.controller';
-import { UserSignUpDto } from '../../src/user/dto/user-signup.dto';
+import { SignupDto } from '../../src/user/dto/signup.dto';
 import { UserRepository } from '../../src/user/repository/user.repository';
 import { UserService } from '../../src/user/service/user.service';
 import { TestUserRepository } from '../database/test.user.repository';
@@ -45,9 +45,7 @@ describe('User router test (e2e)', () => {
 
     describe('/getInfo (GET)', () => {
         it('세션이 없는 경우', async () => {
-            const response = await supertest(app.getHttpServer())
-                .get('/user/getInfo')
-                .expect(200);
+            const response = await supertest(app.getHttpServer()).get('/user/getUser').expect(200);
 
             expect(response.body.status).toEqual('error');
             expect(response.body.message).toEqual('정보가 존재하지 않습니다.');
@@ -57,11 +55,7 @@ describe('User router test (e2e)', () => {
 
     describe('/delete (POST)', () => {
         it('유저가 있는 경우 성공', async () => {
-            const testUser = new UserSignUpDto(
-                'seokho@test.com',
-                'seokho',
-                'naver',
-            );
+            const testUser = new SignupDto('seokho@test.com', 'seokho', 'naver');
             await userService.signUp(testUser);
             const testDeleteUserEmail = { user_email: 'seokho@test.com' };
             const response = await supertest(app.getHttpServer())

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
-import { UserSignUpDto } from '../dto/user-signup.dto';
+import { SignupDto } from '../dto/signup.dto';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 import { UserRepository } from '../repository/user.repository';
 import { UserService } from './user.service';
@@ -13,7 +13,7 @@ const testInfo = {
     providerId: 'google',
 };
 
-const testUser = new UserSignUpDto(
+const testUser = new SignupDto(
     testInfo.userEmail,
     testInfo.userName,
     testInfo.providerId as ProviderIdEnum,
@@ -48,9 +48,7 @@ describe('user service test', () => {
 
     describe('findByEmail test', () => {
         it('find success user', async () => {
-            const repoSpy = jest
-                .spyOn(userRepository, 'findOne')
-                .mockResolvedValue(testUser);
+            const repoSpy = jest.spyOn(userRepository, 'findOne').mockResolvedValue(testUser);
             const user = await userService.findByEmail(testUserEmail);
             expect(user).toEqual(testUser);
             expect(repoSpy).toBeCalledWith({
@@ -75,9 +73,7 @@ describe('user service test', () => {
 
     describe('delete test', () => {
         it('soft delete user', async () => {
-            const repoSpy = jest
-                .spyOn(userRepository, 'softDelete')
-                .mockResolvedValue(true);
+            const repoSpy = jest.spyOn(userRepository, 'softDelete').mockResolvedValue(true);
             const deleteUser = await userService.delete(testUserEmail);
             expect(deleteUser).toEqual(true);
             expect(repoSpy).toBeCalledWith({ user_email: testUserEmail });

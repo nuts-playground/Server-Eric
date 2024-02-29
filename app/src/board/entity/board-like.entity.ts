@@ -1,10 +1,4 @@
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { User } from '../../user/entity/user.entity';
 import { BoardContent } from './board-content.entity';

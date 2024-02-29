@@ -1,10 +1,4 @@
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { User } from '../../user/entity/user.entity';
 import { BoardContent } from './board-content.entity';
@@ -31,15 +25,11 @@ export class BoardComment extends CommonTimestamp {
     })
     user: User;
 
-    @ManyToOne(
-        () => BoardContent,
-        (boardContent) => boardContent.boardComment,
-        {
-            createForeignKeyConstraints: true,
-            nullable: false,
-            onDelete: 'CASCADE',
-        },
-    )
+    @ManyToOne(() => BoardContent, (boardContent) => boardContent.boardComment, {
+        createForeignKeyConstraints: true,
+        nullable: false,
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({
         name: 'content_id',
         foreignKeyConstraintName: 'fk-board_comment-board_content',

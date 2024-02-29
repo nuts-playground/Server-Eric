@@ -1,11 +1,4 @@
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { DateUtil } from '../../common/utils/date.util';
 import { User } from '../../user/entity/user.entity';
@@ -44,30 +37,22 @@ export class BoardContent extends CommonTimestamp {
     })
     user: User;
 
-    @ManyToOne(
-        () => BoardCategory,
-        (boardCategory) => boardCategory.boardContent,
-        {
-            createForeignKeyConstraints: true,
-            nullable: false,
-            onDelete: 'CASCADE',
-        },
-    )
+    @ManyToOne(() => BoardCategory, (boardCategory) => boardCategory.boardContent, {
+        createForeignKeyConstraints: true,
+        nullable: false,
+        onDelete: 'CASCADE',
+    })
     @JoinColumn({
         name: 'category_id',
-        foreignKeyConstraintName: 'fk-board_content-board-category',
+        foreignKeyConstraintName: 'fk-board_content-category',
         referencedColumnName: 'category_id',
     })
     boardCategory: BoardCategory;
 
-    @OneToMany(
-        () => BoardComment,
-        (board_comment) => board_comment.boardContent,
-        {
-            cascade: ['update'],
-            nullable: false,
-        },
-    )
+    @OneToMany(() => BoardComment, (board_comment) => board_comment.boardContent, {
+        cascade: ['update'],
+        nullable: false,
+    })
     boardComment: BoardComment[];
 
     @OneToMany(() => BoardLike, (boardLike) => boardLike.content_id, {
@@ -76,12 +61,7 @@ export class BoardContent extends CommonTimestamp {
     })
     boardLike: BoardLike[];
 
-    private static newBoard(
-        title: string,
-        content: string,
-        category_id: number,
-        user_id: number,
-    ) {
+    private static newBoard(title: string, content: string, category_id: number, user_id: number) {
         const boardContent = new BoardContent();
         boardContent.title = title;
         boardContent.content = content;
@@ -104,7 +84,7 @@ export class BoardContent extends CommonTimestamp {
         return boardContent;
     }
 
-    static updateInfo(boardContent: BoardContent): BoardContent {
+    static updateEntity(boardContent: BoardContent): BoardContent {
         const newBoardContent = this.newBoard(
             boardContent.title,
             boardContent.content,
@@ -119,7 +99,7 @@ export class BoardContent extends CommonTimestamp {
         return newBoardContent;
     }
 
-    static deleteInfo(boardContent: BoardContent): BoardContent {
+    static deleteEntity(boardContent: BoardContent): BoardContent {
         const newBoardContent = this.newBoard(
             boardContent.title,
             boardContent.content,

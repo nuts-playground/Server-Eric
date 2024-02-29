@@ -9,12 +9,7 @@ export class ResponseDto<T> {
     @Exclude() private readonly _serverDateTime: string;
     @Exclude() private readonly _data: T;
 
-    constructor(
-        status: ResponseStatus,
-        message: string,
-        serverDateTime: string,
-        data: T,
-    ) {
+    constructor(status: ResponseStatus, message: string, serverDateTime: string, data: T) {
         this._status = status;
         this._message = message;
         this._serverDateTime = serverDateTime;
@@ -30,12 +25,7 @@ export class ResponseDto<T> {
     }
 
     static error(message: string): ResponseDto<string> {
-        return new ResponseDto<string>(
-            'error',
-            message,
-            DateUtil.stringNow(),
-            '',
-        );
+        return new ResponseDto<string>('error', message, DateUtil.stringNow(), '');
     }
 
     static errorData<T>(data: T): ResponseDto<T> {
@@ -47,12 +37,7 @@ export class ResponseDto<T> {
     }
 
     static exception<T>(message: string, data: T): ResponseDto<T> {
-        return new ResponseDto<T>(
-            'exception',
-            message,
-            DateUtil.stringNow(),
-            data,
-        );
+        return new ResponseDto<T>('exception', message, DateUtil.stringNow(), data);
     }
 
     @ApiProperty()

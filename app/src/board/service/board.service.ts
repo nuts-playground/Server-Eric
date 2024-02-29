@@ -1,13 +1,12 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { FindOptionsWhere } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
-import { DeleteBoardContentDto } from '../dto/board-content/delete-board-content.dto';
+import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
 import { BoardCategory } from '../entity/board-category.entity';
 import { BoardContentRepository } from '../repository/board-content.repository';
 import { BoardContent } from '../entity/board-content.entity';
-import { CreateBoardContentDto } from '../dto/board-content/create-board-content.dto';
+import { CreateContentDto } from '../dto/content/create-content.dto';
 
 @Injectable()
 export class BoardService {
@@ -17,86 +16,68 @@ export class BoardService {
         private readonly userService: UserService,
     ) {}
 
-    async getBoardContent(
+    async findContent(
         contentId: number,
         categoryId?: number,
         userId?: number,
     ): Promise<BoardContent | null> {
-        const query: any = { where: { content_id: contentId } }; // 유연성을 위한 형식 어설션
-        if (categoryId) {
-            query.where.category_id = categoryId;
-        }
-        if (userId) {
-            query.where.user_id = userId; // 매개 변수에 따라 추가 조건 추가
-        }
+        const query: any = { where: { content_id: contentId } };
+
+        if (categoryId) query.where.category_id = categoryId;
+
+        if (userId) query.where.user_id = userId;
+
         return await this.boardContentRepository.findOne(query);
     }
 
-    async getBoardCategoryAll(): Promise<BoardCategory[] | null> {
-        try {
-            return await this.boardCategoryRepository.find();
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+    async getCategoryList(): Promise<BoardCategory[] | null> {
+        return await this.boardCategoryRepository.find();
     }
 
-    async getBoardLatestContentList(): Promise<BoardContent[] | null> {
-        try {
-            return await this.boardContentRepository.find({
-                take: 10,
-            });
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+    async getLatestContentList(): Promise<BoardContent[] | null> {
+        return await this.boardContentRepository.find({
+            take: 10,
+        });
     }
 
-    async createBoardContent(createBoardDto: CreateBoardContentDto) {
-        try {
-            const writeUser = await this.userService.findByEmail(
-                createBoardDto.getUserEmail(),
-            );
-            if (writeUser instanceof User) {
-                const userId = writeUser.user_id;
-                const result = await this.boardContentRepository.save(
-                    createBoardDto.toEntity(userId),
-                );
-                return !!result;
-            } else {
-                return false;
-            }
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+    async createContent(createContentDto: CreateContentDto) {
+        const reqUserEmail = createContentDto.getUserEmail();
+        const user = await this.userService.findByEmail(reqUserEmail);
+
+        const notFoundUser = !(user instanceof User);
+
+        if (notFoundUser) return false;
+
+        const userId = user.user_id;
+        const userEntity = createContentDto.toEntity(userId);
+        const result = await this.boardContentRepository.save(userEntity);
+        return !!result;
     }
 
-    async deleteBoardContent(
-        deleteBoardContentDto: DeleteBoardContentDto,
-    ): Promise<BoardContent | boolean> {
-        try {
-            const user = await this.userService.findByEmail(
-                deleteBoardContentDto.getUserEmail(),
-            );
+    async deleteContent(deleteContentDto: DeleteContentDto): Promise<BoardContent | boolean> {
+        const reqUserEmail = deleteContentDto.getUserEmail();
+        const user = await this.userService.findByEmail(reqUserEmail);
+        const notFoundUser = !(user instanceof User);
 
-            if (!(user instanceof User)) return false;
+        if (notFoundUser) return false;
 
-            const targetBoardContent = await this.getBoardContent(
-                deleteBoardContentDto.getContentId(),
-                deleteBoardContentDto.getCategoryId(),
-                user.user_id,
-            );
+        const targetFindContent = await this.findContent(
+            deleteContentDto.getContentId(),
+            deleteContentDto.getCategoryId(),
+            user.user_id,
+        );
 
-            if (!(targetBoardContent instanceof BoardContent)) return false;
+        const notFoundContent = !(targetFindContent instanceof BoardContent);
 
-            const deleteBoardInfo = BoardContent.deleteInfo(targetBoardContent);
-            return await this.boardContentRepository.save(deleteBoardInfo);
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        if (notFoundContent) return false;
+
+        const deleteBoardInfo = BoardContent.deleteEntity(targetFindContent);
+        return await this.boardContentRepository.save(deleteBoardInfo);
     }
 
-    async updateBoardContent() {}
+    // async updateContent(updateContentDto: UpdateContentDto) {}
 
-    async likeBoardContent() {}
+    // async likeBoardContent() {}
 
-    async commentBoardContent() {}
+    // async commentBoardContent() {}
 }
