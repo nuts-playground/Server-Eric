@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource, UpdateResult } from 'typeorm';
-import { SignupDto } from '../dto/signup.dto';
-import { User } from '../entity/user.entity';
-import { ProviderIdEnum } from '../enum/provider-id-enum';
-import { UserRepository } from './user.repository';
+import { SignupDto } from '../../dto/signup.dto';
+import { User } from '../../entity/user.entity';
+import { ProviderIdEnum } from '../../enum/provider-id-enum';
+import { UserRepository } from '../user.repository';
 
 describe('UserRepository CRUD Test', () => {
     let imsiUserTable: User[];

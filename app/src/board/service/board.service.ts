@@ -7,6 +7,7 @@ import { BoardCategory } from '../entity/board-category.entity';
 import { BoardContentRepository } from '../repository/board-content.repository';
 import { BoardContent } from '../entity/board-content.entity';
 import { CreateContentDto } from '../dto/content/create-content.dto';
+import {UpdateContentDto} from "../dto/content/update-content.dto";
 
 @Injectable()
 export class BoardService {
@@ -15,6 +16,10 @@ export class BoardService {
         private readonly boardContentRepository: BoardContentRepository,
         private readonly userService: UserService,
     ) {}
+
+    async getUserByEmail(userEmail: string) {
+        return await this.userService.findByEmail(userEmail);
+    }
 
     async findContent(
         contentId: number,
@@ -42,7 +47,7 @@ export class BoardService {
 
     async createContent(createContentDto: CreateContentDto) {
         const reqUserEmail = createContentDto.getUserEmail();
-        const user = await this.userService.findByEmail(reqUserEmail);
+        const user = await this.getUserByEmail(reqUserEmail);
 
         const notFoundUser = !(user instanceof User);
 
@@ -56,7 +61,7 @@ export class BoardService {
 
     async deleteContent(deleteContentDto: DeleteContentDto): Promise<BoardContent | boolean> {
         const reqUserEmail = deleteContentDto.getUserEmail();
-        const user = await this.userService.findByEmail(reqUserEmail);
+        const user = await this.getUserByEmail(reqUserEmail);
         const notFoundUser = !(user instanceof User);
 
         if (notFoundUser) return false;
@@ -75,7 +80,26 @@ export class BoardService {
         return await this.boardContentRepository.save(deleteBoardInfo);
     }
 
-    // async updateContent(updateContentDto: UpdateContentDto) {}
+    async updateContent(updateContentDto: UpdateContentDto) {
+        const reqUserEmail = updateContentDto.getEmail();
+        const user = await this.getUserByEmail(reqUserEmail);
+
+        const notFoundUser = !(user instanceof User);
+        if (notFoundUser) return false;
+        const targetFindContent = await this.findContent(
+            updateContentDto.getContentId(),
+            updateContentDto.getCategoryId(),
+            user.user_id,
+        );
+
+        const notFoundContent = !(targetFindContent instanceof BoardContent);
+        if (notFoundContent) return false;
+
+        return await this.boardContentRepository.update(
+            updateContentDto.getContentId(),
+            updateContentDto.getUpdateContent(),
+        )
+    }
 
     // async likeBoardContent() {}
 

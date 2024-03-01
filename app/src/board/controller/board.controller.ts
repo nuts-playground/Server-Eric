@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, InternalServerErrorException } from '@nestjs/common';
+import {Body, Controller, Delete, Get, Post, InternalServerErrorException, Patch} from '@nestjs/common';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { BoardService } from '../service/board.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { BoardCategory } from '../entity/board-category.entity';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { BoardContent } from '../entity/board-content.entity';
 import { CreateContentDto } from '../dto/content/create-content.dto';
+import {UpdateContentDto} from "../dto/content/update-content.dto";
 
 @Controller('board')
 @ApiTags('board')
@@ -59,18 +60,18 @@ export class BoardController {
         }
     }
 
-    // @Patch('/content')
-    // async updateContent(updateContentDto: UpdateContentDto): Promise<ResponseDto<string | null>> {
-    //     try {
-    //         const state = await this.boardService.updateContent(updateContentDto);
-    //
-    //         return state
-    //             ? ResponseDto.success()
-    //             : ResponseDto.error('게시글 수정에 실패하였습니다.');
-    //     } catch (err) {
-    //         throw new InternalServerErrorException(err);
-    //     }
-    // }
+    @Patch('/content')
+    async updateContent(updateContentDto: UpdateContentDto): Promise<ResponseDto<string | null>> {
+        try {
+            const state = await this.boardService.updateContent(updateContentDto);
+
+            return state
+                ? ResponseDto.success()
+                : ResponseDto.error('게시글 수정에 실패하였습니다.');
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
 
     //
     // @Post('/likeBoardContent')

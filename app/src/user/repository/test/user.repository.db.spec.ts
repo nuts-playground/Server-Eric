@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
-import { mysqlConfig } from '../../config/mysql.config';
-import { SignupDto } from '../dto/signup.dto';
-import { User } from '../entity/user.entity';
+import { mysqlConfig } from '../../../config/mysql.config';
+import { SignupDto } from '../../dto/signup.dto';
+import { User } from '../../entity/user.entity';
 
 describe('typeorm version test', () => {
     let userRepository; // custom repository
