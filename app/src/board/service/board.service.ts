@@ -12,12 +12,12 @@ import {UpdateContentDto} from "../dto/content/update-content.dto";
 @Injectable()
 export class BoardService {
     constructor(
+        private readonly userService: UserService,
         private readonly boardCategoryRepository: BoardCategoryRepository,
         private readonly boardContentRepository: BoardContentRepository,
-        private readonly userService: UserService,
     ) {}
 
-    async getUserByEmail(userEmail: string) {
+    async getUserByEmail(userEmail: string): Promise<User | boolean> {
         return await this.userService.findByEmail(userEmail);
     }
 

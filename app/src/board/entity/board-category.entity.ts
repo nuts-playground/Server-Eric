@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BoardContent } from './board-content.entity';
+import {StringUtil} from "../../common/utils/string.util";
 
 @Entity({ name: 'board_category' })
 export class BoardCategory {
@@ -8,6 +9,7 @@ export class BoardCategory {
 
     @Column({
         length: 20,
+        nullable: false,
     })
     title: string;
 
@@ -19,7 +21,7 @@ export class BoardCategory {
 
     static from(title: string): BoardCategory {
         const boardCategory = new BoardCategory();
-        boardCategory.title = title;
+        if(StringUtil.nullCheck(title)) boardCategory.title = title;
         return boardCategory;
     }
 }

@@ -22,7 +22,7 @@ class MysqlConfig extends EnvConfig {
         };
     }
 
-    public getTestDataSource = new DataSource({
+    public getTestDataSource: DataSource = new DataSource({
         type: 'mysql',
         host: this.getValue('MYSQL_HOST'),
         port: parseInt(this.getValue('MYSQL_PORT')),

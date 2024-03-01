@@ -1,32 +1,44 @@
-import { Repository } from 'typeorm';
+import {QueryFailedError, Repository} from 'typeorm';
 import { mysqlConfig } from '../../../config/mysql.config';
-
-import { CreateContentDto } from '../../dto/content/create-content.dto';
-import { BoardContent } from '../../entity/board-content.entity';
-import { BoardLike } from '../../entity/board-like.entity';
-import {CreateLikeDto} from "../../dto/like/create-like.dto";
-import {User} from "../../../user/entity/user.entity";
-import {TestUserRepository} from "../../../user/repository/test-user.repository";
-import {TestBoardCategoryRepository} from "../test-board-category.repository";
-import {TestBoardContentRepository} from "../test-board-content.repository";
-import {TestBoardLikeRepository} from "../test-board-like.repository";
+import {TestUserRepo} from "../../../user/repository/test/test-user.repository";
+import {TestBoardCategoryRepo} from "./test-board-category.repository";
+import {TestBoardContentRepo} from "./test-board-content.repository";
+import {TestBoardCommentRepo} from "./test-board-comment.repository";
+import {TestBoardLikeRepo} from "./test-board-like.repository";
 
 describe('typeorm version test', () => {
-    let boardContentRepository: TestBoardContentRepository;
-    let boardLikeRepository: TestBoardLikeRepository;
-    let userRepository: TestUserRepository;
-    let boarCategoryRepository: TestBoardCategoryRepository;
+    let userRepository: TestUserRepo;
+    let boardCategoryRepository: TestBoardCategoryRepo;
+    let boardContentRepository: TestBoardContentRepo;
+    let boardCommentRepository: TestBoardCommentRepo;
+    let boardLikeRepository: TestBoardLikeRepo;
 
     beforeAll(async () => {
         await mysqlConfig.getTestDataSource.initialize();
     });
 
     beforeEach(() => {
-        boardContentRepository = new TestBoardContentRepository();
-        boardLikeRepository = new TestBoardLikeRepository();
-        userRepository = new TestUserRepository();
-        boarCategoryRepository = new TestBoardCategoryRepository();
+        userRepository = new TestUserRepo();
+        boardCategoryRepository = new TestBoardCategoryRepo();
+        boardContentRepository = new TestBoardContentRepo();
+        boardCommentRepository = new TestBoardCommentRepo();
+        boardLikeRepository = new TestBoardLikeRepo();
     });
+
+    describe('boardCategory', () => {
+        it('save method', async () => {
+            const testUser = await userRepository.setTestUser();
+            const testCategory = boardCategoryRepository.getTestCategory();
+            const result = await boardCategoryRepository.save(testCategory);
+            expect(Object.keys(result)).toEqual(['title', 'category_id']);
+        });
+
+        it('잘못된 title 이 들어갔을 때', async() => {
+            await expect(async () => {
+                await boardCategoryRepository.failSetTestCategory();
+            }).rejects.toBeInstanceOf(QueryFailedError)
+        });
+    })
 
     it('게시글 등록', async() => {
 
