@@ -43,8 +43,8 @@ export class SignupDto {
     getProviderId(): ProviderIdEnum {
         return this.isProviderId() ? this.provider_id : null;
     }
-
-    private valiDateParam(): exchangeObj {
+    
+    validateParam(): exchangeObj {
         const signUpState = {
             user_email: this.isEmail(),
             user_name: this.isName(),
@@ -65,7 +65,7 @@ export class SignupDto {
     }
 
     isReadySignUp(): boolean {
-        const errorObj = this.valiDateParam();
+        const errorObj = this.validateParam();
         return Object.values(errorObj).length === 0;
     }
 
@@ -73,7 +73,7 @@ export class SignupDto {
         if (this.isReadySignUp()) {
             return User.from(this.user_email, this.user_name, this.provider_id);
         } else {
-            return this.valiDateParam();
+            return this.validateParam();
         }
     }
 }

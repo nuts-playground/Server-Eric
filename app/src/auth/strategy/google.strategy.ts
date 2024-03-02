@@ -25,7 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
             if (userSignUpDto.toEntity() instanceof User) {
                 return await this.userService.signUp(userSignUpDto);
             } else {
-                return userSignUpDto.valiDateParam();
+                return userSignUpDto.validateParam();
             }
         } else {
             return member;
