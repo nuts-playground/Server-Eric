@@ -5,7 +5,13 @@ export class UpdateContentDto {
     private readonly title: string;
     private readonly content: string;
 
-    constructor(categoryId: number, contentId: number, userEmail: string, content: string, title: string) {
+    constructor(
+        categoryId: number,
+        contentId: number,
+        userEmail: string,
+        content: string,
+        title: string,
+    ) {
         this.category_id = categoryId;
         this.content_id = contentId;
         this.user_email = userEmail;
@@ -25,10 +31,10 @@ export class UpdateContentDto {
         return this.category_id;
     }
 
-    getUpdateContent()  {
+    getUpdateContent() {
         return {
             title: this.title,
             content: this.content,
-        }
+        };
     }
 }

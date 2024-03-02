@@ -10,16 +10,14 @@ export class UserService {
     async findByEmail(userEmail: string): Promise<User | boolean> {
         const query = { where: { user_email: userEmail } };
         const user = await this.userRepository.findOne(query);
-        return user ? user : false;
+        return user instanceof User ? user : false;
     }
 
-    async signUp(userSignUpDto: SignupDto): Promise<User | boolean> {
-        const user = userSignUpDto.toEntity() ?? false;
-
+    async signUp(signUpDto: SignupDto): Promise<User | boolean | Object | never> {
+        const user = signUpDto.toEntity();
         const notFoundUser = !(user instanceof User);
-
         if (notFoundUser) {
-            new Error(JSON.stringify(userSignUpDto));
+            return user;
         } else {
             return await this.userRepository.save(user);
         }

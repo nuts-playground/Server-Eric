@@ -1,4 +1,12 @@
-import {Body, Controller, Delete, Get, Post, InternalServerErrorException, Patch} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Post,
+    InternalServerErrorException,
+    Patch,
+} from '@nestjs/common';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { BoardService } from '../service/board.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,7 +14,7 @@ import { BoardCategory } from '../entity/board-category.entity';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { BoardContent } from '../entity/board-content.entity';
 import { CreateContentDto } from '../dto/content/create-content.dto';
-import {UpdateContentDto} from "../dto/content/update-content.dto";
+import { UpdateContentDto } from '../dto/content/update-content.dto';
 
 @Controller('board')
 @ApiTags('board')

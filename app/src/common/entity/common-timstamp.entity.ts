@@ -7,14 +7,14 @@ export abstract class CommonTimestamp {
     @UpdateDateColumn({
         type: 'timestamp',
         nullable: true,
-        default: () => null
+        default: () => null,
     })
     update_dtm: Date | null;
 
     @DeleteDateColumn({
         type: 'timestamp',
         nullable: true,
-        default: () => null
+        default: () => null,
     })
     delete_dtm: Date | null;
 }

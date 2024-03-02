@@ -1,10 +1,10 @@
-import {QueryFailedError, Repository} from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { mysqlConfig } from '../../../config/mysql.config';
-import {TestUserRepo} from "../../../user/repository/test/test-user.repository";
-import {TestBoardCategoryRepo} from "./test-board-category.repository";
-import {TestBoardContentRepo} from "./test-board-content.repository";
-import {TestBoardCommentRepo} from "./test-board-comment.repository";
-import {TestBoardLikeRepo} from "./test-board-like.repository";
+import { TestUserRepo } from '../../../user/repository/test/test-user.repository';
+import { TestBoardCategoryRepo } from './test-board-category.repository';
+import { TestBoardContentRepo } from './test-board-content.repository';
+import { TestBoardCommentRepo } from './test-board-comment.repository';
+import { TestBoardLikeRepo } from './test-board-like.repository';
 
 describe('typeorm version test', () => {
     let userRepository: TestUserRepo;
@@ -33,15 +33,14 @@ describe('typeorm version test', () => {
             expect(Object.keys(result)).toEqual(['title', 'category_id']);
         });
 
-        it('잘못된 title 이 들어갔을 때', async() => {
+        it('잘못된 title 이 들어갔을 때', async () => {
             await expect(async () => {
                 await boardCategoryRepository.failSetTestCategory();
-            }).rejects.toBeInstanceOf(QueryFailedError)
+            }).rejects.toBeInstanceOf(QueryFailedError);
         });
-    })
+    });
 
-    it('게시글 등록', async() => {
-
+    it('게시글 등록', async () => {
         // const result = await userRepository.save(userRepository.getTestUser() as User);
         // console.log(result)
         // const result = await userRepository.update(1,userRepository.getTestUser() as User);
@@ -79,9 +78,7 @@ describe('typeorm version test', () => {
         // console.log(ClassUtil.checkDelete(targetBoardContent));
     });
 
-    it('게시글 업데이트', async() => {
-
-    });
+    it('게시글 업데이트', async () => {});
 
     it('게시글 지우기', async () => {
         // await boardContentRepository.save(testContentData);
@@ -96,12 +93,10 @@ describe('typeorm version test', () => {
         // console.log(result);
     });
 
-
     it('좋아요 테스트', async () => {
         // const testLike = new CreateLikeDto(1, 2).toEntity();
         // const like = await boardLikeRepository.save(testLike);
     });
-
 
     afterAll(async () => {
         // await mysqlConfig.getTestDataSource.dropDatabase();

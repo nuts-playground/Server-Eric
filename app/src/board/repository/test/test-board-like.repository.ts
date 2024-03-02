@@ -1,6 +1,6 @@
-import {Repository} from "typeorm";
-import {mysqlConfig} from "../../../config/mysql.config";
-import {BoardLike} from "../../entity/board-like.entity";
+import { Repository } from 'typeorm';
+import { mysqlConfig } from '../../../config/mysql.config';
+import { BoardLike } from '../../entity/board-like.entity';
 
 export class TestBoardLikeRepo extends Repository<BoardLike> {
     constructor() {
@@ -8,6 +8,4 @@ export class TestBoardLikeRepo extends Repository<BoardLike> {
     }
 }
 
-export class TestMockBoardLikeRepo {
-
-}
+export class TestMockBoardLikeRepo {}

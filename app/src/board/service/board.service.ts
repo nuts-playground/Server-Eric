@@ -7,7 +7,7 @@ import { BoardCategory } from '../entity/board-category.entity';
 import { BoardContentRepository } from '../repository/board-content.repository';
 import { BoardContent } from '../entity/board-content.entity';
 import { CreateContentDto } from '../dto/content/create-content.dto';
-import {UpdateContentDto} from "../dto/content/update-content.dto";
+import { UpdateContentDto } from '../dto/content/update-content.dto';
 
 @Injectable()
 export class BoardService {
@@ -16,10 +16,6 @@ export class BoardService {
         private readonly boardCategoryRepository: BoardCategoryRepository,
         private readonly boardContentRepository: BoardContentRepository,
     ) {}
-
-    async getUserByEmail(userEmail: string): Promise<User | boolean> {
-        return await this.userService.findByEmail(userEmail);
-    }
 
     async findContent(
         contentId: number,
@@ -47,7 +43,7 @@ export class BoardService {
 
     async createContent(createContentDto: CreateContentDto) {
         const reqUserEmail = createContentDto.getUserEmail();
-        const user = await this.getUserByEmail(reqUserEmail);
+        const user = await this.userService.findByEmail(reqUserEmail);
 
         const notFoundUser = !(user instanceof User);
 
@@ -61,7 +57,7 @@ export class BoardService {
 
     async deleteContent(deleteContentDto: DeleteContentDto): Promise<BoardContent | boolean> {
         const reqUserEmail = deleteContentDto.getUserEmail();
-        const user = await this.getUserByEmail(reqUserEmail);
+        const user = await this.userService.findByEmail(reqUserEmail);
         const notFoundUser = !(user instanceof User);
 
         if (notFoundUser) return false;
@@ -82,7 +78,7 @@ export class BoardService {
 
     async updateContent(updateContentDto: UpdateContentDto) {
         const reqUserEmail = updateContentDto.getEmail();
-        const user = await this.getUserByEmail(reqUserEmail);
+        const user = await this.userService.findByEmail(reqUserEmail);
 
         const notFoundUser = !(user instanceof User);
         if (notFoundUser) return false;
@@ -98,7 +94,7 @@ export class BoardService {
         return await this.boardContentRepository.update(
             updateContentDto.getContentId(),
             updateContentDto.getUpdateContent(),
-        )
+        );
     }
 
     // async likeBoardContent() {}

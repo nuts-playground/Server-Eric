@@ -1,39 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource } from 'typeorm';
 import { SignupDto } from '../dto/signup.dto';
-import { ProviderIdEnum } from '../enum/provider-id-enum';
 import { UserRepository } from '../repository/user.repository';
 import { UserService } from './user.service';
+import { TestMockUserRepo } from '../repository/test/test-user.repository';
+import { User } from '../entity/user.entity';
 
-const testUserEmail = 'test123@test.com';
+describe('[Service] 유저 서비스 테스트- user.service.ts', () => {
+    let userRepository: UserRepository;
+    let userService: UserService;
 
-const testInfo = {
-    userEmail: 'test123@test.com',
-    userName: 'test',
-    providerId: 'google',
-};
-
-const testUser = new SignupDto(
-    testInfo.userEmail,
-    testInfo.userName,
-    testInfo.providerId as ProviderIdEnum,
-).toEntity();
-
-const notFoundEmail = 'testNotFound@naver.com';
-
-describe('user service test', () => {
-    let userRepository;
-    let userService;
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UserService,
-                UserRepository,
                 {
-                    provide: DataSource,
-                    useValue: {
-                        createEntityManager: jest.fn(),
-                    },
+                    provide: UserRepository,
+                    useClass: TestMockUserRepo,
                 },
             ],
         }).compile();
@@ -44,50 +26,76 @@ describe('user service test', () => {
 
     it('should be defined', () => {
         expect(userService).toBeDefined();
+        expect(userRepository).toBeDefined();
     });
 
-    describe('findByEmail test', () => {
-        it('find success user', async () => {
-            const repoSpy = jest.spyOn(userRepository, 'findOne').mockResolvedValue(testUser);
-            const user = await userService.findByEmail(testUserEmail);
-            expect(user).toEqual(testUser);
-            expect(repoSpy).toBeCalledWith({
-                where: { user_email: testUserEmail },
-            });
-        });
-
-        it('find fail user', async () => {
-            const repoSpy = jest
-                .spyOn(userRepository, 'findOne')
-                .mockImplementation((userEmail: string) => {
-                    return userEmail === testUserEmail ? testUser : null;
+    describe('내부: User 관련', () => {
+        describe('[entity] User', () => {
+            describe('[method] findByEmail', () => {
+                it('찾으려는 유저가 있을 때 성공', async () => {
+                    const testUserEmail = 'test123@test.com';
+                    const user = (await userService.findByEmail(testUserEmail)) as User;
+                    expect(user instanceof User).toBeTruthy();
+                    expect(user.user_name).toEqual('테스트유저');
+                    expect(user.provider_id).toEqual('google');
                 });
 
-            const user = await userService.findByEmail(notFoundEmail);
-            expect(user).toBeFalsy();
-            expect(repoSpy).toBeCalledWith({
-                where: { user_email: notFoundEmail },
-            });
-        });
-    });
-
-    describe('delete test', () => {
-        it('soft delete user', async () => {
-            const repoSpy = jest.spyOn(userRepository, 'softDelete').mockResolvedValue(true);
-            const deleteUser = await userService.delete(testUserEmail);
-            expect(deleteUser).toEqual(true);
-            expect(repoSpy).toBeCalledWith({ user_email: testUserEmail });
-        });
-
-        it('soft delete not found user', async () => {
-            const repoSpy = jest
-                .spyOn(userRepository, 'softDelete')
-                .mockImplementation((userEmail: string) => {
-                    return userEmail === testUserEmail;
+                it('찾으려는 유저가 없을 때 실패', async () => {
+                    const testUserEmail = 'notFoundUser@test.com';
+                    const user = await userService.findByEmail(testUserEmail);
+                    expect(user instanceof User).toBeFalsy();
                 });
-            const deleteUser = await userService.delete(notFoundEmail);
-            expect(deleteUser).toEqual(false);
-            expect(repoSpy).toBeCalledWith({ user_email: notFoundEmail });
+            });
+
+            describe('[method] signUp', () => {
+                it('정상적인 정보로 요청 시 가입 성공', async () => {
+                    const testUser = new SignupDto('test123@test.com', '테스트유저', 'google');
+
+                    const user = (await userService.signUp(testUser)) as User;
+                    expect(user instanceof User).toBeTruthy();
+                    expect(user.create_dtm).not.toBeNull();
+                    expect(user.update_dtm).toBeNull();
+                    expect(user.delete_dtm).toBeNull();
+                });
+
+                it('비정상적인 정보로 요청 시 가입 불가', async () => {
+                    const emailErrorUserReq = new SignupDto(
+                        'testtest.com',
+                        '실패테스트유저',
+                        'google',
+                    );
+                    const nameErrorUserReq = new SignupDto(
+                        'test123@test.com',
+                        '20자리이상은 절대 안되는 이름이거등 안녕하세요 에러가 터질겁니다.',
+                        'google',
+                    );
+                    const emailErrorUser = await userService.signUp(emailErrorUserReq);
+                    expect(emailErrorUser).not.toBeInstanceOf(User);
+                    expect((emailErrorUser as User).user_email).toEqual(
+                        '올바른 이메일을 입력해주세요.',
+                    );
+
+                    const nameErrorUser = await userService.signUp(nameErrorUserReq);
+                    expect(nameErrorUser).not.toBeInstanceOf(User);
+                    expect((nameErrorUser as User).user_name).toEqual(
+                        '이름은 최소 2글자 이상 20자 이하로 입력해주세요.',
+                    );
+                });
+            });
+
+            describe('[method] delete', () => {
+                it('지우려는 유저가 있을 때 성공', async () => {
+                    const testUserEmail = 'test123@test.com';
+                    const deleteUser = await userService.delete(testUserEmail);
+                    expect(deleteUser).toEqual(true);
+                });
+
+                it('지유려는 유저가 없을 때 실패', async () => {
+                    const testUserEmail = 'notFoundUser@test.com';
+                    const deleteUser = await userService.delete(testUserEmail);
+                    expect(deleteUser).toEqual(false);
+                });
+            });
         });
     });
 });

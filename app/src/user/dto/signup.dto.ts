@@ -25,7 +25,7 @@ export class SignupDto {
     }
 
     private isName(): boolean {
-        return 2 <= this.user_name.length && this.user_name.length <= 255;
+        return 2 <= this.user_name.length && this.user_name.length <= 20;
     }
 
     private isProviderId(): boolean {
@@ -44,7 +44,7 @@ export class SignupDto {
         return this.isProviderId() ? this.provider_id : null;
     }
 
-    valiDateParam(): exchangeObj {
+    private valiDateParam(): exchangeObj {
         const signUpState = {
             user_email: this.isEmail(),
             user_name: this.isName(),
@@ -52,7 +52,7 @@ export class SignupDto {
         };
         const errorMsg = {
             user_email: '올바른 이메일을 입력해주세요.',
-            user_name: '이름은 최소 2글자 이상 입력해주세요.',
+            user_name: '이름은 최소 2글자 이상 20자 이하로 입력해주세요.',
             provider_id: '승인되지 않은 플랫폼으로 접근했습니다.',
         };
 

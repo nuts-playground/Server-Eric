@@ -1,23 +1,22 @@
 import { BoardService } from './board.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
-import { DataSource } from 'typeorm';
-import {mysqlConfig} from "../../config/mysql.config";
-import {BoardCategory} from "../entity/board-category.entity";
-import {BoardContentRepository} from "../repository/board-content.repository";
-import {UserService} from "../../user/service/user.service";
-import {BoardContent} from "../entity/board-content.entity";
-import {UserRepository} from "../../user/repository/user.repository";
-import { TestMockBoardCategoryRepo} from "../repository/test/test-board-category.repository";
-import {TestUserRepo} from "../../user/repository/test/test-user.repository";
-import {TestBoardContentRepo} from "../repository/test/test-board-content.repository";
+import { BoardContentRepository } from '../repository/board-content.repository';
+import { UserService } from '../../user/service/user.service';
+import { UserRepository } from '../../user/repository/user.repository';
+import { TestMockBoardCategoryRepo } from '../repository/test/test-board-category.repository';
+import { TestMockUserRepo } from '../../user/repository/test/test-user.repository';
+import { TestMockBoardContentRepo } from '../repository/test/test-board-content.repository';
+import { User } from '../../user/entity/user.entity';
+import { BoardContent } from '../entity/board-content.entity';
 
-describe('보드 서비스 테스트', () => {
+describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
     let boardService: BoardService;
     let userService: UserService;
     let boardCategoryRepository: BoardCategoryRepository;
     let boardContentRepository: BoardContentRepository;
-    let userRepository: UserRepository
+    let userRepository: UserRepository;
+
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -25,15 +24,15 @@ describe('보드 서비스 테스트', () => {
                 UserService,
                 {
                     provide: BoardContentRepository,
-                    useClass: TestBoardContentRepo
+                    useClass: TestMockBoardContentRepo,
                 },
                 {
                     provide: UserRepository,
-                    useClass: TestUserRepo
+                    useClass: TestMockUserRepo,
                 },
                 {
                     provide: BoardCategoryRepository,
-                    useClass: TestMockBoardCategoryRepo
+                    useClass: TestMockBoardCategoryRepo,
                 },
             ],
         }).compile();
@@ -46,27 +45,55 @@ describe('보드 서비스 테스트', () => {
 
     it('should be defined', () => {
         expect(boardService).toBeDefined();
+        expect(userService).toBeDefined();
+        expect(userRepository).toBeDefined();
+        expect(boardContentRepository).toBeDefined();
+        expect(boardCategoryRepository).toBeDefined();
     });
 
-    describe('보드 카테고리', () => {
-        it('/getBoardCategoryAll - 모든 카테고리 리스트 출력(GET) ', async () => {
-            console.log(boardCategoryRepository)
-            // let testCategory = new BoardCategory();
-            // testCategory.title = 'test'
-            // const repoSpy = jest.spyOn(boardCategoryRepository, 'find').mockResolvedValue([
-            //     { category_id: 1, title: '자유게시판', boardContent: [] },
-            //     { category_id: 2, title: '테스트게시판', boardContent: [] },
-            // ]);
-            // const result = await boardCategoryRepository.save(testCategory);
-            // console.log(result)
-            // const categoryList = await boardCategoryRepository.find();
-            // expect(categoryList.length).toEqual(2);
-            // expect(categoryList[0].title).toEqual('자유게시판');
+    describe('외부: User 관련', () => {
+        it('[method] getUserByEmail', async () => {
+            const okResult = await userService.findByEmail('test123@test.com');
+            const failResult = await userService.findByEmail('test123@testest.com');
+
+            expect(okResult instanceof User).toBeTruthy();
+            expect(failResult).toBeFalsy();
         });
     });
 
-    describe('보드 컨텐츠', () => {
-        it('getBoardContent', () => {});
-    });
+    describe('내부: Board 관련', () => {
+        describe('[entity] BoardCategory', () => {
+            describe('[method] getCategoryList', () => {
+                it('현재 있는 카테고리 row 모두 출력', async () => {
+                    const getCategoryList = await boardCategoryRepository.find();
+                    expect(getCategoryList).toHaveLength(2);
+                });
+            });
+        });
 
+        describe('[entity] BoardContent', () => {
+            describe('[method] findContent', () => {
+                it('컨텐츠가 있는 케이스', async () => {
+                    const okResult1 = await boardService.findContent(1);
+                    const okResult2 = await boardService.findContent(1, 1);
+                    const okResult3 = await boardService.findContent(1, 1, 1);
+                    expect(okResult1 instanceof BoardContent).toBeTruthy();
+                    expect(okResult2 instanceof BoardContent).toBeTruthy();
+                    expect(okResult3 instanceof BoardContent).toBeTruthy();
+                });
+                it('컨텐츠가 없는 케이스', async () => {
+                    const failResult1 = await boardService.findContent(2);
+                    const failResult2 = await boardService.findContent(2, 2);
+                    const failResult3 = await boardService.findContent(1, 3);
+                    expect(failResult1).toBeFalsy();
+                    expect(failResult2).toBeFalsy();
+                    expect(failResult3).toBeFalsy();
+                });
+            });
+        });
+
+        describe('[entity] BoardLike', () => {});
+
+        describe('[entity] BoardComment', () => {});
+    });
 });
