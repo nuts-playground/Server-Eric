@@ -1,3 +1,4 @@
+import { ResponseDto } from '../../../common/dto/response.dto';
 import { BoardContent } from '../../entity/board-content.entity';
 
 export class CreateContentDto {
@@ -20,7 +21,25 @@ export class CreateContentDto {
         return this.user_email;
     }
 
-    toEntity(userId: number): BoardContent {
+    private isTitle() {
+        const titleLength = this.title.length;
+        return 2 < titleLength && titleLength <= 50;
+    }
+
+    private isEmail() {
+        const regExp =
+            /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        return regExp.test(this.user_email);
+    }
+
+    toEntity(userId: number): BoardContent | ResponseDto<string> {
+        if (!this.isTitle()) {
+            return ResponseDto.badParam('제목은 2글자 이상, 50글자 이하여야 합니다.');
+        }
+
+        if (!this.isEmail()) {
+            return ResponseDto.badParam('올바른 이메일 형식이 아닙니다.');
+        }
         return BoardContent.from(this.title, this.content, this.category_id, userId);
     }
 }

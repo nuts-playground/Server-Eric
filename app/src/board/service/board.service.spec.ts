@@ -1,3 +1,6 @@
+import { exploreApiConsumesMetadata } from '@nestjs/swagger/dist/explorers/api-consumes.explorer';
+import { SignupDto } from '../../user/dto/signup.dto';
+import { CreateContentDto } from '../dto/content/create-content.dto';
 import { BoardService } from './board.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
@@ -53,7 +56,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
 
     describe('외부: User 관련', () => {
         it('[method] getUserByEmail', async () => {
-            const okResult = await userService.findByEmail('test123@test.com');
+            const okResult = await userService.findByEmail('test1@google.com');
             const failResult = await userService.findByEmail('test123@testest.com');
 
             expect(okResult instanceof User).toBeTruthy();
@@ -88,6 +91,49 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                     expect(failResult1).toBeFalsy();
                     expect(failResult2).toBeFalsy();
                     expect(failResult3).toBeFalsy();
+                });
+            });
+
+            describe('[method] getLatestContentList', () => {
+                it('무조건 10개의 최신 글만 내려주는 서비스 ', async () => {
+                    const getList = await boardService.getLatestContentList();
+                    expect(getList).toHaveLength(10);
+                });
+            });
+
+            describe('[method] createContent', () => {
+                it('정상적인 케이스', async () => {
+                    const createContentDto: CreateContentDto = new CreateContentDto(
+                        'test title 1',
+                        'test content',
+                        1,
+                        'test1@google.com',
+                    );
+                    const result = await boardService.createContent(createContentDto);
+                    expect(result).toBeTruthy();
+                });
+
+                it('에러 케이스 - 생성하려는 유저가 없음', async () => {
+                    const createContentDto: CreateContentDto = new CreateContentDto(
+                        'test title 1',
+                        'test content',
+                        1,
+                        'test1123@google.com',
+                    );
+                    const result = await boardService.createContent(createContentDto);
+                    expect(result).toBeFalsy();
+                });
+
+                it('에러 케이스 - title의 길이가 50 초과', async () => {
+                    const createContentDto: CreateContentDto = new CreateContentDto(
+                        '50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. ',
+                        'test contents',
+                        1,
+                        'test1@google.com',
+                    );
+                    const result = await boardService.createContent(createContentDto);
+                    // expect(result).toBeFalsy();
+                    console.log(result);
                 });
             });
         });

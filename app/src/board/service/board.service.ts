@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ResponseDto } from '../../common/dto/response.dto';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
@@ -41,18 +42,23 @@ export class BoardService {
         });
     }
 
-    async createContent(createContentDto: CreateContentDto) {
+    async createContent(
+        createContentDto: CreateContentDto,
+    ): Promise<ResponseDto<string> | BoardContent | boolean> {
         const reqUserEmail = createContentDto.getUserEmail();
         const user = await this.userService.findByEmail(reqUserEmail);
 
         const notFoundUser = !(user instanceof User);
 
-        if (notFoundUser) return false;
+        if (notFoundUser) return user;
 
         const userId = user.user_id;
-        const userEntity = createContentDto.toEntity(userId);
-        const result = await this.boardContentRepository.save(userEntity);
-        return !!result;
+        const boardContent = createContentDto.toEntity(userId);
+        const validateContent = !(boardContent instanceof BoardContent);
+
+        if (validateContent) return boardContent;
+
+        return await this.boardContentRepository.save(boardContent);
     }
 
     async deleteContent(deleteContentDto: DeleteContentDto): Promise<BoardContent | boolean> {

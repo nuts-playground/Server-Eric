@@ -43,7 +43,7 @@ export class SignupDto {
     getProviderId(): ProviderIdEnum {
         return this.isProviderId() ? this.provider_id : null;
     }
-    
+
     validateParam(): exchangeObj {
         const signUpState = {
             user_email: this.isEmail(),

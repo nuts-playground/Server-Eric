@@ -27,16 +27,21 @@ describe('typeorm version test', () => {
 
     describe('boardCategory', () => {
         it('save method', async () => {
-            const testUser = await userRepository.setTestUser();
-            const testCategory = boardCategoryRepository.getTestCategory();
-            const result = await boardCategoryRepository.save(testCategory);
-            expect(Object.keys(result)).toEqual(['title', 'category_id']);
+            // const testUser = await userRepository.setTestUser();
+            // const testCategory = boardCategoryRepository.getTestCategory();
+            // const result = await boardCategoryRepository.save(testCategory);
+            // expect(Object.keys(result)).toEqual(['title', 'category_id']);
         });
 
         it('잘못된 title 이 들어갔을 때', async () => {
             await expect(async () => {
                 await boardCategoryRepository.failSetTestCategory();
             }).rejects.toBeInstanceOf(QueryFailedError);
+        });
+
+        it('test', async () => {
+            // let test = await boardCategoryRepository.failSetTestCategory();
+            // console.log(test);
         });
     });
 

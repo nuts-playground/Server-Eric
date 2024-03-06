@@ -76,12 +76,7 @@ export class BoardContent extends CommonTimestamp {
         category_id: number,
         user_id: number,
     ): BoardContent {
-        const boardContent = new BoardContent();
-        boardContent.title = title;
-        boardContent.content = content;
-        boardContent.category_id = category_id;
-        boardContent.user_id = user_id;
-        return boardContent;
+        return this.newBoard(title, content, category_id, user_id);
     }
 
     static updateEntity(boardContent: BoardContent): BoardContent {
