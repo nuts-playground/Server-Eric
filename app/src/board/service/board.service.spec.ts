@@ -1,6 +1,6 @@
-import { exploreApiConsumesMetadata } from '@nestjs/swagger/dist/explorers/api-consumes.explorer';
-import { SignupDto } from '../../user/dto/signup.dto';
 import { CreateContentDto } from '../dto/content/create-content.dto';
+import { DeleteContentDto } from '../dto/content/delete-content.dto';
+import { UpdateContentDto } from '../dto/content/update-content.dto';
 import { BoardService } from './board.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
@@ -102,7 +102,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
             });
 
             describe('[method] createContent', () => {
-                it('정상적인 케이스', async () => {
+                it('정상 케이스', async () => {
                     const createContentDto: CreateContentDto = new CreateContentDto(
                         'test title 1',
                         'test content',
@@ -124,7 +124,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                     expect(result).toBeFalsy();
                 });
 
-                it('에러 케이스 - title의 길이가 50 초과', async () => {
+                it('에러 케이스 - title 의 길이가 50 초과', async () => {
                     const createContentDto: CreateContentDto = new CreateContentDto(
                         '50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. 50글자 이상은 안됩니다. ',
                         'test contents',
@@ -132,8 +132,57 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                         'test1@google.com',
                     );
                     const result = await boardService.createContent(createContentDto);
-                    // expect(result).toBeFalsy();
-                    console.log(result);
+                    expect(result).toEqual('제목은 2글자 이상, 50글자 이하여야 합니다.');
+                });
+            });
+
+            describe('[method] deleteContent', () => {
+                it('정상 케이스', async () => {
+                    const deleteContentDto: DeleteContentDto = new DeleteContentDto(
+                        1,
+                        1,
+                        'test1@google.com',
+                    );
+                    const result = await boardService.deleteContent(deleteContentDto);
+                    expect(result).toBeInstanceOf(BoardContent);
+                    expect(result['update_dtm']).not.toBeNull();
+                    expect(result['delete_dtm']).not.toBeNull();
+                });
+
+                it('에러 케이스 - 지우려는 게시글이 없음', async () => {
+                    const deleteContentDto: DeleteContentDto = new DeleteContentDto(
+                        1,
+                        2,
+                        'test1@google.com',
+                    );
+                    const result = await boardService.deleteContent(deleteContentDto);
+                    expect(result).toBeFalsy();
+                });
+
+                it('에러 케이스 - 지우려는 글의 작성자가 일치하지 않음', async () => {
+                    const deleteContentDto: DeleteContentDto = new DeleteContentDto(
+                        1,
+                        1,
+                        'test123@google.com',
+                    );
+                    const result = await boardService.deleteContent(deleteContentDto);
+                    expect(result).toBeFalsy();
+                });
+            });
+
+            describe('[method] updateContent', () => {
+                it('정상 케이스', async () => {
+                    const updateContentDto: UpdateContentDto = new UpdateContentDto(
+                        1,
+                        1,
+                        'test1@google.com',
+                        '새로운 업데이트 컨텐츠지롱',
+                        '새로운 타이틀이지롱',
+                    );
+                    const result = await boardService.updateContent(updateContentDto);
+                    expect(result['title']).toEqual(updateContentDto.getUpdateContent().title);
+                    expect(result['content']).toEqual(updateContentDto.getUpdateContent().content);
+                    expect(result['update_dtm']).not.toBeNull();
                 });
             });
         });

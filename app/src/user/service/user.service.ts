@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SignupDto } from '../dto/signup.dto';
+import { ExchangeObj, SignupDto } from '../dto/signup.dto';
 import { User } from '../entity/user.entity';
 import { UserRepository } from '../repository/user.repository';
 
@@ -13,14 +13,11 @@ export class UserService {
         return user instanceof User ? user : false;
     }
 
-    async signUp(signUpDto: SignupDto): Promise<User | boolean | Object | never> {
+    async signUp(signUpDto: SignupDto): Promise<User | boolean | ExchangeObj | never> {
         const user = signUpDto.toEntity();
         const notFoundUser = !(user instanceof User);
-        if (notFoundUser) {
-            return user;
-        } else {
-            return await this.userRepository.save(user);
-        }
+
+        return notFoundUser ? user : await this.userRepository.save(user);
     }
 
     async delete(userEmail: string): Promise<boolean> {

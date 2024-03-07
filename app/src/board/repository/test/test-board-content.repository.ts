@@ -1,5 +1,5 @@
-import { InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { DateUtil } from '../../../common/utils/date.util';
 import { mysqlConfig } from '../../../config/mysql.config';
 import { BoardContent } from '../../entity/board-content.entity';
 import { TestUtil } from '../../../common/utils/test.util';
@@ -12,18 +12,8 @@ export class TestBoardContentRepo extends Repository<BoardContent> {
 
 export class TestMockBoardContentRepo {
     private time = TestUtil.getTimeEntity();
-    private savedContent = [
-        Object.assign(
-            {
-                category_id: 1,
-                content_id: 1,
-                user_id: 1,
-                title: 'test title',
-                content: 'test content',
-            },
-            this.time,
-        ),
-    ];
+    private rowData: BoardContent = Object.assign(this.getTestContent(), { content_id: 1 });
+    private savedContent = [this.rowData];
 
     private contentList = [
         this.getTestContent('test title1', 'test content1'),
@@ -54,18 +44,16 @@ export class TestMockBoardContentRepo {
     async findOne(query: any): Promise<BoardContent | boolean> {
         const queryLength = Object.values(query.where).length;
         const [contentId, categoryId, userId] = Object.values(query.where);
-        const testContent: BoardContent = this.getTestContent();
-
         if (queryLength === 3 && contentId == 1 && categoryId == 1 && userId == 1) {
-            return testContent;
+            return this.rowData;
         }
 
         if (queryLength === 2 && contentId == 1 && categoryId == 1) {
-            return testContent;
+            return this.rowData;
         }
 
         if (queryLength === 1 && contentId == 1) {
-            return testContent;
+            return this.rowData;
         }
 
         return false;
@@ -80,8 +68,25 @@ export class TestMockBoardContentRepo {
     }
 
     async save(reqContent: BoardContent) {
-        const newBoard = Object.assign(reqContent, this.time);
-        this.savedContent.push(newBoard);
-        return newBoard;
+        if (reqContent.content_id === 1) {
+            this.savedContent[0].update_dtm = reqContent.update_dtm;
+            this.savedContent[0].delete_dtm = reqContent.delete_dtm;
+        } else {
+            const newBoard = Object.assign(reqContent, this.time);
+            this.savedContent.push(newBoard);
+        }
+        return this.savedContent[0];
+    }
+
+    async update(targetContentId: number, updateContent: any) {
+        if (targetContentId === 1) {
+            this.savedContent[0].title = updateContent.title;
+            this.savedContent[0].content = updateContent.content;
+            this.savedContent[0].update_dtm = DateUtil.dateNow();
+        } else {
+            return false;
+        }
+
+        return this.savedContent[0];
     }
 }

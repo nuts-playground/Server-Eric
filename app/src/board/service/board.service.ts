@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ResponseDto } from '../../common/dto/response.dto';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
@@ -44,7 +43,7 @@ export class BoardService {
 
     async createContent(
         createContentDto: CreateContentDto,
-    ): Promise<ResponseDto<string> | BoardContent | boolean> {
+    ): Promise<string | BoardContent | boolean> {
         const reqUserEmail = createContentDto.getUserEmail();
         const user = await this.userService.findByEmail(reqUserEmail);
 
@@ -73,7 +72,6 @@ export class BoardService {
             deleteContentDto.getCategoryId(),
             user.user_id,
         );
-
         const notFoundContent = !(targetFindContent instanceof BoardContent);
 
         if (notFoundContent) return false;

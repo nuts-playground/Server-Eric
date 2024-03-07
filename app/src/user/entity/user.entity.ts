@@ -1,7 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BoardComment } from '../../board/entity/board-comment.entity';
 import { BoardContent } from '../../board/entity/board-content.entity';
-import { BoardLike } from '../../board/entity/board-like.entity';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
 import { ProviderIdEnum } from '../enum/provider-id-enum';
 /*
@@ -38,12 +37,6 @@ export class User extends CommonTimestamp {
         nullable: false,
     })
     boardComment: BoardComment[];
-
-    @OneToMany(() => BoardLike, (boardLike) => boardLike.user_id, {
-        cascade: ['update'],
-        nullable: false,
-    })
-    boardLike: BoardLike[];
 
     static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
         const user = new User();

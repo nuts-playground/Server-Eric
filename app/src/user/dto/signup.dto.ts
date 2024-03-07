@@ -1,7 +1,7 @@
 import { User } from '../entity/user.entity';
 import { ProviderIdEnum, ProviderIdEnumValue } from '../enum/provider-id-enum';
 
-type exchangeObj = {
+export type ExchangeObj = {
     user_email: boolean | null;
     user_name: boolean | null;
     provider_id: boolean | null;
@@ -44,7 +44,7 @@ export class SignupDto {
         return this.isProviderId() ? this.provider_id : null;
     }
 
-    validateParam(): exchangeObj {
+    validateParam(): ExchangeObj {
         const signUpState = {
             user_email: this.isEmail(),
             user_name: this.isName(),
@@ -61,7 +61,7 @@ export class SignupDto {
         for (const [key, val] of Object.entries(signUpState)) {
             if (val === false) errorObj[key] = errorMsg[key];
         }
-        return errorObj as exchangeObj;
+        return errorObj as ExchangeObj;
     }
 
     isReadySignUp(): boolean {
@@ -69,7 +69,7 @@ export class SignupDto {
         return Object.values(errorObj).length === 0;
     }
 
-    toEntity(): User | exchangeObj {
+    toEntity(): User | ExchangeObj {
         if (this.isReadySignUp()) {
             return User.from(this.user_email, this.user_name, this.provider_id);
         } else {

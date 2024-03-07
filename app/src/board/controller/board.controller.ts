@@ -23,64 +23,37 @@ export class BoardController {
 
     @Get('/categoryList')
     async getCategoryList(): Promise<ResponseDto<BoardCategory[] | null>> {
-        try {
-            const categoryList = await this.boardService.getCategoryList();
-            return ResponseDto.successData(categoryList);
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        const categoryList = await this.boardService.getCategoryList();
+        return ResponseDto.successData(categoryList);
     }
 
     @Get('/latestContentList')
     async getLatestContentList(): Promise<ResponseDto<BoardContent[] | null>> {
-        try {
-            const contentList = await this.boardService.getLatestContentList();
-            return ResponseDto.successData(contentList);
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        const contentList = await this.boardService.getLatestContentList();
+        return ResponseDto.successData(contentList);
     }
 
     @Post('/content')
     async createContent(
         @Body() createContentDto: CreateContentDto,
     ): Promise<ResponseDto<string | null>> {
-        try {
-            const state = await this.boardService.createContent(createContentDto);
-            return state
-                ? ResponseDto.success()
-                : ResponseDto.error('게시글 등록에 실패하였습니다.');
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        const state = await this.boardService.createContent(createContentDto);
+        return state ? ResponseDto.success() : ResponseDto.error('게시글 등록에 실패하였습니다.');
     }
 
     @Delete('/content')
     async deleteContent(deleteContentDto: DeleteContentDto): Promise<ResponseDto<string | null>> {
-        try {
-            const state = await this.boardService.deleteContent(deleteContentDto);
-
-            return state instanceof BoardContent
-                ? ResponseDto.success()
-                : ResponseDto.error('게시글 삭제에 실패하였습니다.');
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        const state = await this.boardService.deleteContent(deleteContentDto);
+        return state instanceof BoardContent
+            ? ResponseDto.success()
+            : ResponseDto.error('게시글 삭제에 실패하였습니다.');
     }
 
     @Patch('/content')
     async updateContent(updateContentDto: UpdateContentDto): Promise<ResponseDto<string | null>> {
-        try {
-            const state = await this.boardService.updateContent(updateContentDto);
-
-            return state
-                ? ResponseDto.success()
-                : ResponseDto.error('게시글 수정에 실패하였습니다.');
-        } catch (err) {
-            throw new InternalServerErrorException(err);
-        }
+        const state = await this.boardService.updateContent(updateContentDto);
+        return state ? ResponseDto.success() : ResponseDto.error('게시글 수정에 실패하였습니다.');
     }
-
     //
     // @Post('/likeBoardContent')
     // async likeBoardContent() {

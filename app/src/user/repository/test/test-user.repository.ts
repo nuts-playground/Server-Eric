@@ -30,10 +30,8 @@ export class TestMockUserRepo {
 
     async findOne(query: any): Promise<User | boolean> {
         if (query.where.user_email === this.savedUserEmail) {
-            console.log('성공');
             return this.getTestUser();
         } else {
-            console.log('실패');
             return false;
         }
     }

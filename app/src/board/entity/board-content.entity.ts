@@ -4,7 +4,6 @@ import { DateUtil } from '../../common/utils/date.util';
 import { User } from '../../user/entity/user.entity';
 import { BoardCategory } from './board-category.entity';
 import { BoardComment } from './board-comment.entity';
-import { BoardLike } from './board-like.entity';
 
 @Entity({ name: 'board_content' })
 export class BoardContent extends CommonTimestamp {
@@ -55,12 +54,6 @@ export class BoardContent extends CommonTimestamp {
     })
     boardComment: BoardComment[];
 
-    @OneToMany(() => BoardLike, (boardLike) => boardLike.content_id, {
-        cascade: ['update'],
-        nullable: false,
-    })
-    boardLike: BoardLike[];
-
     private static newBoard(title: string, content: string, category_id: number, user_id: number) {
         const boardContent = new BoardContent();
         boardContent.title = title;
@@ -90,6 +83,7 @@ export class BoardContent extends CommonTimestamp {
         let dateNow: Date;
         // eslint-disable-next-line prefer-const
         dateNow = DateUtil.dateNow();
+        newBoardContent.content_id = boardContent.content_id;
         newBoardContent.update_dtm = dateNow;
         return newBoardContent;
     }
@@ -102,6 +96,7 @@ export class BoardContent extends CommonTimestamp {
             boardContent.user_id,
         );
         const dateNow = DateUtil.dateNow();
+        newBoardContent.content_id = boardContent.content_id;
         newBoardContent.update_dtm = dateNow;
         newBoardContent.delete_dtm = dateNow;
         return newBoardContent;
