@@ -1,12 +1,8 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Post,
-    Patch,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Patch } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/comment/create-comment.dto';
+import { DeleteCommentDto } from '../dto/comment/delete-comment.dto';
+import { GetCommentListDto } from '../dto/comment/get-comment-list.dto';
+import { UpdateCommentDto } from '../dto/comment/update-comment.dto';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { BoardService } from '../service/board.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -59,9 +55,29 @@ export class BoardController {
         return state ? ResponseDto.success() : ResponseDto.error('게시글 수정에 실패하였습니다.');
     }
 
+    @Get('/commentList')
+    async getCommentList(@Body() getCommentListDto: GetCommentListDto) {
+        const commentList = await this.boardService.getCommentList(
+            getCommentListDto.getContentId(),
+        );
+        return ResponseDto.successData(commentList);
+    }
+
     @Post('/comment')
     async createComment(@Body() createCommentDto: CreateCommentDto): Promise<ResponseDto<any>> {
         const state = await this.boardService.createComment(createCommentDto);
         return state ? ResponseDto.success() : ResponseDto.error('댓글 등록에 실패하였습니다.');
+    }
+
+    @Patch('/comment')
+    async updateComment(@Body() updateCommentDto: UpdateCommentDto) {
+        const state = await this.boardService.updateComment(updateCommentDto);
+        return state ? ResponseDto.success() : ResponseDto.error('댓글 수정에 실패하였습니다.');
+    }
+
+    @Delete('/comment')
+    async deleteComment(@Body() deleteCommentDto: DeleteCommentDto) {
+        const state = await this.boardService.deleteComment(deleteCommentDto);
+        return state ? ResponseDto.success() : ResponseDto.error('댓글 삭제에 실패하였습니다.');
     }
 }

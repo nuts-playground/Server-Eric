@@ -15,21 +15,21 @@ export class TestMockBoardContentRepo {
     private rowData: BoardContent = Object.assign(this.getTestContent(), { content_id: 1 });
     private savedContent = [this.rowData];
 
-    private contentList = [
-        this.getTestContent('test title1', 'test content1'),
-        this.getTestContent('test title2', 'test content2'),
-        this.getTestContent('test title3', 'test content3'),
-        this.getTestContent('test title4', 'test content4'),
-        this.getTestContent('test title5', 'test content5'),
-        this.getTestContent('test title6', 'test content6'),
-        this.getTestContent('test title7', 'test content7'),
-        this.getTestContent('test title8', 'test content8'),
-        this.getTestContent('test title9', 'test content9'),
-        this.getTestContent('test title10', 'test content10'),
+    private curData = [
+        this.getTestContent('test title1', 'test content1', 1, 1),
+        this.getTestContent('test title2', 'test content2', 2, 1),
+        this.getTestContent('test title3', 'test content3', 3, 4),
+        this.getTestContent('test title4', 'test content4', 4, 2),
+        this.getTestContent('test title5', 'test content5', 5, 7),
+        this.getTestContent('test title6', 'test content6', 6, 1),
+        this.getTestContent('test title7', 'test content7', 7, 5),
+        this.getTestContent('test title8', 'test content8', 8, 10),
+        this.getTestContent('test title9', 'test content9', 9, 2),
+        this.getTestContent('test title10', 'test content10', 10, 11),
     ];
 
-    getTestContentList(count: number): BoardContent[] {
-        return this.contentList.slice(0, count);
+    getTestcurData(count: number): BoardContent[] {
+        return this.curData.slice(0, count);
     }
 
     getTestContent(
@@ -61,9 +61,9 @@ export class TestMockBoardContentRepo {
 
     async find(obj: any) {
         if (obj) {
-            return this.getTestContentList(obj.take);
+            return this.getTestcurData(obj.take);
         } else {
-            return this.getTestContentList(10);
+            return this.getTestcurData(10);
         }
     }
 

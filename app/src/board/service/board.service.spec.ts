@@ -1,6 +1,11 @@
+import { CreateCommentDto } from '../dto/comment/create-comment.dto';
+import { GetCommentListDto } from '../dto/comment/get-comment-list.dto';
 import { CreateContentDto } from '../dto/content/create-content.dto';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { UpdateContentDto } from '../dto/content/update-content.dto';
+import { BoardComment } from '../entity/board-comment.entity';
+import { BoardCommentRepository } from '../repository/board-comment.repository';
+import { TestMockBoardCommentRepo } from '../repository/test/test-board-comment.repository';
 import { BoardService } from './board.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
@@ -18,6 +23,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
     let userService: UserService;
     let boardCategoryRepository: BoardCategoryRepository;
     let boardContentRepository: BoardContentRepository;
+    let boardCommentRepository: BoardCommentRepository;
     let userRepository: UserRepository;
 
     beforeAll(async () => {
@@ -37,6 +43,10 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                     provide: BoardCategoryRepository,
                     useClass: TestMockBoardCategoryRepo,
                 },
+                {
+                    provide: BoardCommentRepository,
+                    useClass: TestMockBoardCommentRepo,
+                },
             ],
         }).compile();
 
@@ -44,6 +54,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
         userService = module.get<UserService>(UserService);
         boardContentRepository = module.get<BoardContentRepository>(BoardContentRepository);
         boardCategoryRepository = module.get<BoardCategoryRepository>(BoardCategoryRepository);
+        boardCommentRepository = module.get<BoardCommentRepository>(BoardCommentRepository);
     });
 
     it('should be defined', () => {
@@ -187,8 +198,60 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
             });
         });
 
-        describe('[entity] BoardLike', () => {});
+        describe('[entity] BoardComment', () => {
+            describe('[method] getCommentList', () => {
+                it('정상 케이스', async () => {
+                    const getCommentListDto = new GetCommentListDto(1);
+                    const result = await boardService.getCommentList(
+                        getCommentListDto.getContentId(),
+                    );
+                    expect(result[0]).toBeInstanceOf(BoardComment);
+                    expect(result.length).not.toEqual(0);
+                });
+                it('에러 케이스 - 댓글이 없을 때', async () => {
+                    const getCommentListDto = new GetCommentListDto(5);
+                    const result = await boardService.getCommentList(
+                        getCommentListDto.getContentId(),
+                    );
+                    expect(result.length).toEqual(0);
+                });
+            });
 
-        describe('[entity] BoardComment', () => {});
+            describe('[method] createComment', () => {
+                it('정상 케이스', async () => {
+                    const createCommentDto = new CreateCommentDto(
+                        5,
+                        'test1@google.com',
+                        '댓글이다요옹',
+                    );
+                    const result = await boardService.createComment(createCommentDto);
+                    expect(result['comment']).toEqual('댓글이다요옹');
+                    expect(result['create_dtm']).not.toBeNull();
+                });
+
+                it('에러 케이스 - 댓글을 달려고 하는 게시글 id 잘못 입력', async () => {
+                    const createCommentDto = new CreateCommentDto(
+                        123,
+                        'test1@google.com',
+                        '댓글이다요옹',
+                    );
+                    const result = await boardService.createComment(createCommentDto);
+                    expect(result).toBeNull();
+                });
+            });
+
+            // describe('[method] updateComment', () => {
+            //     it('정상 케이스', async () => {
+            //         const createCommentDto = new CreateCommentDto(
+            //             5,
+            //             'test1@google.com',
+            //             '댓글이다요옹',
+            //         );
+            //         const result = await boardService.createComment(createCommentDto);
+            //         expect(result['comment']).toEqual('댓글이다요옹');
+            //         expect(result['create_dtm']).not.toBeNull();
+            //     });
+            // });
+        });
     });
 });

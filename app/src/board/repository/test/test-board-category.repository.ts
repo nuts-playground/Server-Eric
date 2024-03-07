@@ -43,4 +43,11 @@ export class TestMockBoardCategoryRepo {
     async find() {
         return this.testCategoryList;
     }
+
+    getTestCategory(): BoardCategory {
+        const testCategory = new BoardCategory();
+        testCategory.category_id = 1;
+        testCategory.title = '자유 테스트 게시판';
+        return testCategory;
+    }
 }
