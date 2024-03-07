@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { UpdateResult } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
+import { CreateCommentDto } from '../dto/comment/create-comment.dto';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
+import { BoardComment } from '../entity/board-comment.entity';
 import { BoardCategoryRepository } from '../repository/board-category.repository';
 import { BoardCategory } from '../entity/board-category.entity';
+import { BoardCommentRepository } from '../repository/board-comment.repository';
 import { BoardContentRepository } from '../repository/board-content.repository';
 import { BoardContent } from '../entity/board-content.entity';
 import { CreateContentDto } from '../dto/content/create-content.dto';
@@ -15,6 +19,7 @@ export class BoardService {
         private readonly userService: UserService,
         private readonly boardCategoryRepository: BoardCategoryRepository,
         private readonly boardContentRepository: BoardContentRepository,
+        private readonly boardCommentRepository: BoardCommentRepository,
     ) {}
 
     async findContent(
@@ -80,7 +85,7 @@ export class BoardService {
         return await this.boardContentRepository.save(deleteBoardInfo);
     }
 
-    async updateContent(updateContentDto: UpdateContentDto) {
+    async updateContent(updateContentDto: UpdateContentDto): Promise<UpdateResult | boolean> {
         const reqUserEmail = updateContentDto.getEmail();
         const user = await this.userService.findByEmail(reqUserEmail);
 
@@ -101,7 +106,20 @@ export class BoardService {
         );
     }
 
-    // async likeBoardContent() {}
+    async createComment(
+        createCommentDto: CreateCommentDto,
+    ): Promise<BoardComment | string | boolean> {
+        const reqUserEmail = createCommentDto.getEmail();
+        const user = await this.userService.findByEmail(reqUserEmail);
 
-    // async commentBoardContent() {}
+        const notFoundUser = !(user instanceof User);
+        if (notFoundUser) return false;
+
+        const userId = user.user_id;
+        const boardComment = createCommentDto.toEntity(userId);
+        const validateContent = !(boardComment instanceof BoardComment);
+
+        if (validateContent) return boardComment;
+        return await this.boardCommentRepository.save(boardComment);
+    }
 }

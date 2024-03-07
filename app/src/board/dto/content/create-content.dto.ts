@@ -1,4 +1,3 @@
-import { ResponseDto } from '../../../common/dto/response.dto';
 import { BoardContent } from '../../entity/board-content.entity';
 
 export class CreateContentDto {

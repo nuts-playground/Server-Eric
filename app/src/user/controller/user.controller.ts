@@ -1,10 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Session,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Session } from '@nestjs/common';
 import { EmailDto } from '../dto/email.dto';
 import { UserService } from '../service/user.service';
 import { ResponseDto } from '../../common/dto/response.dto';

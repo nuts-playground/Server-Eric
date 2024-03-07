@@ -18,11 +18,17 @@ export class BoardContent extends CommonTimestamp {
     @Column('longtext')
     content: string;
 
-    @Column()
+    @ManyToOne(() => BoardCategory, (boardCategory) => boardCategory.boardContent, {
+        createForeignKeyConstraints: true,
+        nullable: false,
+        onDelete: 'CASCADE',
+    })
+    @JoinColumn({
+        name: 'category_id',
+        foreignKeyConstraintName: 'fk-board_content-category',
+        referencedColumnName: 'category_id',
+    })
     category_id: number;
-
-    @Column()
-    user_id: number;
 
     @ManyToOne(() => User, (user) => user.boardContent, {
         createForeignKeyConstraints: true,
@@ -34,25 +40,13 @@ export class BoardContent extends CommonTimestamp {
         foreignKeyConstraintName: 'fk-board_content-user',
         referencedColumnName: 'user_id',
     })
-    user: User;
+    user_id: number;
 
-    @ManyToOne(() => BoardCategory, (boardCategory) => boardCategory.boardContent, {
-        createForeignKeyConstraints: true,
-        nullable: false,
-        onDelete: 'CASCADE',
+    @OneToMany(() => BoardComment, (board_comment) => board_comment.content_id, {
+        cascade: ['update', 'remove'],
+        nullable: true,
     })
-    @JoinColumn({
-        name: 'category_id',
-        foreignKeyConstraintName: 'fk-board_content-category',
-        referencedColumnName: 'category_id',
-    })
-    boardCategory: BoardCategory;
-
-    @OneToMany(() => BoardComment, (board_comment) => board_comment.boardContent, {
-        cascade: ['update'],
-        nullable: false,
-    })
-    boardComment: BoardComment[];
+    boardComment?: BoardComment[];
 
     private static newBoard(title: string, content: string, category_id: number, user_id: number) {
         const boardContent = new BoardContent();

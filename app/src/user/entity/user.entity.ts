@@ -27,16 +27,16 @@ export class User extends CommonTimestamp {
     provider_id: ProviderIdEnum;
 
     @OneToMany(() => BoardContent, (boardContent) => boardContent.user_id, {
-        cascade: ['update'],
-        nullable: false,
+        cascade: ['update', 'remove'],
+        nullable: true,
     })
-    boardContent: BoardContent[];
+    boardContent?: BoardContent[];
 
-    @OneToMany(() => BoardComment, (boardComment) => boardComment.user, {
-        cascade: ['update'],
-        nullable: false,
+    @OneToMany(() => BoardComment, (boardComment) => boardComment.user_id, {
+        cascade: ['update', 'remove'],
+        nullable: true,
     })
-    boardComment: BoardComment[];
+    boardComment?: BoardComment[];
 
     static from(userEmail: string, userName: string, providerId: ProviderIdEnum): User {
         const user = new User();

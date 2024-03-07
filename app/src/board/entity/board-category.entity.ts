@@ -13,11 +13,11 @@ export class BoardCategory {
     })
     title: string;
 
-    @OneToMany(() => BoardContent, (boardContent) => boardContent.boardCategory, {
-        cascade: ['update'],
-        nullable: false,
+    @OneToMany(() => BoardContent, (boardContent) => boardContent.category_id, {
+        cascade: ['update', 'remove'],
+        nullable: true,
     })
-    boardContent: BoardContent[];
+    boardContent?: BoardContent[];
 
     static from(title: string): BoardCategory {
         const boardCategory = new BoardCategory();
