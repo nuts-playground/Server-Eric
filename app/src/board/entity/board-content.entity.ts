@@ -65,34 +65,4 @@ export class BoardContent extends CommonTimestamp {
     ): BoardContent {
         return this.newBoard(title, content, category_id, user_id);
     }
-
-    static updateEntity(boardContent: BoardContent): BoardContent {
-        const newBoardContent = this.newBoard(
-            boardContent.title,
-            boardContent.content,
-            boardContent.category_id,
-            boardContent.user_id,
-        );
-
-        let dateNow: Date;
-        // eslint-disable-next-line prefer-const
-        dateNow = DateUtil.dateNow();
-        newBoardContent.content_id = boardContent.content_id;
-        newBoardContent.update_dtm = dateNow;
-        return newBoardContent;
-    }
-
-    static deleteEntity(boardContent: BoardContent): BoardContent {
-        const newBoardContent = this.newBoard(
-            boardContent.title,
-            boardContent.content,
-            boardContent.category_id,
-            boardContent.user_id,
-        );
-        const dateNow = DateUtil.dateNow();
-        newBoardContent.content_id = boardContent.content_id;
-        newBoardContent.update_dtm = dateNow;
-        newBoardContent.delete_dtm = dateNow;
-        return newBoardContent;
-    }
 }

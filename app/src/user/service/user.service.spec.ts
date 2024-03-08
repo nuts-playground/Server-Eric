@@ -33,10 +33,10 @@ describe('[Service] 유저 서비스 테스트- user.service.ts', () => {
         describe('[entity] User', () => {
             describe('[method] findByEmail', () => {
                 it('찾으려는 유저가 있을 때 성공', async () => {
-                    const testUserEmail = 'test123@test.com';
+                    const testUserEmail = 'test1@google.com';
                     const user = (await userService.findByEmail(testUserEmail)) as User;
                     expect(user instanceof User).toBeTruthy();
-                    expect(user.user_name).toEqual('테스트유저');
+                    expect(user.user_name).toEqual('testUser1');
                     expect(user.provider_id).toEqual('google');
                 });
 

@@ -59,7 +59,7 @@ describe('User router test (e2e)', () => {
             await userService.signUp(testUser);
             const testDeleteUserEmail = { user_email: 'seokho@test.com' };
             const response = await supertest(app.getHttpServer())
-                .post('/user/delete')
+                .delete('/user/info')
                 .set('Accept', 'application/json')
                 .send(testDeleteUserEmail);
 
@@ -70,7 +70,7 @@ describe('User router test (e2e)', () => {
         it('유저가 없는 경우 실패', async () => {
             const failTestDeleteUserEmail = { user_email: 'seokho@test.com' };
             const response = await supertest(app.getHttpServer())
-                .post('/user/delete')
+                .delete('/user/info')
                 .set('Accept', 'application/json')
                 .send(failTestDeleteUserEmail);
 
@@ -81,7 +81,6 @@ describe('User router test (e2e)', () => {
 
     afterAll(async () => {
         await mysqlConfig.getTestDataSource.dropDatabase();
-
         await app.close();
     });
 });

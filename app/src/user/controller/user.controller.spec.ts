@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { instanceToPlain } from 'class-transformer';
-import { EmailDto } from '../dto/email.dto';
+import { DeleteUserDto } from '../dto/delete-user.dto';
 import { UserService } from '../service/user.service';
 import { UserController } from './user.controller';
 
@@ -88,9 +88,9 @@ describe('유저 컨트롤러 테스트', () => {
 
     describe('유저 가입 정보 지우기', () => {
         it('POST /deleteUserInfo', async () => {
-            const noSearchUserParam = new EmailDto('test@test.com');
-            const successParam = new EmailDto('seokho@test.com');
-            const serverErrorParam = new EmailDto('ServerError@test.com');
+            const noSearchUserParam = new DeleteUserDto('test@test.com');
+            const successParam = new DeleteUserDto('seokho@test.com');
+            const serverErrorParam = new DeleteUserDto('ServerError@test.com');
             const noSearchResult = convertPlain(
                 await userController.deleteUserInfo(noSearchUserParam),
             );
@@ -115,18 +115,18 @@ describe('유저 컨트롤러 테스트', () => {
             //     test: 'test',
             //     err: 'err',
             // });
-            const sessionSuccessParam: Record<string, any> = {
-                passport: {
-                    user: 'seokho@test.com',
-                },
-            };
-            try {
-                const failResult = convertPlain(
-                    await userController.getUserInfo(sessionSuccessParam),
-                );
-            } catch (error) {
-                console.log(error);
-            }
+            // const sessionSuccessParam: Record<string, any> = {
+            //     passport: {
+            //         user: 'seokho@test.com',
+            //     },
+            // };
+            // try {
+            //     const failResult = convertPlain(
+            //         await userController.getUserInfo(sessionSuccessParam),
+            //     );
+            // } catch (error) {
+            //     console.log(error);
+            // }
             // console.log(failResult);
             // expect(failResult.status).toEqual('exception');
             // expect(failResult.message).toEqual('getUserInfo');

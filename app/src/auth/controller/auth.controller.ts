@@ -2,7 +2,6 @@ import {
     Body,
     Controller,
     Get,
-    InternalServerErrorException,
     Post,
     Redirect,
     Req,
@@ -10,6 +9,7 @@ import {
     Session,
     UseGuards,
 } from '@nestjs/common';
+import { ApiExcludeController } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { urlConfig } from '../../config/url.config';
@@ -17,20 +17,19 @@ import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard } from
 import { AuthService } from '../service/auth.service';
 import { OauthLoginDto } from '../dto/oauth-login.dto';
 
+@ApiExcludeController()
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('/oauth-login')
     async oauthLogin(@Body() oauthLoginDto: OauthLoginDto): Promise<ResponseDto<string | any>> {
-        try {
-            const targetMethod = oauthLoginDto.getMethod();
-            if (typeof targetMethod !== 'string') return ResponseDto.badParam(targetMethod);
-            const targetUrl = urlConfig.getHostUrl() + '/' + 'auth/' + targetMethod;
-            return ResponseDto.successData(targetUrl);
-        } catch (err) {
-            throw new InternalServerErrorException(err);
+        const targetMethod = oauthLoginDto.getMethod();
+        if (typeof targetMethod !== 'string') {
+            return ResponseDto.badParam('인증할 수 없는 로그인 메서드입니다.', targetMethod);
         }
+        const targetUrl = urlConfig.getHostUrl() + '/' + 'auth/' + targetMethod;
+        return ResponseDto.successData(targetUrl);
     }
 
     @Get('/to-google')
@@ -71,21 +70,17 @@ export class AuthController {
 
     @Get('/logOut')
     async logOut(@Session() session, @Req() req: Request, @Res() res: Response) {
-        try {
-            const sessionCheck = session.passport;
-            if (sessionCheck && sessionCheck.user) {
-                req.session.destroy((err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    res.clearCookie('connect.sid');
-                    res.send(true);
-                });
-            } else {
-                return ResponseDto.error('로그인 하지 않은 상태입니다.');
-            }
-        } catch (err) {
-            throw new InternalServerErrorException(err);
+        const sessionCheck = session.passport;
+        if (sessionCheck && sessionCheck.user) {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log(err);
+                }
+                res.clearCookie('connect.sid');
+                res.send(true);
+            });
+        } else {
+            return ResponseDto.error('로그인 하지 않은 상태입니다.');
         }
     }
 }

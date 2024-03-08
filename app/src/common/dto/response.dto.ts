@@ -32,8 +32,8 @@ export class ResponseDto<T> {
         return new ResponseDto<T>('error', '', DateUtil.stringNow(), data);
     }
 
-    static badParam<T>(data: T): ResponseDto<T> {
-        return new ResponseDto<T>('bad_param', '', DateUtil.stringNow(), data);
+    static badParam<T>(message: string, data: T): ResponseDto<T> {
+        return new ResponseDto<T>('bad_param', message, DateUtil.stringNow(), data);
     }
 
     static exception<T>(message: string, data: T): ResponseDto<T> {
