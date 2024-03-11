@@ -12,12 +12,13 @@ import { UserModule } from '../src/user/user.module';
 describe('AppController (e2e)', () => {
     let app: INestApplication;
     beforeAll(async () => {
+
         const module: TestingModule = await Test.createTestingModule({
             imports: [
                 AuthModule,
                 UserModule,
                 BoardModule,
-                TypeOrmModule.forRoot(mysqlConfig.getConfig()),
+                TypeOrmModule.forRoot(mysqlConfig.getTestConfig()),
             ],
         }).compile();
         app = module.createNestApplication();

@@ -1,16 +1,12 @@
 export class DeleteCommentDto {
+    private readonly comment_id: number;
     private readonly content_id: number;
     private readonly user_email: string;
-    private readonly comment_id: number;
 
-    constructor(contentId: number, userEmail: string, commentId: number) {
+    constructor(commentId: number, contentId: number, userEmail: string) {
         this.content_id = contentId;
         this.user_email = userEmail;
         this.comment_id = commentId;
-    }
-
-    getEmail() {
-        return this.user_email;
     }
 
     getCommentId() {
@@ -19,5 +15,9 @@ export class DeleteCommentDto {
 
     getContentId() {
         return this.content_id;
+    }
+
+    getEmail() {
+        return this.user_email;
     }
 }

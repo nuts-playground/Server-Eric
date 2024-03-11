@@ -1,5 +1,7 @@
 import { CreateCommentDto } from '../dto/comment/create-comment.dto';
+import { DeleteCommentDto } from '../dto/comment/delete-comment.dto';
 import { GetCommentListDto } from '../dto/comment/get-comment-list.dto';
+import { UpdateCommentDto } from '../dto/comment/update-comment.dto';
 import { CreateContentDto } from '../dto/content/create-content.dto';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
 import { UpdateContentDto } from '../dto/content/update-content.dto';
@@ -21,10 +23,10 @@ import { BoardContent } from '../entity/board-content.entity';
 describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
     let boardService: BoardService;
     let userService: UserService;
+    let userRepository: UserRepository;
     let boardCategoryRepository: BoardCategoryRepository;
     let boardContentRepository: BoardContentRepository;
     let boardCommentRepository: BoardCommentRepository;
-    let userRepository: UserRepository;
 
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -52,6 +54,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
 
         boardService = module.get<BoardService>(BoardService);
         userService = module.get<UserService>(UserService);
+        userRepository = module.get<UserRepository>(UserRepository);
         boardContentRepository = module.get<BoardContentRepository>(BoardContentRepository);
         boardCategoryRepository = module.get<BoardCategoryRepository>(BoardCategoryRepository);
         boardCommentRepository = module.get<BoardCommentRepository>(BoardCommentRepository);
@@ -143,7 +146,7 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                         'test1@google.com',
                     );
                     const result = await boardService.createContent(createContentDto);
-                    expect(result).toEqual('제목은 2글자 이상, 50글자 이하여야 합니다.');
+                    expect(result).toStrictEqual('제목은 2글자 이상, 50글자 이하여야 합니다.');
                 });
             });
 
@@ -191,8 +194,12 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                         '새로운 타이틀이지롱',
                     );
                     const result = await boardService.updateContent(updateContentDto);
-                    expect(result['title']).toEqual(updateContentDto.getUpdateContent().title);
-                    expect(result['content']).toEqual(updateContentDto.getUpdateContent().content);
+                    expect(result['title']).toStrictEqual(
+                        updateContentDto.getUpdateContent().title,
+                    );
+                    expect(result['content']).toStrictEqual(
+                        updateContentDto.getUpdateContent().content,
+                    );
                     expect(result['update_dtm']).not.toBeNull();
                 });
             });
@@ -206,26 +213,26 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                         getCommentListDto.getContentId(),
                     );
                     expect(result[0]).toBeInstanceOf(BoardComment);
-                    expect(result.length).not.toEqual(0);
+                    expect(result.length).not.toStrictEqual(0);
                 });
                 it('에러 케이스 - 댓글이 없을 때', async () => {
                     const getCommentListDto = new GetCommentListDto(5);
                     const result = await boardService.getCommentList(
                         getCommentListDto.getContentId(),
                     );
-                    expect(result.length).toEqual(0);
+                    expect(result.length).toStrictEqual(0);
                 });
             });
 
             describe('[method] createComment', () => {
                 it('정상 케이스', async () => {
                     const createCommentDto = new CreateCommentDto(
-                        5,
+                        1,
                         'test1@google.com',
                         '댓글이다요옹',
                     );
                     const result = await boardService.createComment(createCommentDto);
-                    expect(result['comment']).toEqual('댓글이다요옹');
+                    expect(result['comment']).toStrictEqual('댓글이다요옹');
                     expect(result['create_dtm']).not.toBeNull();
                 });
 
@@ -240,18 +247,47 @@ describe('[Service] 보드 서비스 테스트 - board.service.ts', () => {
                 });
             });
 
-            // describe('[method] updateComment', () => {
-            //     it('정상 케이스', async () => {
-            //         const createCommentDto = new CreateCommentDto(
-            //             5,
-            //             'test1@google.com',
-            //             '댓글이다요옹',
-            //         );
-            //         const result = await boardService.createComment(createCommentDto);
-            //         expect(result['comment']).toEqual('댓글이다요옹');
-            //         expect(result['create_dtm']).not.toBeNull();
-            //     });
-            // });
+            describe('[method] updateComment', () => {
+                it('정상 케이스', async () => {
+                    const updateCommentDto = new UpdateCommentDto(
+                        1,
+                        'test1@google.com',
+                        1,
+                        '업데이트 댓글이다요옹',
+                    );
+                    const result = await boardService.updateComment(updateCommentDto);
+                    expect(result['comment']).toStrictEqual('업데이트 댓글이다요옹');
+                    expect(result['update_dtm']).not.toBeNull();
+                    expect(result['comment_id']).toStrictEqual(1);
+                });
+
+                it('에러 케이스 - 없는 댓글 아이디에 시도', async () => {
+                    const updateCommentDto = new UpdateCommentDto(
+                        1,
+                        'test1@google.com',
+                        5,
+                        '업데이트 댓글이다요옹',
+                    );
+                    const result = await boardService.updateComment(updateCommentDto);
+                    expect(result).toBeFalsy();
+                });
+            });
+
+            describe('[method] deleteComment', () => {
+                it('정상 케이스', async () => {
+                    const deleteCommentDto = new DeleteCommentDto(1, 1, 'test1@google.com');
+                    const result = await boardService.deleteComment(deleteCommentDto);
+                    expect(result['update_dtm']).not.toBeNull();
+                    expect(result['delete_dtm']).not.toBeNull();
+                    expect(result['comment_id']).toStrictEqual(1);
+                });
+
+                it('에러 케이스 - 없는 댓글 아이디에 시도', async () => {
+                    const deleteCommentDto = new DeleteCommentDto(10, 1, 'test1@google.com');
+                    const result = await boardService.deleteComment(deleteCommentDto);
+                    expect(result).toBeFalsy();
+                });
+            });
         });
     });
 });

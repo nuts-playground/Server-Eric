@@ -105,6 +105,7 @@ export class BoardService {
         if (notFoundContent) return false;
 
         targetFindContent.delete_dtm = curTime;
+        targetFindContent.update_dtm = curTime;
         return await this.boardContentRepository.save(targetFindContent);
     }
 
@@ -185,7 +186,9 @@ export class BoardService {
 
         if (notFoundContent) return false;
 
+
         targetFindComment.delete_dtm = curTime;
-        return await this.boardContentRepository.save(targetFindComment);
+        targetFindComment.update_dtm = curTime;
+        return await this.boardCommentRepository.save(targetFindComment);
     }
 }
