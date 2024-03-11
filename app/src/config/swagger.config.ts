@@ -8,7 +8,6 @@ export async function swaggerOn(reqApp: INestApplication) {
         .setVersion('1.0')
         .addCookieAuth('connect.sid')
         .build();
-
     const document = SwaggerModule.createDocument(reqApp, config);
     SwaggerModule.setup('api-docs', reqApp, document);
 }
