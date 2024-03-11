@@ -59,7 +59,7 @@ export class BoardService {
 
     async getLatestContentList(): Promise<BoardContent[] | null> {
         return await this.boardContentRepository.find({
-            take: 10,
+            take: 50,
         });
     }
 
