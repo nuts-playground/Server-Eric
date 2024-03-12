@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { DateUtil } from '../../../common/utils/date.util';
 import { mysqlConfig } from '../../../config/mysql.config';
 import { BoardContent } from '../../entity/board-content.entity';

@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { mysqlConfig } from '../../../config/mysql.config';
 import { BoardCategory } from '../../entity/board-category.entity';
 
