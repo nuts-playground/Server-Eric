@@ -11,13 +11,13 @@ describe('typeorm version test', () => {
     let action; // 요거는 분기처리 좀 더 편하게 하기 위한 모의 함수
 
     beforeAll(async () => {
-        await mysqlConfig.getTestDataSource.initialize();
+        await mysqlConfig.testGetDataSource.initialize();
     });
 
     beforeEach(() => {
         userRepository = new Repository<User>(
             User,
-            mysqlConfig.getTestDataSource.createEntityManager(),
+            mysqlConfig.testGetDataSource.createEntityManager(),
         );
         testInfo = {
             userEmail: 'test123@test.com',
@@ -115,6 +115,6 @@ describe('typeorm version test', () => {
     });
 
     afterAll(async () => {
-        await mysqlConfig.getTestDataSource.dropDatabase();
+        await mysqlConfig.testGetDataSource.dropDatabase();
     });
 });
