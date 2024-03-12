@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { DateUtil } from '../../../common/utils/date.util';
 import { mysqlConfig } from '../../../config/mysql.config';
 import { BoardContent } from '../../entity/board-content.entity';
@@ -6,7 +6,7 @@ import { TestUtil } from '../../../common/utils/test.util';
 
 export class TestBoardContentRepo extends Repository<BoardContent> {
     constructor() {
-        super(BoardContent, mysqlConfig.getTestDataSource.createEntityManager());
+        super(BoardContent, mysqlConfig.testGetDataSource.createEntityManager());
     }
 }
 

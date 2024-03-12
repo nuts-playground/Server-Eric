@@ -14,13 +14,12 @@ export class UserController {
     @ApiExcludeEndpoint()
     @Get('/info')
     async getUserInfo(@Session() session: Record<string, any>): Promise<ResponseDto<any>> {
-        if (!session.passport) return ResponseDto.error('정보가 존재하지 않습니다.');
+        if (!session.passport) return ResponseDto.error('잘못된 정보 요청입니다.');
 
         const userEmail = session.passport.user;
         const user = await this.userService.findByEmail(userEmail);
-
         if (!(user instanceof User)) {
-            return ResponseDto.error('로그인 하지 않았습니다.');
+            return ResponseDto.error('유저를 찾을 수 없습니다.');
         } else {
             const responseUserInfo = new SafeResponseDto(
                 user.user_id,
@@ -45,7 +44,7 @@ export class UserController {
         return result ? ResponseDto.success() : ResponseDto.error('삭제에 실패했습니다.');
     }
 
-    @Get('/setTestInfo')
+    @Get('/setSwaggerTestInfo')
     @ApiOperation({
         summary: '테스트 유저 세팅 API',
         description: '유저가 oauth 로만 만들어져서 이 데이터로 테스트 해보시면 됩니다.',
@@ -68,7 +67,7 @@ export class UserController {
             },
         },
     })
-    async setTestInfo() {
+    async setSwaggerTestInfo() {
         const user = (await this.userService.findByEmail('test1@google.com')) as User;
         if (!(user instanceof User)) {
             return ResponseDto.error('로그인 하지 않았습니다.');

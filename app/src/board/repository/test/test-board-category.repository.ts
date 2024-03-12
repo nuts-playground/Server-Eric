@@ -1,12 +1,12 @@
-import { Repository } from 'typeorm';
-import { BoardCategory } from '../../entity/board-category.entity';
+import { DataSource, Repository } from 'typeorm';
 import { mysqlConfig } from '../../../config/mysql.config';
+import { BoardCategory } from '../../entity/board-category.entity';
 
 export class TestBoardCategoryRepo extends Repository<BoardCategory> {
     private title = '자유게시판';
 
     constructor() {
-        super(BoardCategory, mysqlConfig.getTestDataSource.createEntityManager());
+        super(BoardCategory, mysqlConfig.testGetDataSource.createEntityManager());
     }
 
     getTestCategory() {

@@ -1,13 +1,13 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource } from 'typeorm';
+import { instanceToPlain } from 'class-transformer';
 import { corsConfig } from '../../src/config/cors.config';
 import { setGlobalProvider } from '../../src/config/global-provider.config';
 import { mysqlConfig } from '../../src/config/mysql.config';
 import { setSession } from '../../src/config/session.config';
 import * as supertest from 'supertest';
 import { UserController } from '../../src/user/controller/user.controller';
-import { SignupDto } from '../../src/user/dto/signup.dto';
+import { TestUserRepo } from '../../src/user/repository/test/test-user.repository';
 import { UserRepository } from '../../src/user/repository/user.repository';
 import { UserService } from '../../src/user/service/user.service';
 
@@ -15,18 +15,19 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     let app: INestApplication;
     let userController: UserController;
     let userService: UserService;
+    let userRepository: UserRepository;
     beforeAll(async () => {
+        await mysqlConfig.testGetDataSource.initialize();
         const module: TestingModule = await Test.createTestingModule({
+            imports: [],
             controllers: [UserController],
             providers: [
                 UserService,
-                UserRepository,
                 {
-                    provide: DataSource,
-                    useValue: mysqlConfig.getTestDataSource,
+                    provide: UserRepository,
+                    useClass: TestUserRepo,
                 },
             ],
-            exports: [UserService],
         }).compile();
 
         app = module.createNestApplication();
@@ -34,52 +35,105 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
         await setSession(app);
         app.enableCors(corsConfig.getConfig());
         await app.init();
+
         userService = module.get<UserService>(UserService);
         userController = module.get<UserController>(UserController);
+        userRepository = module.get<UserRepository>(UserRepository);
+
+        const ifUser = await userRepository.findOne({
+            where: { user_email: TestUserRepo.getTestEmail() },
+        });
+
+        if (ifUser) {
+            await userRepository.delete({
+                user_email: TestUserRepo.getTestEmail(),
+            });
+        }
     });
 
     it('should be defined', () => {
         expect(userController).toBeDefined();
         expect(userService).toBeDefined();
+        expect(userRepository).toBeDefined();
     });
 
-    // describe('[GET] /user/info', () => {
-    //     it('세션이 없는 경우', async () => {
-    //         const response = await supertest(app.getHttpServer()).get('/user/info').expect(200);
-    //
-    //         expect(response.body.status).toEqual('error');
-    //         expect(response.body.message).toEqual('정보가 존재하지 않습니다.');
-    //         expect(response.body.data).toEqual('');
-    //     });
-    // });
+    describe('[GET] /user/info', () => {
+        it('세션이 없는 경우', async () => {
+            const response = await supertest(app.getHttpServer()).get('/user/info').expect(200);
+            expect(response.body.status).toStrictEqual('error');
+            expect(response.body.message).toStrictEqual('잘못된 정보 요청입니다.');
+            expect(response.body.data).toStrictEqual('');
+        });
 
-    // describe('[POST] /user/info', () => {
-    //     it('유저가 있는 경우 성공', async () => {
-    //         const testUser = new SignupDto('seokho@test.com', 'seokho', 'naver');
-    //         await userService.signUp(testUser);
-    //         const testDeleteUserEmail = { user_email: 'seokho@test.com' };
-    //         const response = await supertest(app.getHttpServer())
-    //             .delete('/user/info')
-    //             .set('Accept', 'application/json')
-    //             .send(testDeleteUserEmail);
+        it('세션이 있지만 가입한 유저가 없는 경우 (현재는 가상)', async () => {
+            const fakeSession = {
+                passport: {
+                    user: 'test@google.com',
+                },
+            };
+            const response = instanceToPlain(await userController.getUserInfo(fakeSession));
+            expect(response.status).toStrictEqual('error');
+            expect(response.message).toStrictEqual('유저를 찾을 수 없습니다.');
+        });
+
+        it('세션도 있고 가입한 유저도 있는 경우', async () => {
+            await userRepository.save(TestUserRepo.getTestUser());
+            const fakeSession = {
+                passport: {
+                    user: TestUserRepo.getTestEmail(),
+                },
+            };
+            const response = instanceToPlain(await userController.getUserInfo(fakeSession));
+            expect(response.status).toStrictEqual('success');
+            expect(response.message).toStrictEqual('');
+            expect(response.data.name).toStrictEqual('테스트유저');
+            expect(response.data.email).toStrictEqual(TestUserRepo.getTestEmail());
+        });
+    });
     //
-    //         expect(response.body.status).toEqual('success');
-    //         expect(response.body.message).toEqual('');
-    //     });
-    //
-    //     it('유저가 없는 경우 실패', async () => {
-    //         const failTestDeleteUserEmail = { user_email: 'seokho@test.com' };
-    //         const response = await supertest(app.getHttpServer())
-    //             .delete('/user/info')
-    //             .set('Accept', 'application/json')
-    //             .send(failTestDeleteUserEmail);
-    //
-    //         expect(response.body.status).toEqual('error');
-    //         expect(response.body.message).toEqual('존재하지 않는 유저입니다.');
-    //     });
-    // });
-    //
-    // afterAll(async () => {
-    //     await app.close();
-    // });
+    describe('[POST] /user/info', () => {
+        /*
+         * Oauth!
+         * */
+        // it('oauth 로 가입이라 signUp service', async () => {
+        //     const signUpDto = new SignupDto('test@email.com', 'e2eTestUser', 'google');
+        //     await userService.signUp(signUpDto);
+        //
+        //     const response = await userRepository.findOne({
+        //         where: { user_email: 'test@email.com' },
+        //     });
+        //     expect(response.user_email).toStrictEqual('test@email.com');
+        //     expect(response.user_name).toStrictEqual('e2eTestUser');
+        //     expect(response.provider_id).toStrictEqual('google');
+        //     expect(response.create_dtm).not.toBeNull();
+        // });
+    });
+
+    describe('[DELETE] /user/info', () => {
+        it('should ', async () => {
+            const request = {
+                user_email: TestUserRepo.getTestUser(),
+            };
+            const response = await supertest(app.getHttpServer())
+                .delete('/user/info')
+                .set('Accept', 'application/json')
+                .send(request);
+
+            expect(response.body.status).toStrictEqual('success');
+            expect(response.body.message).toStrictEqual('');
+
+            const fakeSession = {
+                passport: {
+                    user: 'test@email.com',
+                },
+            };
+            const afterResponse = instanceToPlain(await userController.getUserInfo(fakeSession));
+            expect(afterResponse.status).toStrictEqual('error');
+            expect(afterResponse.message).toStrictEqual('유저를 찾을 수 없습니다.');
+        });
+    });
+
+    afterAll(async () => {
+        await app.close();
+    });
 });

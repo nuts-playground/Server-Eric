@@ -1,12 +1,23 @@
 import { Repository } from 'typeorm';
-import { User } from '../../entity/user.entity';
 import { mysqlConfig } from '../../../config/mysql.config';
+import { User } from '../../entity/user.entity';
 import { ProviderIdEnum } from '../../enum/provider-id-enum';
 import { TestUtil } from '../../../common/utils/test.util';
 
 export class TestUserRepo extends Repository<User> {
     constructor() {
-        super(User, mysqlConfig.getTestDataSource.createEntityManager());
+        super(User, mysqlConfig.testGetDataSource.createEntityManager());
+    }
+
+    static getTestUser() {
+        const email = 'test1@google.com';
+        const name = '테스트유저';
+        const provider = 'google';
+        return User.from(email, name, provider);
+    }
+
+    static getTestEmail() {
+        return 'test1@google.com';
     }
 }
 

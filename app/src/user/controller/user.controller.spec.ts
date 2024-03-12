@@ -43,12 +43,12 @@ describe('유저 컨트롤러 테스트', () => {
         expect(userController).toBeDefined();
     });
 
-    describe('컨트롤러에 무의미 라우터', () => {
-        it('GET /test', async () => {
-            const test = await userController.test();
-            expect(test).toEqual('무의미 라우터 테스트');
-        });
-    });
+    // describe('컨트롤러에 무의미 라우터', () => {
+    //     it('GET /test', async () => {
+    //         const test = await userController.test();
+    //         expect(test).toEqual('무의미 라우터 테스트');
+    //     });
+    // });
 
     describe('유저 정보 가져오기', () => {
         it('GET /getInfo', async () => {

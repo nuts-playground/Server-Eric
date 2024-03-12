@@ -22,20 +22,7 @@ class MysqlConfig extends EnvConfig {
         };
     }
 
-    public getTestConfig(): TypeOrmModuleOptions {
-        return {
-            type: 'mysql',
-            host: this.getValue('MYSQL_HOST'),
-            port: parseInt(this.getValue('MYSQL_PORT')),
-            username: this.getValue('MYSQL_USERNAME'),
-            password: this.getValue('MYSQL_PASSWORD'),
-            database: 'test',
-            synchronize: true,
-            entities: [__dirname + '/..' + '/**/*.entity{.ts,.js}'],
-            // logging: this.isDevMode(),
-        };
-    }
-    public getTestDataSource: DataSource = new DataSource({
+    public testGetDataSource: DataSource = new DataSource({
         type: 'mysql',
         host: this.getValue('MYSQL_HOST'),
         port: parseInt(this.getValue('MYSQL_PORT')),
@@ -43,8 +30,8 @@ class MysqlConfig extends EnvConfig {
         password: this.getValue('MYSQL_PASSWORD'),
         database: 'test',
         synchronize: true,
-        entities: [__dirname + '/..' + '/**/*.entity{.ts,.js}'],
-        // logging: true,
+        entities: [__dirname + '/..' + '/..' + '/**/*.entity{.ts,.js}'],
+        logging: true,
     });
 }
 

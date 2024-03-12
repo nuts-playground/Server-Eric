@@ -1,12 +1,12 @@
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { DateUtil } from '../../../common/utils/date.util';
 import { TestUtil } from '../../../common/utils/test.util';
-import { BoardComment } from '../../entity/board-comment.entity';
 import { mysqlConfig } from '../../../config/mysql.config';
+import { BoardComment } from '../../entity/board-comment.entity';
 
 export class TestBoardCommentRepo extends Repository<BoardComment> {
     constructor() {
-        super(BoardComment, mysqlConfig.getTestDataSource.createEntityManager());
+        super(BoardComment, mysqlConfig.testGetDataSource.createEntityManager());
     }
 }
 

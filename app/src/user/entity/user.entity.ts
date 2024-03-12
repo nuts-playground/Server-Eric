@@ -13,7 +13,9 @@ export class User extends CommonTimestamp {
     @PrimaryGeneratedColumn()
     user_id: number;
 
-    @Column()
+    @Column({
+        unique: true,
+    })
     user_email: string;
 
     @Column({

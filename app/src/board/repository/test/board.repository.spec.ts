@@ -12,7 +12,7 @@ describe('[Repository] 보드 레포 DataSource 테스트 - board.repository.spe
     let boardCommentRepository: TestBoardCommentRepo;
 
     beforeAll(async () => {
-        await mysqlConfig.getTestDataSource.initialize();
+        await mysqlConfig.testGetDataSource.initialize();
     });
 
     beforeEach(() => {
