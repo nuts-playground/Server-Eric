@@ -48,4 +48,3 @@ export class User extends CommonTimestamp {
         return user;
     }
 }
-

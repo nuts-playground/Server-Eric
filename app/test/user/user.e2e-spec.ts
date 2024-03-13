@@ -7,6 +7,7 @@ import { mysqlConfig } from '../../src/config/mysql.config';
 import { setSession } from '../../src/config/session.config';
 import * as supertest from 'supertest';
 import { UserController } from '../../src/user/controller/user.controller';
+import { SignupDto } from '../../src/user/dto/signup.dto';
 import { TestUserRepo } from '../../src/user/repository/test/test-user.repository';
 import { UserRepository } from '../../src/user/repository/user.repository';
 import { UserService } from '../../src/user/service/user.service';
@@ -92,25 +93,21 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     });
     //
     describe('[POST] /user/info', () => {
-        /*
-         * Oauth!
-         * */
-        // it('oauth 로 가입이라 signUp service', async () => {
-        //     const signUpDto = new SignupDto('test@email.com', 'e2eTestUser', 'google');
-        //     await userService.signUp(signUpDto);
-        //
-        //     const response = await userRepository.findOne({
-        //         where: { user_email: 'test@email.com' },
-        //     });
-        //     expect(response.user_email).toStrictEqual('test@email.com');
-        //     expect(response.user_name).toStrictEqual('e2eTestUser');
-        //     expect(response.provider_id).toStrictEqual('google');
-        //     expect(response.create_dtm).not.toBeNull();
-        // });
+        it('oauth 로 가입이라 signUp service', async () => {
+            const signUpDto = new SignupDto('test@email.com', 'e2eTestUser', 'google');
+            await userService.signUp(signUpDto);
+            const response = await userRepository.findOne({
+                where: { user_email: 'test@email.com' },
+            });
+            expect(response.user_email).toStrictEqual('test@email.com');
+            expect(response.user_name).toStrictEqual('e2eTestUser');
+            expect(response.provider_id).toStrictEqual('google');
+            expect(response.create_dtm).not.toBeNull();
+        });
     });
 
     describe('[DELETE] /user/info', () => {
-        it('should ', async () => {
+        it('정상 케이스', async () => {
             const request = {
                 user_email: TestUserRepo.getTestUser(),
             };
@@ -118,7 +115,6 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
                 .delete('/user/info')
                 .set('Accept', 'application/json')
                 .send(request);
-
             expect(response.body.status).toStrictEqual('success');
             expect(response.body.message).toStrictEqual('');
 

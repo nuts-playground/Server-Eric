@@ -1,12 +1,11 @@
 import { Controller, Get, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController } from '@nestjs/swagger';
 import { Response } from 'express';
-import { MainService } from './main.service';
 
 @Controller('main')
-@ApiTags('main')
+@ApiExcludeController()
 export class MainController {
-    constructor(private readonly mainService: MainService) {}
+    constructor() {}
 
     @Get('/')
     test(@Res() res: Response) {

@@ -31,7 +31,7 @@ class MysqlConfig extends EnvConfig {
         database: 'test',
         synchronize: true,
         entities: [__dirname + '/..' + '/..' + '/**/*.entity{.ts,.js}'],
-        logging: true,
+        // logging: true,
     });
 }
 

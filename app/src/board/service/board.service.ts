@@ -186,7 +186,6 @@ export class BoardService {
 
         if (notFoundContent) return false;
 
-
         targetFindComment.delete_dtm = curTime;
         targetFindComment.update_dtm = curTime;
         return await this.boardCommentRepository.save(targetFindComment);

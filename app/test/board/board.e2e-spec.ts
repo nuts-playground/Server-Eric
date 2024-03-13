@@ -78,8 +78,24 @@ describe('[e2e] 보드 e2e 테스트 - board.e2e-spec.ts', () => {
     describe('[GET] /board/categoryList', () => {
         console.log(userRepository);
         it('정상 케이스', async () => {
+            await userRepository.save(TestUserRepo.getTestUser());
+            // await new TestBoardCategoryRepo().setTestCategory(); // 카테고리 셋
             const response = await supertest(app.getHttpServer()).get('/board/categoryList');
+            expect(response.body.status).toStrictEqual('success');
+            expect(response.body.message).toStrictEqual('');
+            expect(response.body.data.length).not.toBeNull();
+        });
+    });
+
+    describe('[GET] /board/latestContentList', () => {
+        console.log(userRepository);
+        it('정상 케이스', async () => {
+            await boardContentRepository.save(TestBoardContentRepo.getTestContent());
+            const response = await supertest(app.getHttpServer()).get('/board/latestContentList');
             console.log(response.body);
+            // expect(response.body.status).toStrictEqual('success');
+            // expect(response.body.message).toStrictEqual('');
+            // expect(response.body.data.length).not.toBeNull();
         });
     });
 

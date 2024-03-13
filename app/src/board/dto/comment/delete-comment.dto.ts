@@ -1,11 +1,11 @@
 export class DeleteCommentDto {
-    private readonly comment_id: number;
-    private readonly content_id: number;
     private readonly user_email: string;
+    private readonly content_id: number;
+    private readonly comment_id: number;
 
-    constructor(commentId: number, contentId: number, userEmail: string) {
-        this.content_id = contentId;
+    constructor(userEmail: string, contentId: number, commentId: number) {
         this.user_email = userEmail;
+        this.content_id = contentId;
         this.comment_id = commentId;
     }
 

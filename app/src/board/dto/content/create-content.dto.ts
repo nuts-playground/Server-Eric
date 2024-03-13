@@ -1,19 +1,16 @@
 import { BoardContent } from '../../entity/board-content.entity';
 
 export class CreateContentDto {
+    private readonly user_email: string;
+    private readonly category_id: number;
     private readonly title: string;
-
     private readonly content: string;
 
-    private readonly category_id: number;
-
-    private readonly user_email: string;
-
-    constructor(title: string, content: string, categoryId: number, userEmail: string) {
+    constructor(userEmail: string, categoryId: number, title: string, content: string) {
+        this.user_email = userEmail;
+        this.category_id = categoryId;
         this.title = title;
         this.content = content;
-        this.category_id = categoryId;
-        this.user_email = userEmail;
     }
 
     getUserEmail(): string {
@@ -39,6 +36,6 @@ export class CreateContentDto {
         if (!this.isEmail()) {
             return '올바른 이메일 형식이 아닙니다.';
         }
-        return BoardContent.from(this.title, this.content, this.category_id, userId);
+        return BoardContent.from(userId, this.category_id, this.title, this.content);
     }
 }

@@ -1,22 +1,22 @@
 export class UpdateContentDto {
+    private readonly user_email: string;
     private readonly category_id: number;
     private readonly content_id: number;
-    private readonly user_email: string;
     private readonly title: string;
     private readonly content: string;
 
     constructor(
+        userEmail: string,
         categoryId: number,
         contentId: number,
-        userEmail: string,
-        content: string,
         title: string,
+        content: string,
     ) {
+        this.user_email = userEmail;
         this.category_id = categoryId;
         this.content_id = contentId;
-        this.user_email = userEmail;
-        this.content = content;
         this.title = title;
+        this.content = content;
     }
 
     getEmail(): string {

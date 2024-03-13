@@ -1,12 +1,12 @@
 export class UpdateCommentDto {
-    private readonly content_id: number;
     private readonly user_email: string;
+    private readonly content_id: number;
     private readonly comment_id: number;
     private readonly comment: string;
 
-    constructor(contentId: number, userEmail: string, commentId: number, comment: string) {
-        this.content_id = contentId;
+    constructor(userEmail: string, contentId: number, commentId: number, comment: string) {
         this.user_email = userEmail;
+        this.content_id = contentId;
         this.comment_id = commentId;
         this.comment = comment;
     }

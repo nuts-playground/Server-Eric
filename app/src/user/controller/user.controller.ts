@@ -7,7 +7,7 @@ import { User } from '../entity/user.entity';
 import { SafeResponseDto } from '../dto/safe-response.dto';
 
 @Controller('user')
-@ApiTags('user')
+@ApiTags('유저 API')
 export class UserController {
     constructor(private userService: UserService) {}
 
@@ -39,15 +39,19 @@ export class UserController {
         const user = await this.userService.findByEmail(userEmail);
 
         if (!user) return ResponseDto.error('존재하지 않는 유저입니다.');
-
         const result = await this.userService.delete(userEmail);
         return result ? ResponseDto.success() : ResponseDto.error('삭제에 실패했습니다.');
     }
 
+    /*
+     *
+     * 테스트 유저 세팅 => Responses 에 있는 value 로 다른 API 에 쓰시면 됩니다.
+     *
+     * npm*/
     @Get('/setSwaggerTestInfo')
     @ApiOperation({
-        summary: '테스트 유저 세팅 API',
-        description: '유저가 oauth 로만 만들어져서 이 데이터로 테스트 해보시면 됩니다.',
+        description:
+            '유저가 oauth 로만 만들어져서 아래 보이는 데이터로 테스트 해보시면 됩니다. request 로 나오는 정보는 실제 응답 정보로 user_id가 없습니다.',
     })
     @ApiResponse({
         status: 200,

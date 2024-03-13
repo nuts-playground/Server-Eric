@@ -8,6 +8,10 @@ export class TestBoardContentRepo extends Repository<BoardContent> {
     constructor() {
         super(BoardContent, mysqlConfig.testGetDataSource.createEntityManager());
     }
+
+    static getTestContent() {
+        return BoardContent.from(1, 1, 'test 용 게시글 제목', 'test 용 게시글 이지롱');
+    }
 }
 
 export class TestMockBoardContentRepo {
@@ -16,16 +20,9 @@ export class TestMockBoardContentRepo {
     private savedContent = [this.rowData];
 
     private curData = [
-        this.getTestContent('test title1', 'test content1', 1, 1),
-        this.getTestContent('test title2', 'test content2', 2, 1),
-        this.getTestContent('test title3', 'test content3', 3, 4),
-        this.getTestContent('test title4', 'test content4', 4, 2),
-        this.getTestContent('test title5', 'test content5', 5, 7),
-        this.getTestContent('test title6', 'test content6', 6, 1),
-        this.getTestContent('test title7', 'test content7', 7, 5),
-        this.getTestContent('test title8', 'test content8', 8, 10),
-        this.getTestContent('test title9', 'test content9', 9, 2),
-        this.getTestContent('test title10', 'test content10', 10, 11),
+        this.getTestContent(1, 1, 'test title1', 'test content1'),
+        this.getTestContent(1, 2, 'test title2', 'test content2'),
+        this.getTestContent(1, 3, 'test title3', 'test content3'),
     ];
 
     getTestcurData(count: number): BoardContent[] {
@@ -33,12 +30,12 @@ export class TestMockBoardContentRepo {
     }
 
     getTestContent(
+        userId: number = 1,
+        categoryId: number = 1,
         title: string = 'test title',
         content: string = 'test content',
-        categoryId: number = 1,
-        userId: number = 1,
     ): BoardContent {
-        return Object.assign(BoardContent.from(title, content, categoryId, userId), this.time);
+        return Object.assign(BoardContent.from(userId, categoryId, title, content), this.time);
     }
 
     async findOne(query: any): Promise<BoardContent | boolean> {

@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonTimestamp } from '../../common/entity/common-timstamp.entity';
-import { DateUtil } from '../../common/utils/date.util';
 import { User } from '../../user/entity/user.entity';
 import { BoardCategory } from './board-category.entity';
 import { BoardComment } from './board-comment.entity';
@@ -48,21 +47,16 @@ export class BoardContent extends CommonTimestamp {
     })
     boardComment?: BoardComment[];
 
-    private static newBoard(title: string, content: string, category_id: number, user_id: number) {
+    private static newBoard(userId: number, categoryId: number, title: string, content: string) {
         const boardContent = new BoardContent();
+        boardContent.user_id = userId;
+        boardContent.category_id = categoryId;
         boardContent.title = title;
         boardContent.content = content;
-        boardContent.category_id = category_id;
-        boardContent.user_id = user_id;
         return boardContent;
     }
 
-    static from(
-        title: string,
-        content: string,
-        category_id: number,
-        user_id: number,
-    ): BoardContent {
-        return this.newBoard(title, content, category_id, user_id);
+    static from(userId: number, categoryId: number, title: string, content: string): BoardContent {
+        return this.newBoard(userId, categoryId, title, content);
     }
 }

@@ -1,13 +1,13 @@
 import { BoardComment } from '../../entity/board-comment.entity';
 
 export class CreateCommentDto {
-    private readonly content_id: number;
     private readonly user_email: string;
+    private readonly content_id: number;
     private readonly comment: string;
 
-    constructor(contentId: number, userEmail: string, comment: string) {
-        this.content_id = contentId;
+    constructor(userEmail: string, contentId: number, comment: string) {
         this.user_email = userEmail;
+        this.content_id = contentId;
         this.comment = comment;
     }
     getEmail() {

@@ -13,7 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const exceptionBody = {
             statusCode: status,
             path: request.url,
-            requestBody: request.body,
+            requestBody: JSON.stringify(request.body),
         };
         const responseBody = ResponseDto.exception(message, exceptionBody);
         const plainResponse = instanceToPlain(responseBody, {
