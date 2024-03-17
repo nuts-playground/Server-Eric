@@ -4,7 +4,6 @@ import { AppModule } from '../src/app.module';
 import { corsConfig } from '../src/config/cors.config';
 import { setGlobalProvider } from '../src/config/global-provider.config';
 import { setSession } from '../src/config/session.config';
-import {mysqlConfig} from "../src/config/mysql.config";
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;

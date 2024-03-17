@@ -11,7 +11,6 @@ import { TestBoardContentRepo } from '../../src/board/repository/test/test-board
 import { BoardService } from '../../src/board/service/board.service';
 import { corsConfig } from '../../src/config/cors.config';
 import { setGlobalProvider } from '../../src/config/global-provider.config';
-import { mysqlConfig } from '../../src/config/mysql.config';
 import { setSession } from '../../src/config/session.config';
 import { TestUserRepo } from '../../src/user/repository/test/test-user.repository';
 import { UserRepository } from '../../src/user/repository/user.repository';
