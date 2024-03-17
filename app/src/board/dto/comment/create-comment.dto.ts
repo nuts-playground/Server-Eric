@@ -14,6 +14,10 @@ export class CreateCommentDto {
         return this.user_email;
     }
 
+    getContentId() {
+        return this.content_id;
+    }
+
     private isComment() {
         const titleLength = this.comment.length;
         return 2 < titleLength && titleLength <= 100;

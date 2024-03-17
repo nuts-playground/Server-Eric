@@ -8,6 +8,9 @@ export class TestBoardCommentRepo extends Repository<BoardComment> {
     constructor() {
         super(BoardComment, mysqlConfig.testGetDataSource.createEntityManager());
     }
+    static getTestComment() {
+        return BoardComment.from(1, 1, 'test comment');
+    }
 }
 
 export class TestMockBoardCommentRepo {
