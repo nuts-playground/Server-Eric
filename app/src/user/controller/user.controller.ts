@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Next, Req, Res, Session } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { instanceToPlain } from 'class-transformer';
+import { NextFunction, Request, Response } from 'express';
 import { DeleteUserDto } from '../dto/delete-user.dto';
 import { UserService } from '../service/user.service';
 import { ResponseDto } from '../../common/dto/response.dto';
@@ -13,12 +15,19 @@ export class UserController {
 
     @ApiExcludeEndpoint()
     @Get('/info')
-    async getUserInfo(@Session() session: Record<string, any>): Promise<ResponseDto<any>> {
-        if (!session.passport) return ResponseDto.error('잘못된 정보 요청입니다.');
-        const userEmail = session.passport.user;
+    async getUserInfo(@Session() session: Record<string, any>, @Res() res: Response): Promise<any> {
+        const change = (obj: any) => {
+            return instanceToPlain(obj);
+        };
+        if (!session['passport']) {
+            res.send(change(ResponseDto.error('잘못된 정보 요청입니다.')));
+            return;
+        }
+        const userEmail = session['passport']['user'];
         const user = await this.userService.findByEmail(userEmail);
         if (!(user instanceof User)) {
-            return ResponseDto.error('유저를 찾을 수 없습니다.');
+            res.send(change(ResponseDto.error('유저를 찾을 수 없습니다.')));
+            return;
         } else {
             const responseUserInfo = new SafeResponseDto(
                 user.user_id,
@@ -27,7 +36,11 @@ export class UserController {
                 user.provider_id,
             ).getProfileInfo();
 
-            return ResponseDto.successData(responseUserInfo);
+            res.cookie('state', 'active', {
+                maxAge: 3600000 * 12 * 7,
+            });
+            res.send(change(ResponseDto.successData(responseUserInfo)));
+            return;
         }
     }
 
