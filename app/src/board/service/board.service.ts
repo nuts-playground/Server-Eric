@@ -27,28 +27,26 @@ export class BoardService {
 
     async findContent(
         contentId: number,
-        categoryId?: number,
-        userId?: number,
+        categoryId: number,
+        userId: number,
     ): Promise<BoardContent | null> {
-        const query: any = { where: { content_id: contentId } };
-
-        if (categoryId) query.where.category_id = categoryId;
-
-        if (userId) query.where.user_id = userId;
+        const query: any = {
+            where: { content_id: contentId }
+        };
+        query.where.category_id = categoryId;
+        query.where.user_id = userId;
 
         return await this.boardContentRepository.findOne(query);
     }
 
     async findComment(
         commentId: number,
-        contentId?: number,
-        userId?: number,
+        contentId: number,
+        userId: number,
     ): Promise<BoardComment | null> {
         const query: any = { where: { comment_id: commentId } };
-
-        if (contentId) query.where.content_id = contentId;
-
-        if (userId) query.where.user_id = userId;
+        query.where.content_id = contentId;
+        query.where.user_id = userId;
 
         return await this.boardCommentRepository.findOne(query);
     }
@@ -139,6 +137,12 @@ export class BoardService {
 
         const notFoundUser = !(user instanceof User);
         if (notFoundUser) return false;
+
+        const reqContent = await this.boardContentRepository.findOneBy(
+            { content_id: createCommentDto.getContentId()}
+        );
+        const notFoundContent = !(reqContent instanceof BoardContent);
+        if(notFoundContent) return false;
 
         const userId = user.user_id;
         const boardComment = createCommentDto.toEntity(userId);

@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { instanceToPlain } from 'class-transformer';
 import { corsConfig } from '../../src/config/cors.config';
 import { setGlobalProvider } from '../../src/config/global-provider.config';
-import { mysqlConfig } from '../../src/config/mysql.config';
 import { setSession } from '../../src/config/session.config';
 import * as supertest from 'supertest';
 import { UserController } from '../../src/user/controller/user.controller';
@@ -11,6 +10,7 @@ import { SignupDto } from '../../src/user/dto/signup.dto';
 import { TestUserRepo } from '../../src/user/repository/test/test-user.repository';
 import { UserRepository } from '../../src/user/repository/user.repository';
 import { UserService } from '../../src/user/service/user.service';
+import {E2eDatabase} from "../utils/e2e-db";
 
 describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     let app: INestApplication;
@@ -18,7 +18,7 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     let userService: UserService;
     let userRepository: UserRepository;
     beforeAll(async () => {
-        await mysqlConfig.testGetDataSource.initialize();
+        await E2eDatabase.connect();
         const module: TestingModule = await Test.createTestingModule({
             imports: [],
             controllers: [UserController],
@@ -40,16 +40,6 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
         userService = module.get<UserService>(UserService);
         userController = module.get<UserController>(UserController);
         userRepository = module.get<UserRepository>(UserRepository);
-
-        const ifUser = await userRepository.findOne({
-            where: { user_email: TestUserRepo.getTestEmail() },
-        });
-
-        if (ifUser) {
-            await userRepository.delete({
-                user_email: TestUserRepo.getTestEmail(),
-            });
-        }
     });
 
     it('should be defined', () => {
@@ -69,7 +59,7 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
         it('세션이 있지만 가입한 유저가 없는 경우 (현재는 가상)', async () => {
             const fakeSession = {
                 passport: {
-                    user: 'test@google.com',
+                    user: 'test321@google.com',
                 },
             };
             const response = instanceToPlain(await userController.getUserInfo(fakeSession));
@@ -91,7 +81,7 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
             expect(response.data.email).toStrictEqual(TestUserRepo.getTestEmail());
         });
     });
-    //
+
     describe('[POST] /user/info', () => {
         it('oauth 로 가입이라 signUp service', async () => {
             const signUpDto = new SignupDto('test@email.com', 'e2eTestUser', 'google');
@@ -109,7 +99,7 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     describe('[DELETE] /user/info', () => {
         it('정상 케이스', async () => {
             const request = {
-                user_email: TestUserRepo.getTestUser(),
+                user_email: 'test@email.com',
             };
             const response = await supertest(app.getHttpServer())
                 .delete('/user/info')
@@ -130,6 +120,7 @@ describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     });
 
     afterAll(async () => {
+        await E2eDatabase.close();
         await app.close();
     });
 });

@@ -2,8 +2,12 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
   "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
+  "testRegex": "user.e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }
 }
+
+/* 기존은 전체 검사 테스트 할 때는 파일마다 바꿔서 하기
+"testRegex": ".e2e-spec.ts$",
+*/
