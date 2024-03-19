@@ -6,6 +6,10 @@ export class GoogleAuthGuard extends AuthGuard('google') {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const result = (await super.canActivate(context)) as boolean;
         const request = context.switchToHttp().getRequest();
+        const response = context.switchToHttp().getResponse();
+        response.cookie('state', 'login', {
+            maxAge: 3600000 * 12 * 7,
+        });
         await super.logIn(request);
         return result;
     }
@@ -16,16 +20,10 @@ export class GithubAuthGuard extends AuthGuard('github') {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const result = (await super.canActivate(context)) as boolean;
         const request = context.switchToHttp().getRequest();
-        await super.logIn(request);
-        return result;
-    }
-}
-
-@Injectable()
-export class NaverAuthGuard extends AuthGuard('naver') {
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-        const result = (await super.canActivate(context)) as boolean;
-        const request = context.switchToHttp().getRequest();
+        const response = context.switchToHttp().getResponse();
+        response.cookie('state', 'login', {
+            maxAge: 3600000 * 12 * 7,
+        });
         await super.logIn(request);
         return result;
     }
@@ -36,7 +34,21 @@ export class KakaoAuthGuard extends AuthGuard('kakao') {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const result = (await super.canActivate(context)) as boolean;
         const request = context.switchToHttp().getRequest();
+        const response = context.switchToHttp().getResponse();
+        response.cookie('state', 'login', {
+            maxAge: 3600000 * 12 * 7,
+        });
         await super.logIn(request);
         return result;
     }
 }
+
+// @Injectable()
+// export class NaverAuthGuard extends AuthGuard('naver') {
+//     async canActivate(context: ExecutionContext): Promise<boolean> {
+//         const result = (await super.canActivate(context)) as boolean;
+//         const request = context.switchToHttp().getRequest();
+//         await super.logIn(request);
+//         return result;
+//     }
+// }

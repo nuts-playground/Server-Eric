@@ -10,10 +10,11 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { instanceToPlain } from 'class-transformer';
 import { Request, Response } from 'express';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { urlConfig } from '../../config/url.config';
-import { GoogleAuthGuard, GithubAuthGuard, NaverAuthGuard, KakaoAuthGuard } from '../auth.guard';
+import { GoogleAuthGuard, GithubAuthGuard, KakaoAuthGuard } from '../auth.guard';
 import { AuthService } from '../service/auth.service';
 import { OauthLoginDto } from '../dto/oauth-login.dto';
 
@@ -50,14 +51,14 @@ export class AuthController {
     @Redirect(urlConfig.getMainPageUrl())
     async githubAuthRedirect() {}
 
-    @Get('/to-naver')
-    @UseGuards(NaverAuthGuard)
-    naverAuth() {}
-
-    @Get('/naver')
-    @UseGuards(NaverAuthGuard)
-    @Redirect(urlConfig.getMainPageUrl())
-    async naverAuthRedirect() {}
+    // @Get('/to-naver')
+    // @UseGuards(NaverAuthGuard)
+    // naverAuth() {}
+    //
+    // @Get('/naver')
+    // @UseGuards(NaverAuthGuard)
+    // @Redirect(urlConfig.getMainPageUrl())
+    // async naverAuthRedirect() {}
 
     @Get('/to-kakao')
     @UseGuards(KakaoAuthGuard)
@@ -80,7 +81,7 @@ export class AuthController {
                 res.send(true);
             });
         } else {
-            return ResponseDto.error('로그인 하지 않은 상태입니다.');
+            res.send(instanceToPlain(ResponseDto.error('로그인 하지 않은 상태입니다.')));
         }
     }
 }

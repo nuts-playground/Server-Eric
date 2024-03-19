@@ -7,18 +7,10 @@ import { SessionSerializer } from './session.serializer';
 import { GithubStrategy } from './strategy/github.strategy';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { KakaoStrategy } from './strategy/kakao.strategy';
-import { NaverStrategy } from './strategy/naver.strategy';
 
 @Module({
     imports: [UserModule, PassportModule.register({ session: true })],
     controllers: [AuthController],
-    providers: [
-        AuthService,
-        GoogleStrategy,
-        GithubStrategy,
-        NaverStrategy,
-        KakaoStrategy,
-        SessionSerializer,
-    ],
+    providers: [AuthService, GoogleStrategy, GithubStrategy, KakaoStrategy, SessionSerializer],
 })
 export class AuthModule {}

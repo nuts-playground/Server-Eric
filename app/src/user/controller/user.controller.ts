@@ -15,7 +15,6 @@ export class UserController {
     @Get('/info')
     async getUserInfo(@Session() session: Record<string, any>): Promise<ResponseDto<any>> {
         if (!session.passport) return ResponseDto.error('잘못된 정보 요청입니다.');
-
         const userEmail = session.passport.user;
         const user = await this.userService.findByEmail(userEmail);
         if (!(user instanceof User)) {

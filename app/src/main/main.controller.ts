@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -8,10 +8,13 @@ export class MainController {
     constructor() {}
 
     @Get('/')
-    test(@Res() res: Response) {
-        res.json({
-            key: 'https://api.seokhoweb.com/auth/to-google',
-        });
-        res.end();
+    test(@Req() req: Request, @Res() res: Response) {
+        console.log(req);
+        console.log(
+            '==============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================',
+        );
+        console.log(res);
+        res.setHeader('test', 'testHeaderValue')
+        res.send('hello!');
     }
 }
