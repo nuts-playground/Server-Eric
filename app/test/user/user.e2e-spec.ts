@@ -10,7 +10,7 @@ import { SignupDto } from '../../src/user/dto/signup.dto';
 import { TestUserRepo } from '../../src/user/repository/test/test-user.repository';
 import { UserRepository } from '../../src/user/repository/user.repository';
 import { UserService } from '../../src/user/service/user.service';
-import {E2eDatabase} from "../utils/e2e-db";
+import { E2eDatabase } from '../utils/e2e-db';
 
 describe('[e2e] 유저 e2e 테스트 - user.e2e-spec.ts', () => {
     let app: INestApplication;

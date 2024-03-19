@@ -31,7 +31,7 @@ export class BoardService {
         userId: number,
     ): Promise<BoardContent | null> {
         const query: any = {
-            where: { content_id: contentId }
+            where: { content_id: contentId },
         };
         query.where.category_id = categoryId;
         query.where.user_id = userId;
@@ -138,11 +138,11 @@ export class BoardService {
         const notFoundUser = !(user instanceof User);
         if (notFoundUser) return false;
 
-        const reqContent = await this.boardContentRepository.findOneBy(
-            { content_id: createCommentDto.getContentId()}
-        );
+        const reqContent = await this.boardContentRepository.findOneBy({
+            content_id: createCommentDto.getContentId(),
+        });
         const notFoundContent = !(reqContent instanceof BoardContent);
-        if(notFoundContent) return false;
+        if (notFoundContent) return false;
 
         const userId = user.user_id;
         const boardComment = createCommentDto.toEntity(userId);
