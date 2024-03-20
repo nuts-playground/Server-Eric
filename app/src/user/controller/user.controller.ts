@@ -15,7 +15,8 @@ export class UserController {
 
     @ApiExcludeEndpoint()
     @Get('/info')
-    async getUserInfo(@Session() session: Record<string, any>, @Res() res: Response): Promise<any> {
+    async getUserInfo(@Session() session: Express.SessionStore, @Res() res: Response): Promise<any> {
+        console.log(session);
         const change = (obj: any) => {
             return instanceToPlain(obj);
         };

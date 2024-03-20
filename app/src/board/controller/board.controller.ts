@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Patch, Param } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/comment/create-comment.dto';
 import { DeleteCommentDto } from '../dto/comment/delete-comment.dto';
 import { GetCommentListDto } from '../dto/comment/get-comment-list.dto';
@@ -57,6 +57,17 @@ export class BoardController {
     async getLatestContentList(): Promise<ResponseDto<BoardContent[] | null>> {
         const contentList = await this.boardService.getLatestContentList();
         return ResponseDto.successData(contentList);
+    }
+
+
+    /*
+     *
+     * 게시글 조회
+     *
+     * */
+    @Get('/content/:id')
+    async getContent(@Param('id') id: number) {
+        return await this.boardService.findContent(id);
     }
 
     /*
@@ -125,7 +136,7 @@ export class BoardController {
      * 게시글에 현재 생성되어 있는 댓글 목록 조회
      *
      * */
-    @Post('/commentList')
+    @Get('/commentList/:content_id')
     @ApiCreatedResponse({ description: 'status: success(성공) || error(실패) + message 확인 필요' })
     @ApiNotFoundResponse({
         description: '클라이언트 세팅 문제로 JSON 형식이 이상하면 BAD_REQUEST 가 반환됩니다.',
@@ -133,10 +144,8 @@ export class BoardController {
     @ApiInternalServerErrorResponse({
         description: 'status: exception(일시적인 내부 시스템 오류 백엔드 한테 슬랙해 주세요.)',
     })
-    async getCommentList(@Body() getCommentListDto: GetCommentListDto) {
-        const commentList = await this.boardService.getCommentList(
-            getCommentListDto.getContentId(),
-        );
+    async getCommentList(@Param('content_id') contentId: number) {
+        const commentList = await this.boardService.getCommentList(contentId);
         return ResponseDto.successData(commentList);
     }
 

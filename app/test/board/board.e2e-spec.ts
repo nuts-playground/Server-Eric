@@ -75,6 +75,17 @@ describe('[e2e] 보드 e2e 테스트 - board.e2e-spec.ts', () => {
         expect(boardCommentRepository).toBeDefined();
     });
 
+    // describe('[GET] /board/content/:id', () => {
+    //     it('정상 케이스', async () => {
+    //         await userRepository.save(TestUserRepo.getTestUser());
+    //         await new TestBoardCategoryRepo().setTestCategory(); // 카테고리 셋
+    //         await new TestBoardContentRepo().save(TestBoardContentRepo.getTestContent());
+    //         await new TestBoardContentRepo().save(TestBoardContentRepo.getTestContent());
+    //         const response = await supertest(app.getHttpServer()).get('/board/content/2');
+    //         console.log(response.body);
+    //     });
+    // });
+
     describe('[GET] /board/categoryList', () => {
         it('정상 케이스', async () => {
             await userRepository.save(TestUserRepo.getTestUser());
@@ -158,30 +169,19 @@ describe('[e2e] 보드 e2e 테스트 - board.e2e-spec.ts', () => {
         });
     });
 
-    describe('[POST] /board/commentList', () => {
+    describe('[GET] /board/commentList', () => {
         it('정상 케이스', async () => {
             await boardCommentRepository.save(TestBoardCommentRepo.getTestComment());
             await boardCommentRepository.save(TestBoardCommentRepo.getTestComment());
             await boardCommentRepository.save(TestBoardCommentRepo.getTestComment());
-
-            const reqData = {
-                content_id: 1,
-            };
-            const response = await supertest(app.getHttpServer())
-                .post('/board/commentList')
-                .send(reqData);
+            const response = await supertest(app.getHttpServer())!.get('/board/commentList/1');
             expect(response.body.status).toStrictEqual('success');
             expect(response.body.message).toStrictEqual('');
             expect(response.body.data.length).toStrictEqual(3);
         });
 
         it('실패 케이스 - 찾으려는 content_id 잘못 입력', async () => {
-            const reqData = {
-                content_id: 3,
-            };
-            const response = await supertest(app.getHttpServer())
-                .post('/board/commentList')
-                .send(reqData);
+            const response = await supertest(app.getHttpServer()).get('/board/commentList/3');
             expect(response.body.status).toStrictEqual('success');
             expect(response.body.message).toStrictEqual('');
             expect(response.body.data.length).toStrictEqual(0);

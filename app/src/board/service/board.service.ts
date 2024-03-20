@@ -27,14 +27,14 @@ export class BoardService {
 
     async findContent(
         contentId: number,
-        categoryId: number,
-        userId: number,
+        categoryId?: number,
+        userId?: number,
     ): Promise<BoardContent | null> {
         const query: any = {
             where: { content_id: contentId },
         };
-        query.where.category_id = categoryId;
-        query.where.user_id = userId;
+        if (categoryId) query.where.category_id = categoryId;
+        if (userId) query.where.user_id = userId;
 
         return await this.boardContentRepository.findOne(query);
     }
@@ -45,8 +45,8 @@ export class BoardService {
         userId: number,
     ): Promise<BoardComment | null> {
         const query: any = { where: { comment_id: commentId } };
-        query.where.content_id = contentId;
-        query.where.user_id = userId;
+        if (contentId) query.where.content_id = contentId;
+        if (userId) query.where.user_id = userId;
 
         return await this.boardCommentRepository.findOne(query);
     }
@@ -58,6 +58,9 @@ export class BoardService {
     async getLatestContentList(): Promise<BoardContent[] | null> {
         return await this.boardContentRepository.find({
             take: 50,
+            order: {
+                content_id: 'DESC',
+            },
         });
     }
 
