@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Next, Req, Res, Session } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { instanceToPlain } from 'class-transformer';
-import { NextFunction, Request, Response } from 'express';
+import { Response } from 'express';
 import { DeleteUserDto } from '../dto/delete-user.dto';
 import { UserService } from '../service/user.service';
 import { ResponseDto } from '../../common/dto/response.dto';
@@ -15,7 +15,10 @@ export class UserController {
 
     @ApiExcludeEndpoint()
     @Get('/info')
-    async getUserInfo(@Session() session: Express.SessionStore, @Res() res: Response): Promise<any> {
+    async getUserInfo(
+        @Session() session: Express.SessionStore,
+        @Res() res: Response,
+    ): Promise<any> {
         console.log(session);
         const change = (obj: any) => {
             return instanceToPlain(obj);

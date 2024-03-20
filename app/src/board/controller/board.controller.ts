@@ -59,15 +59,22 @@ export class BoardController {
         return ResponseDto.successData(contentList);
     }
 
-
     /*
      *
-     * 게시글 조회
+     * 게시글 쿼리 파람으로 조회
      *
      * */
     @Get('/content/:id')
-    async getContent(@Param('id') id: number) {
-        return await this.boardService.findContent(id);
+    @ApiOkResponse({ description: 'status: success(성공) || error(실패) + message 확인 필요' })
+    @ApiNotFoundResponse({
+        description: '클라이언트 세팅 문제로 JSON 형식이 이상하면 BAD_REQUEST 가 반환됩니다.',
+    })
+    @ApiInternalServerErrorResponse({
+        description: 'status: exception(일시적인 내부 시스템 오류 백엔드 한테 슬랙해 주세요.)',
+    })
+    async getContent(@Param('id') id: number): Promise<ResponseDto<BoardContent>> {
+        const content = await this.boardService.findContent(id);
+        return ResponseDto.successData(content);
     }
 
     /*

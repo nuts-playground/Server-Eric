@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateResult } from 'typeorm';
+import { FindOneOptions, UpdateResult } from 'typeorm';
 import { DateUtil } from '../../common/utils/date.util';
 import { User } from '../../user/entity/user.entity';
 import { UserService } from '../../user/service/user.service';
 import { CreateCommentDto } from '../dto/comment/create-comment.dto';
 import { DeleteCommentDto } from '../dto/comment/delete-comment.dto';
 import { UpdateCommentDto } from '../dto/comment/update-comment.dto';
+import { CreateContentDto } from '../dto/content/create-content.dto';
 import { DeleteContentDto } from '../dto/content/delete-content.dto';
-import { BoardComment } from '../entity/board-comment.entity';
-import { BoardCategoryRepository } from '../repository/board-category.repository';
+import { UpdateContentDto } from '../dto/content/update-content.dto';
 import { BoardCategory } from '../entity/board-category.entity';
+import { BoardComment } from '../entity/board-comment.entity';
+import { BoardContent } from '../entity/board-content.entity';
+import { BoardCategoryRepository } from '../repository/board-category.repository';
 import { BoardCommentRepository } from '../repository/board-comment.repository';
 import { BoardContentRepository } from '../repository/board-content.repository';
-import { BoardContent } from '../entity/board-content.entity';
-import { CreateContentDto } from '../dto/content/create-content.dto';
-import { UpdateContentDto } from '../dto/content/update-content.dto';
 
 @Injectable()
 export class BoardService {
@@ -30,13 +30,29 @@ export class BoardService {
         categoryId?: number,
         userId?: number,
     ): Promise<BoardContent | null> {
-        const query: any = {
-            where: { content_id: contentId },
-        };
-        if (categoryId) query.where.category_id = categoryId;
-        if (userId) query.where.user_id = userId;
+        const queryBuilder = this.boardContentRepository.createQueryBuilder('boardContent');
+        queryBuilder.leftJoinAndSelect('boardContent.user_id', 'user');
+        queryBuilder.where('boardContent.content_id = :contentId', { contentId });
+        if (categoryId) {
+            queryBuilder.andWhere('boardContent.category_id = :categoryId', { categoryId });
+        }
+        if (userId) {
+            queryBuilder.andWhere('boardContent.user_id = :userId', { userId });
+        }
+        const result = await queryBuilder
+            .select([
+                'boardContent.create_dtm',
+                'boardContent.update_dtm',
+                'boardContent.content_id',
+                'boardContent.title',
+                'boardContent.content',
+                'user.user_name',
+                'user.user_email',
+                'user.provider_id',
+            ])
+            .getOne();
 
-        return await this.boardContentRepository.findOne(query);
+        return result;
     }
 
     async findComment(
