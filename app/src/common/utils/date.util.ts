@@ -1,14 +1,13 @@
-import { convert, DateTimeFormatter, LocalDate, LocalDateTime, nativeJs } from '@js-joda/core';
+import {convert, DateTimeFormatter, LocalDate, LocalDateTime, nativeJs, ZoneId,} from '@js-joda/core';
 
 export class DateUtil {
     private static DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern('yyyy-MM-dd HH:mm:ss');
-
     static stringNow(): string {
-        return LocalDateTime.now().format(this.DATE_TIME_FORMATTER);
+        return LocalDateTime.now().plusHours(9).format(this.DATE_TIME_FORMATTER);
     }
 
     static dateNow(): Date {
-        return convert(LocalDateTime.now()).toDate();
+        return convert(LocalDateTime.now().plusHours(9)).toDate();
     }
 
     static toDate(localDate: LocalDate | LocalDateTime): Date {

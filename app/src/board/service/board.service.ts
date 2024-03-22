@@ -83,6 +83,9 @@ export class BoardService {
     async getCommentList(targetId: number): Promise<BoardComment[] | null> {
         return await this.boardCommentRepository.find({
             where: { content_id: targetId },
+            order: {
+                comment_id: 'DESC'
+            }
         });
     }
 
